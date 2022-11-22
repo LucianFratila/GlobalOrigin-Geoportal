@@ -33,6 +33,8 @@ export default function ConcessionsPage({map,mapLoaded}){
 
     return(
         <div><h5 className="text-muted">CONSESSIONS PAGE</h5></div>
-        // <ConcessionMap map={map}></ConcessionMap>
+            // <Legend>   de facut legenda 
+                // <ConcessionLayers map={map}></ConcessionLayers>
+            // </Legend>
     )
 }
