@@ -1,16 +1,14 @@
-
 import React from 'react'
-import ConcessionsLayers from './ConcessionsLayers'
+import HarvestingLayers from './HarvestingLayers'
 
 
-export default function ConcessionsPage({ map, mapLoaded}){
+export default function HarvestingLayers({map, mapLoaded}){
 
-   
     return(
         <React.Fragment>
             <div><h5 className="text-muted">CONSESSIONS PAGE</h5></div>
         {/*  <Legend>   de facut legenda  */}
-            <ConcessionsLayers map={map} mapLoaded={mapLoaded} ></ConcessionsLayers>
+            <HarvestingLayers map={map} mapLoaded={mapLoaded} ></HarvestingLayers>
         {/* </Legend> */}
         </React.Fragment>    
     )
