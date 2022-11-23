@@ -17,34 +17,18 @@ import HarvestingPage from "harvesting/HarvestingPage";
 
 ///// UI Components Imports//////
 import MainNav from "components/mainNav/mainNav";
-import useStore from "common/utils/stateStore/useStore";
+
 
 import Map from "map/Map";
 
-function MapLegendConcession({ data }) {
-  return (
-    <div
-      style={{ zIndex: 60 }}
-      className=' w-56 h-auto text-maintext p-4 bg-primary/100 rounded-md absolute right-4 top-20'
-    >
-      <span>
-        <h1>{`Active Layers`}</h1>
-        <p>Concession Layer: {data?`${data}`:`loading`}</p>
-      </span>
-    </div>
-  );
-}
+
 
 function App() {
   const [lang, setLang] = useState("en");
   const [user, setUser] = useState(GetObject("user") ? GetObject("user") : "guest");
   const [jwt, setJwt] = useState(GetObject("jwt") ? GetObject("jwt") : "");
   const [mapLoaded, setMapLoaded] = useState(false);
-  //// global store///
-  const concessionLayerVisibility = useStore((state) => state.concessionLayerVisibility);
-  const concessionLayerData = useStore((state) => state.concessionLayerData);
-  
-  //// global store///
+
 
 
   const map = useRef(null);
@@ -68,7 +52,7 @@ function App() {
     <Router>
       <LangContext.Provider value={lang}>
         <main className=' w-full h-full'>
-          {concessionLayerVisibility && <MapLegendConcession data={concessionLayerData}/>}
+
           <MainNav>
             <Routes>
               <Route exact path='/' element={<ConcessionsPage map={map} mapLoaded={mapLoaded} />} />

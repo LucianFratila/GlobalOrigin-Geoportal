@@ -4,7 +4,7 @@ import ToggleCheckBox from "components/reusable/toggleCheckbox";
 import InputSelectOptions from "components/reusable/inputSelectOptions";
 
 import ConcessionsLayers from "./ConcessionsLayers";
-
+import MapLegendConcession from "./ConcessionLegend";
 
 import useStore from "common/utils/stateStore/useStore";
 
@@ -118,8 +118,11 @@ export default function ConcessionsPage({ map, mapLoaded }) {
         {/* <Statistics data={chartDataSample.chart1}/> */}
       </main>
       {/*  <Legend>   de facut legenda  */}
+
       {/* Conditia asta de jos e doar de test, in realitate nu e ok ce am facut aici pt ca montez/demontez componenta care la fiecare mount face acel apel prin axios, cel mai bine, cred, e cu ajutorul variabilei concessionLayerVisibility e sa modificam acel layer-visibility de mapbox */}
-      {concessionLayerVisibility && <ConcessionsLayers map={map} mapLoaded={mapLoaded} />}
+      <MapLegendConcession>
+        <ConcessionsLayers map={map} mapLoaded={mapLoaded} />
+      </MapLegendConcession>
 
       {/* </Legend> */}
     </React.Fragment>
