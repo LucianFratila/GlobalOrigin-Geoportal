@@ -23,7 +23,7 @@ export default function ConcessionsPage({ map, mapLoaded}){
         <React.Fragment>
             <div><h5 className="text-muted">CONSESSIONS PAGE</h5></div>
             <Legend>
-                {/* <ConcessionsLayers map={map} mapLoaded={mapLoaded} layersProps={layersProps} ></ConcessionsLayers> */}
+                <ConcessionsLayers map={map} mapLoaded={mapLoaded} layersProps={layersProps} ></ConcessionsLayers>
             </Legend>
         </React.Fragment>    
     )

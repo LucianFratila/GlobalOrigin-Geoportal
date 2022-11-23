@@ -95,6 +95,7 @@ export default function ConcessionsLayer({map, mapLoaded, layerProps}){
 
     return(
         <React.Fragment>
+            <div>Concessions</div>
         </React.Fragment>
     )
 
