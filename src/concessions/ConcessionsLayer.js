@@ -54,7 +54,9 @@ export default function ConcessionsLayer({map, mapLoaded, layerProps}){
                 map.current.on('mouseenter', name, (e) => {
                     // Change the cursor style as a UI indicator.
                     map.current.getCanvas().style.cursor = 'pointer';
-                        
+                    const popUps = document.getElementsByClassName('mapboxgl-popup');
+                    /** Check if there is already a popup on the map and if so, remove it */
+                    if (popUps[0]) popUps[0].remove();   
                     // Copy coordinates array.
                     const coordinates = e.features[0].geometry.coordinates.slice();
                     const id = e.features[0].properties.id;
@@ -95,7 +97,7 @@ export default function ConcessionsLayer({map, mapLoaded, layerProps}){
 
     return(
         <React.Fragment>
-            <div>Concessions</div>
+            
         </React.Fragment>
     )
 

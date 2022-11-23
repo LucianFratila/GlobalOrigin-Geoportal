@@ -16,7 +16,8 @@ import useStore from "common/utils/stateStore/useStore";
 
 
 const MainNav = ({ children }) => {
-
+  const user = localStorage.getItem("user");
+  
   ///Menu Visibility Controls///
   const mainNavVisibility = useStore((state) => state.mainNavVisibility);
   const toggleMainNav = useStore(state => state.toggleMainNav);
@@ -37,7 +38,7 @@ const MainNav = ({ children }) => {
               <div className={`${!mainNavVisibility && "opacity-0"} transition delay-300 duration-600 p-4 `}>
                 <h1 className='text-xl text-maintext '>Gabon Geoportal</h1>
                 <p className='text-xs text-maintext flex items-center gap-1 '>
-                  Simone Weil{" "}
+                  {user}
                   <button className=' hover:text-white'>
                     <IoMdArrowDropdown size={20} />
                   </button>

@@ -20,7 +20,7 @@ function MapLegendConcession({ children, data }) {
             {concessionLayers.layers.map((i) => (
               <span key={i.id} className='flex  items-center justify-between'>
                 <span style={ {backgroundColor:`${i.color}`}} className={`w-3 h-3 mr-1`}></span>
-                <span className=' mr-5 w-1/2 text-sm text-left'>{i.name}</span>
+                <span className=' mr-5 w-40 text-sm justify-start'>{i.name}</span>
                 <button className=' text-maintext hover:text-white'>
                   <CgClose />
                 </button>
