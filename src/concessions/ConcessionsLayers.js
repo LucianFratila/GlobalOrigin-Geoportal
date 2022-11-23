@@ -7,22 +7,9 @@ import AACLayer from './AACLayer'
 import axios from "axios"
 
 
-export default function ConcessionsLayers({map, mapLoaded}){
+export default function ConcessionsLayers({map, mapLoaded, layersProps}){
 
-    let layersProps={
-        'concessions':{
-            'visibility':'visible'
-        },
-        'ufa':{
-            'visibility':'none'
-        },
-        'ufg':{
-            'visibility':''
-        },
-        'aac':{
-            'visibility':'visible'
-        }
-    }
+
 
     return(
         <React.Fragment>

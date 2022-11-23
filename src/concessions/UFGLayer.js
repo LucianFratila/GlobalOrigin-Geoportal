@@ -39,7 +39,7 @@ export default function UFGLayer({map, mapLoaded, layerProps}){
                     'paint': paint,
                     'layout': {
                         // Make the layer visible by default.
-                        'visibility': layerProps.visibility
+                        'visibility': layerProps.visibility ?  layerProps.visibility : 'none'
                         },
                 }); 
 
