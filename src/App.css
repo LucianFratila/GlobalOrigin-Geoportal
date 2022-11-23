@@ -35,7 +35,7 @@ body {
   border-radius: 10px;
 }
 
-<<<<<<< HEAD
+
 a{
   color: lightgrey !important;
   overflow: hidden;
@@ -66,8 +66,6 @@ a{
   }
 
 
-
-=======
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
@@ -79,4 +77,4 @@ a{
   border-bottom: 2px solid green;
   padding-bottom: 4px;
 }
->>>>>>> 8dc807677cbcbaa783a99e5fdd4c32b1e84a4bc8
+
