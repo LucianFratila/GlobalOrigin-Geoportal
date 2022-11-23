@@ -10,7 +10,7 @@ export default function Map({map,setMapLoaded,children}){
     const [lng, setLng] = useState(GetObject("lng") ? GetObject("lng") : -70.9);
     const [lat, setLat] = useState(GetObject("lat") ? GetObject("lat") : 42.35);
     const [zoom, setZoom] = useState(GetObject("zoom") ? GetObject("zoom") : 9);
-    console.log('in harta')
+
     useEffect(() => {
         SetObject("lng",lng);
     },[lng])
