@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from 'react'
 import ConcessionsLayers from './ConcessionsLayers'
 import Legend from 'map/Legend'
@@ -28,3 +29,149 @@ export default function ConcessionsPage({ map, mapLoaded}){
         </React.Fragment>    
     )
 }
+=======
+
+import React from "react";
+
+import ToggleCheckBox from "components/reusable/toggleCheckbox";
+import InputSelectOptions from "components/reusable/inputSelectOptions";
+
+import ConcessionsLayers from "./ConcessionsLayers";
+import MapLegendConcession from "./ConcessionLegend";
+
+import useStore from "common/utils/stateStore/useStore";
+
+export default function ConcessionsPage({ map, mapLoaded }) {
+  const concessionLayerVisibility = useStore((state) => state.concessionLayerVisibility);
+  const toggleConcessionLayer = useStore((state) => state.toggleConcessionLayer);
+
+  ////MockUp Data////
+  const layercontrols = {
+    layers: [
+      { name: "View Concessions", id: 1 },
+      { name: "View UFA's", id: 2 },
+      { name: "View UFG's", id: 3 },
+      { name: "View AAC's", id: 4 },
+    ],
+  };
+  const chartDataSample = {
+    chart1: [
+      { title: "xx1", value: 10, color: "#E38627" },
+      { title: "xx2", value: 10, color: "#C13C37" },
+      { title: "xx3", value: 35, color: "#6A2135" },
+      { title: "xx4", value: 15, color: "#009278" },
+      { title: "xx5", value: 10, color: "#7b83dd" },
+      { title: "xx6", value: 20, color: "#b3c1bf" },
+    ],
+  };
+
+  const dataSelecteInput = {
+    company: [
+      { name: "company 1", id: 1 },
+      { name: "company 2", id: 2 },
+      { name: "company 3", id: 3 },
+      { name: "company 4", id: 4 },
+      { name: "company 5", id: 5 },
+      { name: "company 6", id: 6 },
+    ],
+    concessions: [
+      { name: "concessions 1", id: 1 },
+      { name: "concessions 2", id: 2 },
+      { name: "concessions 3", id: 3 },
+      { name: "concessions 4", id: 4 },
+      { name: "concessions 5", id: 5 },
+      { name: "concessions 6", id: 6 },
+    ],
+  };
+  ////MockUp Data////
+
+  let layersProps = {
+    concessions: {
+      visibility: "visible",
+    },
+    ufa: {
+      visibility: "none",
+    },
+    ufg: {
+      visibility: "none",
+    },
+    aac: {
+      visibility: "visible",
+    },
+  };
+
+  return (
+    <React.Fragment>
+      <main className='p-2'>
+        {/* layer name & visibility */}
+        <div className=' py-5 gap-3 flex flex-row  px-4'>
+          <h1 className=' text-white'>Concessions</h1>
+          <ToggleCheckBox
+            toggleState={concessionLayerVisibility}
+            toggleAction={toggleConcessionLayer}
+            name={"Concession Visibility"}
+          />
+          {/* <ToggleCheckBox  name={'Concession Visibility'}  /> */}
+        </div>
+        {/* filters */}
+        <section className=' rounded-md p-4  bg-neutral-700'>
+          <div>
+            <h1 className=' text-white py-4'>Filters</h1>
+          </div>
+          <div className='flex flex-row gap-2'>
+            {/* Company */}
+            <InputSelectOptions selected={"Company Name"} data={dataSelecteInput.company} />
+            {/* Concessions */}
+            <InputSelectOptions selected={"Concessions"} data={dataSelecteInput.concessions} />
+          </div>
+          <div>
+            <form>
+              <div className='relative py-3'>
+                <div className='flex absolute text-maintext  inset-y-0 left-0 items-center pl-3 pointer-events-none'>
+                  <svg
+                    aria-hidden='true'
+                    className='w-5 h-5 text-gray-500 dark:text-gray-400'
+                    fill='none'
+                    stroke='currentColor'
+                    viewBox='0 0 24 24'
+                    xmlns='http://www.w3.org/2000/svg'
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth='2'
+                      d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'
+                    ></path>
+                  </svg>
+                </div>
+                <input
+                  type='search'
+                  id='default-search'
+                  className='block bg-gray-600 placeholder text-maintext p-4 pl-10 rounded-md w-full text-sm'
+                  placeholder='Search for AAC ID, tree ID...'
+                  required
+                />
+              </div>
+            </form>
+          </div>
+          <div className=' py-5 gap-3 flex flex-col'>
+            {layercontrols.layers.map((i) => (
+              <div key={i.id} className='flex py-3 gap-3'>
+                <h1 className=' text-white'>{i.name}</h1>
+                <ToggleCheckBox />
+              </div>
+            ))}
+          </div>
+        </section>
+        {/* statistics */}
+        {/* <Statistics data={chartDataSample.chart1}/> */}
+      </main>
+
+      <MapLegendConcession>
+        <ConcessionsLayers map={map} mapLoaded={mapLoaded} layersProps={layersProps}></ConcessionsLayers>
+      </MapLegendConcession>
+    </React.Fragment>
+  );
+}
+
+>>>>>>> 8dc807677cbcbaa783a99e5fdd4c32b1e84a4bc8
