@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
+import {GetObject,SetObject} from 'common/utils/StorageObject'
+import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 
 export default function Map({ map, setMapLoaded, children }) {
   const mapContainer = useRef(null);
