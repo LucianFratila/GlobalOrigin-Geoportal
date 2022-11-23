@@ -9,6 +9,9 @@ import MapLegendConcession from "./ConcessionLegend";
 import useStore from "common/utils/stateStore/useStore";
 
 export default function ConcessionsPage({ map, mapLoaded }) {
+  const concessionLayerVisibility = useStore((state) => state.concessionLayerVisibility);
+  const toggleConcessionLayer = useStore((state) => state.toggleConcessionLayer);
+
   ////MockUp Data////
   const layercontrols = {
     layers: [
@@ -48,8 +51,21 @@ export default function ConcessionsPage({ map, mapLoaded }) {
     ],
   };
   ////MockUp Data////
-  const concessionLayerVisibility = useStore((state) => state.concessionLayerVisibility);
-  const toggleConcessionLayer = useStore((state) => state.toggleConcessionLayer);
+
+  let layersProps = {
+    concessions: {
+      visibility: "visible",
+    },
+    ufa: {
+      visibility: "none",
+    },
+    ufg: {
+      visibility: "none",
+    },
+    aac: {
+      visibility: "visible",
+    },
+  };
 
   return (
     <React.Fragment>
@@ -117,14 +133,10 @@ export default function ConcessionsPage({ map, mapLoaded }) {
         {/* statistics */}
         {/* <Statistics data={chartDataSample.chart1}/> */}
       </main>
-      {/*  <Legend>   de facut legenda  */}
 
-      {/* Conditia asta de jos e doar de test, in realitate nu e ok ce am facut aici pt ca montez/demontez componenta care la fiecare mount face acel apel prin axios, cel mai bine, cred, e cu ajutorul variabilei concessionLayerVisibility e sa modificam acel layer-visibility de mapbox */}
       <MapLegendConcession>
-        <ConcessionsLayers map={map} mapLoaded={mapLoaded} />
+        <ConcessionsLayers map={map} mapLoaded={mapLoaded} layersProps={layersProps}></ConcessionsLayers>
       </MapLegendConcession>
-
-      {/* </Legend> */}
     </React.Fragment>
   );
 }
