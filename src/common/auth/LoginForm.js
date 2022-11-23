@@ -38,6 +38,7 @@ function LoginForm({resetUser}){
       
       axios.post('/authentication/login',values)
           .then( response => {
+            console.log(response);
                 setMessage(response.data.output.message)
                 setMessageClass('alert alert-success')    
                 resetUser(fields["email"],response.data.output.jwt);             

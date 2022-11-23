@@ -7,13 +7,15 @@ export default function SidePanel({children}) {
         setopen(!open)
     }
   return (
-    <div className={open?"sidenav":"sidenavClosed"}>
-      <div className="divBtn">
+    <div  >
+      {/* <div className="divBtn">
         <button className="menuBtn" onClick={toggleOpen}>
             {open? <i class="fa-solid fa-angles-left"></i>: <i class="fa-solid fa-angles-right"></i>}
         </button>
-      </div>  
+      </div>   */}
         {children}
     </div>
   )
 }
+
+// className={open?"sidenav":"sidenavClosed"}
