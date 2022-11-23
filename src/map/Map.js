@@ -1,11 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 
-import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
-import { SetObject, GetObject } from "common/utils/StorageObject.js";
-import 'mapbox-gl/dist/mapbox-gl.css';
-import axios from "axios";
-import VectorLayer from "./VectorLayer";
-
 export default function Map({ map, setMapLoaded, children }) {
   const mapContainer = useRef(null);
 

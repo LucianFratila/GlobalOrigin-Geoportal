@@ -1,3 +1,4 @@
+
 import React from "react";
 
 import ToggleCheckBox from "components/reusable/toggleCheckbox";
@@ -140,3 +141,4 @@ export default function ConcessionsPage({ map, mapLoaded }) {
     </React.Fragment>
   );
 }
+
