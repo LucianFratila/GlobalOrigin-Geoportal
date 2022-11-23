@@ -38,7 +38,6 @@ export default function UFGLayer({map, mapLoaded, layerProps}){
                     'source': name,
                     'paint': paint,
                     'layout': {
-                        // Make the layer visible by default.
                         'visibility': layerProps.visibility ?  layerProps.visibility : 'none'
                         },
                 }); 
@@ -46,6 +45,7 @@ export default function UFGLayer({map, mapLoaded, layerProps}){
                 getData()
     
                 map.current.on('moveend',name, getData);
+
             }
         }
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import ConcessionsLayers from './ConcessionsLayers'
-
+import Legend from 'map/Legend'
 
 export default function ConcessionsPage({ map, mapLoaded}){
     
@@ -22,9 +22,9 @@ export default function ConcessionsPage({ map, mapLoaded}){
     return(
         <React.Fragment>
             <div><h5 className="text-muted">CONSESSIONS PAGE</h5></div>
-        {/*  <Legend>   de facut legenda  */}
-            <ConcessionsLayers map={map} mapLoaded={mapLoaded} layersProps={layersProps} ></ConcessionsLayers>
-        {/* </Legend> */}
+            <Legend>
+                {/* <ConcessionsLayers map={map} mapLoaded={mapLoaded} layersProps={layersProps} ></ConcessionsLayers> */}
+            </Legend>
         </React.Fragment>    
     )
 }

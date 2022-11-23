@@ -38,7 +38,6 @@ export default function UFALayer({map, mapLoaded, layerProps}){
                     'source': name,
                     'paint': paint,
                     'layout': {
-                        // Make the layer visible by default.
                         'visibility': layerProps.visibility ?  layerProps.visibility : 'none'
                         },
                 }); 

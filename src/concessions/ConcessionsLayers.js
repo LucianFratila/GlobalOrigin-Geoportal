@@ -10,7 +10,6 @@ import axios from "axios"
 export default function ConcessionsLayers({map, mapLoaded, layersProps}){
 
 
-
     return(
         <React.Fragment>
             <ConcessionsLayer map={map} mapLoaded={mapLoaded} layerProps={layersProps.concessions}/>
