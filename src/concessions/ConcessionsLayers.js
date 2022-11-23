@@ -20,7 +20,4 @@ export default function ConcessionsLayers({map, mapLoaded, layersProps}){
         </React.Fragment>
     )
 
-
-
-
 }
