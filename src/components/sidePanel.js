@@ -22,7 +22,7 @@ const SidePanel = () => {
   //////////VISIBILITY CONTROLS///////////////
 function onClose(){
   hideSidePanel()
-  // showMainNav()
+  showMainNav()
 }
 
     
@@ -34,7 +34,7 @@ function onClose(){
           <div
             className={`bg-primary/100 overflow-x-hidden  h-[100%]   ${
               sidePanel ? ` lg:w-[500px] md:w-[500px] sm:w-[300px] xs: w-[300px]  ` : ` w-0`
-            } duration-500`}
+            } duration-700`}
           >
             <div className={`grid grid-cols-2  whitespace-nowrap items-center`}>
               {/* Menu Header */}

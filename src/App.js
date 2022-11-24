@@ -28,7 +28,6 @@ function App() {
   const [mapLoaded, setMapLoaded] = useState(false);
 
   const map = useRef(null);
-
   AxiosInit(API_SERVER, jwt);
 
   useEffect(() => {

@@ -13,8 +13,7 @@ function MapLegendConcession({ children, data }) {
   };
   return (
     <>
-      {concessionLayerVisibility && (
-        <div style={{ zIndex: 60 }} className='h-auto text-maintext p-4 bg-primary/100 rounded-md fixed right-4 top-20'>
+      <div style={{ zIndex: 60 }} className='h-auto text-maintext p-4 bg-primary/100 rounded-md fixed right-4 top-20'>
           <span>
             <h1>Active Layers</h1>
             {concessionLayers.layers.map((i) => (
@@ -28,7 +27,6 @@ function MapLegendConcession({ children, data }) {
             ))}
           </span>
         </div>
-      )}
 
       {children}
     </>
