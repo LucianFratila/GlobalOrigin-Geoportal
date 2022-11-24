@@ -14,7 +14,7 @@ const UserMenu = ({ user, logout }) => {
 
       <div
         className={` bg-neutral-900 text-maintext text-sm flex flex-col p-3 rounded-md w-auto ${
-          open ? " scale-0 " : "scale-100"
+          !open ? " scale-0 " : "scale-100"
         } duration-200 absolute z-[100] `}
       >
         <button onClick={logout}>Logout</button>

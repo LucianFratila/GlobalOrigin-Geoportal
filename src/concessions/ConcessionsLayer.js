@@ -83,7 +83,6 @@ export default function ConcessionsLayer({map, mapLoaded, layerProps, activateSi
                 });
                         
                 map.current.on('mouseleave',name, () => {
-                    console.log('mouseleave')
                     map.current.getCanvas().style.cursor = '';
                     popup.remove();
                     if (hoveredStateId !== null) {
@@ -96,7 +95,6 @@ export default function ConcessionsLayer({map, mapLoaded, layerProps, activateSi
                 }); 
             
                 map.current.on('mousemove', name, (e) => {
-                    console.log(e)
                     if (e.features.length > 0) {
                     if (hoveredStateId !== null) {
                     map.current.setFeatureState(

@@ -4,9 +4,9 @@ export default function AxiosInit(apiServer,jwt){
 
     axios.defaults.withCredentials = false;
     axios.defaults.baseURL = apiServer; 
-  //  axios.defaults.headers.withCredentials=true;  
+    //  axios.defaults.headers.withCredentials=true;  
     axios.defaults.headers.common["Jwt"] = jwt;
-   // axios.defaults.headers.common["Content-Type"]= "application/json";
+    // axios.defaults.headers.common["Content-Type"]= "application/json";
     //axios.defaults.headers.common["Accept"]= "application/json";
 
     axios.interceptors.request.use(

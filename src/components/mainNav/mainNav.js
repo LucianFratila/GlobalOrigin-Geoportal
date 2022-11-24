@@ -31,7 +31,7 @@ const MainNav = ({ children,logout,user }) => {
         <div className='absolute z-50 h-[100%]   '>
           <div
             className={`bg-primary/95 overflow-x-hidden  h-[100%]   ${
-              mainNavVisibility ? ` lg:w-[500px] md:w-[500px] sm:w-[300px] xs: w-[300px]  ` : ` w-0`
+              mainNavVisibility ? ` lg:w-[500px] md:w-[500px] sm:w-[300px] xs: w-[300px]  ` : `  w-0`
             } duration-1000`}
           >
             <div className={`grid grid-cols-2  whitespace-nowrap items-center`}>

@@ -17,6 +17,7 @@ import HarvestingPage from "harvesting/HarvestingPage";
 
 ///// UI Components Imports//////
 import MainNav from "components/mainNav/mainNav";
+import useStore from "common/utils/stateStore/useStore";
 
 
 import Map from "map/Map";
@@ -26,7 +27,7 @@ function App() {
   const [user, setUser] = useState(GetObject("user") ? GetObject("user") : "guest");
   const [jwt, setJwt] = useState(GetObject("jwt") ? GetObject("jwt") : "");
   const [mapLoaded, setMapLoaded] = useState(false);
-
+  const setJwtStore = useStore((state) => state.setJwt);
   const map = useRef(null);
   AxiosInit(API_SERVER, jwt);
 
@@ -36,16 +37,18 @@ function App() {
 
   useEffect(() => {
     SetObject("jwt", jwt);
+    setJwtStore(jwt)
   }, [jwt]);
 
   function resetUser(user, jwt) {
     setUser(user);
     setJwt(jwt);
   }
-
+  
+  ////Am bagat JWT in contextul de limba, pt teste//////
   return (
     <Router>
-      <LangContext.Provider value={lang}>
+      <LangContext.Provider value={lang}> 
         <main className=' w-full h-full'>
           <MainNav logout={()=>resetUser("guest","")} user={user}>
             <Routes>
