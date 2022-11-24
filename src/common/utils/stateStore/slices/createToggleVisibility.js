@@ -30,7 +30,7 @@
     //// global state for Concession Map Layer Visibility ////
 
     ///// SidePanel Visibility /////
-    sidePanel:true,
+    sidePanel:false,
     showSidePanel:() => set(() => ({ sidePanel: true })),
     hideSidePanel:() => set(() => ({ sidePanel: false })),
 

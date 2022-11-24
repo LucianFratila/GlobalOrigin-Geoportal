@@ -15,11 +15,15 @@ const SidePanel = () => {
   const hideSidePanel = useStore((state) => state.hideSidePanel);
 
   const mainNavVisibility = useStore((state) => state.mainNavVisibility);
+  const showMainNav = useStore((state) => state.showMainNav);
 
   
 
   //////////VISIBILITY CONTROLS///////////////
-
+function onClose(){
+  hideSidePanel()
+  // showMainNav()
+}
 
     
   return (
@@ -30,11 +34,11 @@ const SidePanel = () => {
           <div
             className={`bg-primary/100 overflow-x-hidden  h-[100%]   ${
               sidePanel ? ` lg:w-[500px] md:w-[500px] sm:w-[300px] xs: w-[300px]  ` : ` w-0`
-            } duration-1000`}
+            } duration-500`}
           >
             <div className={`grid grid-cols-2  whitespace-nowrap items-center`}>
               {/* Menu Header */}
-              <div className={`${!sidePanel && "opacity-0"} transition delay-300 duration-600 p-4 `}>
+              <div className={`${!sidePanel && "opacity-0"} transition delay-300 duration-400 p-4 `}>
                 <h1 className='text-xl text-maintext '>Layer Name</h1>
                 
               </div>
@@ -43,8 +47,8 @@ const SidePanel = () => {
               {/* Menu Close/Open Controls and Search */}
               <div className='flex justify-end p-2'>
                 <button
-                  onClick={hideSidePanel}
-                  className={`${!sidePanel ? "bg-gray-600 hover:bg-gray-500 px-1 py-2  rounded-md" : ""}`}
+                  onClick={onClose}
+                  className={`${!sidePanel ? " px-1 py-2  rounded-md" : ""}`}
                 >
                   <CgClose
                       className={`text-maintext text-2xl hover:text-white duration-300 ${!sidePanel && " scale-100"}`}
