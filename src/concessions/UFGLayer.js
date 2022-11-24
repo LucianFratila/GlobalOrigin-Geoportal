@@ -1,8 +1,6 @@
 import React, {useEffect,useCallback} from 'react'
-import {addVectorLayer,removeVectorLayer} from 'map/VectorLayer'
-
 import axios from "axios"
-
+import { CgClose } from "react-icons/cg";
 
 export default function UFGLayer({map, mapLoaded, layerProps}){
 
@@ -70,8 +68,22 @@ export default function UFGLayer({map, mapLoaded, layerProps}){
     },[])
 
 
+    let block
+    if (layerProps.visibility=='visible') {
+        block = <span key='1' className='flex items-center justify-between' >
+                    <span style={{backgroundColor:`${paint["fill-color"]}`}} className="w-3 h-3 mr-1"></span>
+                    <span className=' mr-5 w-40 text-sm justify-start'>UFG's</span>
+                    <button className=' text-maintext hover:text-white'>
+                    <CgClose />
+                    </button>
+                </span>
+      } else {
+        block= '' 
+      }
+
     return(
         <React.Fragment>
+            {block}
         </React.Fragment>
     )
 

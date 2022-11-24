@@ -1,8 +1,8 @@
 import React, {useEffect,useCallback} from 'react'
-import {addVectorLayer,removeVectorLayer} from 'map/VectorLayer'
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import axios from "axios"
-import { CgController } from 'react-icons/cg';
+import { API_SERVER } from '../config';
+import { CgClose } from "react-icons/cg";
 
 
 export default function ConcessionsLayer({map, mapLoaded, layerProps, activateSidePanel}){
@@ -17,7 +17,6 @@ export default function ConcessionsLayer({map, mapLoaded, layerProps, activateSi
         ]
     }
 
-    
     const name='concessions'
     const type='fill'
 
@@ -25,16 +24,7 @@ export default function ConcessionsLayer({map, mapLoaded, layerProps, activateSi
         closeButton: false,
         closeOnClick: false,
         className: "mypopup" 
-        }).trackPointer();
-
-    const getData = useCallback(
-        () => {
-            const bounds = map.current.getBounds();
-            axios.get(`/concessions/vectors`)
-                .then(response => {
-                    map.current.getSource(name).setData(response.data);
-                }) 
-        },[]);
+    }).trackPointer();
 
     useEffect(()=>{
         if(map.current)
@@ -54,7 +44,8 @@ export default function ConcessionsLayer({map, mapLoaded, layerProps, activateSi
                
                 map.current.addSource(name, {
                     type: 'geojson',
-                    generateId: true // This ensures that all features have unique IDs
+                    generateId: true, // This ensures that all features have unique IDs
+                    data: API_SERVER + '/concessions/vectors'
                 });
                    
                 map.current.addLayer({
@@ -64,17 +55,14 @@ export default function ConcessionsLayer({map, mapLoaded, layerProps, activateSi
                     'paint': paint,
                     'layout': {
                         'visibility': layerProps.visibility ?  layerProps.visibility : 'none'
-                        },
+                    },
                 }); 
-
-                getData()
     
                 map.current.on('mouseenter', name, (e) => {
-                    // Change the cursor style as a UI indicator.
 
                     map.current.getCanvas().style.cursor = 'pointer';
                     const popUps = document.getElementsByClassName('mapboxgl-popup');
-                    /** Check if there is already a popup on the map and if so, remove it */
+
                     if (popUps[0]) popUps[0].remove();   
  
                     const id = e.features[0].properties.Id;
@@ -83,7 +71,6 @@ export default function ConcessionsLayer({map, mapLoaded, layerProps, activateSi
                 });
                         
                 map.current.on('mouseleave',name, () => {
-                    console.log('mouseleave')
                     map.current.getCanvas().style.cursor = '';
                     popup.remove();
                     if (hoveredStateId !== null) {
@@ -96,25 +83,22 @@ export default function ConcessionsLayer({map, mapLoaded, layerProps, activateSi
                 }); 
             
                 map.current.on('mousemove', name, (e) => {
-                    console.log(e)
                     if (e.features.length > 0) {
-                    if (hoveredStateId !== null) {
-                    map.current.setFeatureState(
-                    { source: name, id: hoveredStateId },
-                    { hover: false }
-                    );
-                    }
-                    hoveredStateId = e.features[0].id;
-                    map.current.setFeatureState(
-                    { source: name, id: hoveredStateId },
-                    { hover: true }
-                    );
+                        if (hoveredStateId !== null) {
+                            map.current.setFeatureState(
+                                { source: name, id: hoveredStateId },
+                                { hover: false }
+                            );
+                        }
+                        hoveredStateId = e.features[0].id;
+                        map.current.setFeatureState(
+                            { source: name, id: hoveredStateId },
+                            { hover: true }
+                        );
                     }
                 });
 
                 map.current.on('click', name, (e) => {
-
-                   
                     activateSidePanel({'id':e.features[0].properties.Id,
                                        'concession':e.features[0].properties.name_geo})
                 })
@@ -128,16 +112,27 @@ export default function ConcessionsLayer({map, mapLoaded, layerProps, activateSi
             if(map.current.getSource(name)){
                 map.current.removeLayer(name)
                 map.current.removeSource(name)
-             //   map.current.off('moveend',name,getData)
             }
         }
 
     },[])
 
+    let block
+    if (layerProps.visibility=='visible') {
+        block = <span key='1' className='flex items-center justify-between' >
+                    <span style={{backgroundColor:`${paint["fill-color"]}`}} className="w-3 h-3 mr-1"></span>
+                    <span className=' mr-5 w-40 text-sm justify-start'>Concessions</span>
+                    <button className=' text-maintext hover:text-white'>
+                    <CgClose />
+                    </button>
+                </span>
+      } else {
+        block= '' 
+      }
 
     return(
         <React.Fragment>
-            
+            {block}
         </React.Fragment>
     )
 
