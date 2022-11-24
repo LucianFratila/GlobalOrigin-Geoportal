@@ -1,37 +1,31 @@
 import React from "react";
+import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 import ToggleCheckBox from "components/reusable/toggleCheckbox";
 import InputSelectOptions from "components/reusable/inputSelectOptions";
 
 import ConcessionsLayers from "./ConcessionsLayers";
 import MapLegendConcession from "./ConcessionLegend";
+import SidePanel from "common/pannels/sidepanel";
 
 import useStore from "common/utils/stateStore/useStore";
 
 export default function ConcessionsPage({ map, mapLoaded }) {
+  //////////LAYER VISIBILITY CONTROLS///////////////
   const concessionLayerVisibility = useStore((state) => state.concessionLayerVisibility);
   const toggleConcessionLayer = useStore((state) => state.toggleConcessionLayer);
 
-  ////MockUp Data////
-  const layercontrols = {
-    layers: [
-      { name: "View Concessions", id: 1 },
-      { name: "View UFA's", id: 2 },
-      { name: "View UFG's", id: 3 },
-      { name: "View AAC's", id: 4 },
-    ],
-  };
-  const chartDataSample = {
-    chart1: [
-      { title: "xx1", value: 10, color: "#E38627" },
-      { title: "xx2", value: 10, color: "#C13C37" },
-      { title: "xx3", value: 35, color: "#6A2135" },
-      { title: "xx4", value: 15, color: "#009278" },
-      { title: "xx5", value: 10, color: "#7b83dd" },
-      { title: "xx6", value: 20, color: "#b3c1bf" },
-    ],
-  };
+  const UFAvisibility = useStore((state) => state.UFAvisibility);
+  const toggleUFA = useStore((state) => state.toggleUFA);
+  
+  const UFGvisibility = useStore((state) => state.UFGvisibility);
+  const toggleUFG = useStore((state) => state.toggleUFG);
+  
+  const AACvisibility = useStore((state) => state.AACvisibility);
+  const toggleAAC = useStore((state) => state.toggleAAC);
+  //////////LAYER VISIBILITY CONTROLS///////////////
 
+  ////MockUp Data////
   const dataSelecteInput = {
     company: [
       { name: "company 1", id: 1 },
@@ -54,18 +48,20 @@ export default function ConcessionsPage({ map, mapLoaded }) {
 
   let layersProps = {
     concessions: {
-      visibility: "visible",
+      visibility: `${concessionLayerVisibility?`visible`:`none`}`,
     },
     ufa: {
-      visibility: "none",
+      visibility: `${UFAvisibility?`visible`:`none`}`,
     },
     ufg: {
-      visibility: "none",
+      visibility: `${UFGvisibility?`visible`:`none`}`,
     },
     aac: {
-      visibility: "visible",
+      visibility: `${AACvisibility?`visible`:`none`}`,
     },
   };
+
+  console.log(layersProps);
 
   return (
     <React.Fragment>
@@ -121,17 +117,36 @@ export default function ConcessionsPage({ map, mapLoaded }) {
               </div>
             </form>
           </div>
+          {/* Layer toggles */}
           <div className=' py-5 gap-3 flex flex-col'>
-            {layercontrols.layers.map((i) => (
-              <div key={i.id} className='flex py-3 gap-3'>
-                <h1 className=' text-white'>{i.name}</h1>
-                <ToggleCheckBox />
-              </div>
-            ))}
+            <div className='flex py-3 gap-3'>
+              <h1 className=' text-white'>View Concessions</h1>
+              <ToggleCheckBox />
+            </div>
+          </div>
+          <div className=' py-5 gap-3 flex flex-col'>
+            <div className='flex py-3 gap-3'>
+              <h1 className=' text-white'>View UFA's</h1>
+              <ToggleCheckBox toggleState={UFAvisibility} toggleAction={toggleUFA} name={"UFA"} />
+            </div>
+          </div>
+          <div className=' py-5 gap-3 flex flex-col'>
+            <div className='flex py-3 gap-3'>
+              <h1 className=' text-white'>View UFG's</h1>
+              <ToggleCheckBox toggleState={UFGvisibility} toggleAction={toggleUFG} name={"UFG"} />
+            </div>
+          </div>
+          <div className=' py-5 gap-3 flex flex-col'>
+            <div className='flex py-3 gap-3'>
+              <h1 className=' text-white'>View AAC's</h1>
+              <ToggleCheckBox toggleState={AACvisibility} toggleAction={toggleAAC} name={"AAG"} />
+            </div>
           </div>
         </section>
-        {/* statistics */}
-        {/* <Statistics data={chartDataSample.chart1}/> */}
+        <Link className='mainnavlink text-maintext' to={`/sidepanel`}>
+          side
+        </Link>
+        <SidePanel />
       </main>
 
       <MapLegendConcession>
@@ -140,4 +155,3 @@ export default function ConcessionsPage({ map, mapLoaded }) {
     </React.Fragment>
   );
 }
-
