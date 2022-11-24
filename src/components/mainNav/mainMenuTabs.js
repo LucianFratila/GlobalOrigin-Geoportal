@@ -30,7 +30,7 @@ const MainMenuTabs = ({ open }) => {
   return (
     <div className=' flex flex-row h-full px-2 '>
       <div className={` flex flex-row whitespace-nowrap `}>
-      <button
+        <button
           onClick={slideLeft}
           className={`bg-gray-600 hover:bg-gray-500 px py-1  rounded-sm  ${sliderPos <= 50 ? "scale-0" : ""}`}
         >
@@ -43,17 +43,14 @@ const MainMenuTabs = ({ open }) => {
       >
         {menu.menuitem.map((i) => (
           <div key={i.name}>
-            <Link
-              className='mainnavlink text-maintext'
-              to={i.link}
-            >
+            <Link className='mainnavlink text-maintext' to={i.link}>
               {i.name}
             </Link>
           </div>
         ))}
       </div>
+      
       <div>
-       
         <button onClick={slideRight} className={`bg-gray-600 hover:bg-gray-500 px py-1  rounded-sm  `}>
           <IoMdArrowDropleft className={`text-maintext text-1xl rotate-180 duration-300 ${!open && "scale-100"} `} />
         </button>

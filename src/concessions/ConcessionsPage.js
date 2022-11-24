@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 
 import ToggleCheckBox from "components/reusable/toggleCheckbox";
 import InputSelectOptions from "components/reusable/inputSelectOptions";
@@ -10,6 +10,9 @@ import SidePanel from "components/sidePanel";
 import useStore from "common/utils/stateStore/useStore";
 
 export default function ConcessionsPage({ map, mapLoaded }) {
+  const [layerData, SetLayerData] = useState(null)
+
+  console.log('concession page '+ layerData);
   //////////LAYER VISIBILITY CONTROLS///////////////
   const concessionLayerVisibility = useStore((state) => state.concessionLayerVisibility);
   const toggleConcessionLayer = useStore((state) => state.toggleConcessionLayer);
@@ -28,7 +31,8 @@ export default function ConcessionsPage({ map, mapLoaded }) {
   //////////LAYER VISIBILITY CONTROLS///////////////
 
   function activateSidePanel(data){
-    
+    showSidePanel()
+    SetLayerData(data)
   }
 
   ////MockUp Data////
@@ -147,18 +151,14 @@ export default function ConcessionsPage({ map, mapLoaded }) {
               <ToggleCheckBox toggleState={AACvisibility} toggleAction={toggleAAC} name={"AAG"} />
             </div>
           </div>
-          <button onClick={showSidePanel}>Click me</button>
+          <button onClick={activateSidePanel}>Click me</button>
           {/* Layer toggles */}
         </section>
         
-        
-        
-    
-        
       </main>
-      {/* <SidePanel/> */}
+      <SidePanel/>
       <MapLegendConcession>
-        <ConcessionsLayers map={map} mapLoaded={mapLoaded} layersProps={layersProps}></ConcessionsLayers>
+        <ConcessionsLayers map={map} mapLoaded={mapLoaded} layersProps={layersProps} activateSidePanel={activateSidePanel} ></ConcessionsLayers>
       </MapLegendConcession>
     </React.Fragment>
   );

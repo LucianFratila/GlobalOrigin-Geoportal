@@ -7,8 +7,8 @@ import AACLayer from './AACLayer'
 import axios from "axios"
 
 
-export default function ConcessionsLayers({map, mapLoaded, layersProps}){
-
+export default function ConcessionsLayers({map, mapLoaded, layersProps,activateSidePanel}){
+    
 
     return(
         <React.Fragment>

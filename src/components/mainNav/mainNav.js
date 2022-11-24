@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { Link } from "react-router-dom";
 ////React Icons Imports//////
 import { IoMdArrowDropleft } from "react-icons/io";
 import { AiOutlineSearch } from "react-icons/ai";
@@ -34,6 +34,7 @@ const MainNav = ({ children,logout,user }) => {
             } duration-1000`}
           >
             <div className={`grid grid-cols-2  whitespace-nowrap items-center`}>
+            
               {/* Menu Header */}
               <div className={`${!mainNavVisibility && "opacity-0"} transition delay-300 duration-600 p-4 `}>
                 <h1 className='text-xl text-maintext '>Gabon Geoportal</h1>
@@ -42,8 +43,10 @@ const MainNav = ({ children,logout,user }) => {
                   <button className=' hover:text-white'>
                     <IoMdArrowDropdown size={20} />
                   </button>
-                  <button onClick={logout}>logout</button>
+                  
                 </p>
+                <button onClick={logout}>logout</button>
+                  <Link to='/login'>Login</Link>
               </div>
               {/* Menu Header */}
 
