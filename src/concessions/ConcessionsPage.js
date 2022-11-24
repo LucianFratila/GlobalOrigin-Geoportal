@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 
 import ToggleCheckBox from "components/reusable/toggleCheckbox";
 import InputSelectOptions from "components/reusable/inputSelectOptions";
@@ -10,19 +10,18 @@ import SidePanel from "components/sidePanel";
 import useStore from "common/utils/stateStore/useStore";
 
 export default function ConcessionsPage({ map, mapLoaded }) {
-  const [layerData, SetLayerData] = useState(null)
+  const [layerData, SetLayerData] = useState(null);
 
-  console.log('concession page '+ layerData);
   //////////LAYER VISIBILITY CONTROLS///////////////
   const concessionLayerVisibility = useStore((state) => state.concessionLayerVisibility);
   const toggleConcessionLayer = useStore((state) => state.toggleConcessionLayer);
 
   const UFAvisibility = useStore((state) => state.UFAvisibility);
   const toggleUFA = useStore((state) => state.toggleUFA);
-  
+
   const UFGvisibility = useStore((state) => state.UFGvisibility);
   const toggleUFG = useStore((state) => state.toggleUFG);
-  
+
   const AACvisibility = useStore((state) => state.AACvisibility);
   const toggleAAC = useStore((state) => state.toggleAAC);
 
@@ -30,10 +29,10 @@ export default function ConcessionsPage({ map, mapLoaded }) {
   const hideMainNav = useStore((state) => state.hideMainNav);
   //////////LAYER VISIBILITY CONTROLS///////////////
 
-  function activateSidePanel(data){
-    showSidePanel()
-    hideMainNav()
-    SetLayerData(data)
+  function activateSidePanel(data) {
+    showSidePanel();
+    hideMainNav();
+    SetLayerData(data);
   }
 
   ////MockUp Data////
@@ -59,35 +58,25 @@ export default function ConcessionsPage({ map, mapLoaded }) {
 
   let layersProps = {
     concessions: {
-      visibility: `${concessionLayerVisibility?`visible`:`none`}`,
+      visibility: `${concessionLayerVisibility ? `visible` : `none`}`,
     },
     ufa: {
-      visibility: `${UFAvisibility?`visible`:`none`}`,
+      visibility: `${UFAvisibility ? `visible` : `none`}`,
     },
     ufg: {
-      visibility: `${UFGvisibility?`visible`:`none`}`,
+      visibility: `${UFGvisibility ? `visible` : `none`}`,
     },
     aac: {
-      visibility: `${AACvisibility?`visible`:`none`}`,
+      visibility: `${AACvisibility ? `visible` : `none`}`,
     },
   };
-
 
   return (
     <React.Fragment>
       <main className='p-2'>
         {/* layer name & visibility */}
-        <div className=' py-5 gap-3 flex flex-row  px-4'>
-          <h1 className=' text-white'>Concessions</h1>
-          <ToggleCheckBox
-            toggleState={concessionLayerVisibility}
-            toggleAction={toggleConcessionLayer}
-            name={"Concession Visibility"}
-          />
-          {/* <ToggleCheckBox  name={'Concession Visibility'}  /> */}
-        </div>
         {/* filters */}
-        <section className='  rounded-md p-4  bg-neutral-700'>
+        <section className='  rounded-md p-4 mt-3  bg-neutral-700'>
           <div>
             <h1 className=' text-white py-4'>Filters</h1>
           </div>
@@ -131,7 +120,11 @@ export default function ConcessionsPage({ map, mapLoaded }) {
           <div className=' py-5 gap-3 flex flex-col'>
             <div className='flex py-3 gap-3'>
               <h1 className=' text-white'>View Concessions</h1>
-              <ToggleCheckBox />
+              <ToggleCheckBox
+                toggleState={concessionLayerVisibility}
+                toggleAction={toggleConcessionLayer}
+                name={"Concession Visibility"}
+              />
             </div>
           </div>
           <div className=' py-5 gap-3 flex flex-col'>
@@ -155,11 +148,15 @@ export default function ConcessionsPage({ map, mapLoaded }) {
           <button onClick={activateSidePanel}>Click me</button>
           {/* Layer toggles */}
         </section>
-        
       </main>
-      <SidePanel/>
+      <SidePanel />
       <MapLegendConcession>
-        <ConcessionsLayers map={map} mapLoaded={mapLoaded} layersProps={layersProps} activateSidePanel={activateSidePanel} ></ConcessionsLayers>
+        <ConcessionsLayers
+          map={map}
+          mapLoaded={mapLoaded}
+          layersProps={layersProps}
+          activateSidePanel={activateSidePanel}
+        ></ConcessionsLayers>
       </MapLegendConcession>
     </React.Fragment>
   );

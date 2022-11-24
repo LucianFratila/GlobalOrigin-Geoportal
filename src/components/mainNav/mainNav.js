@@ -4,10 +4,11 @@ import { Link } from "react-router-dom";
 import { IoMdArrowDropleft } from "react-icons/io";
 import { AiOutlineSearch } from "react-icons/ai";
 import { CgClose } from "react-icons/cg";
-import { IoMdArrowDropdown } from "react-icons/io";
+
 
 ////Component imports////
 import MainMenuTabs from "./mainMenuTabs";
+import UserMenu from "./userMenu";
 
 ////Utilis Imports////
 import useStore from "common/utils/stateStore/useStore";
@@ -38,15 +39,9 @@ const MainNav = ({ children,logout,user }) => {
               {/* Menu Header */}
               <div className={`${!mainNavVisibility && "opacity-0"} transition delay-300 duration-600 p-4 `}>
                 <h1 className='text-xl text-maintext '>Gabon Geoportal</h1>
-                <p className='text-xs text-maintext flex items-center gap-1 '>
-                  {user}
-                  <button className=' hover:text-white'>
-                    <IoMdArrowDropdown size={20} />
-                  </button>
-                  
-                </p>
-                <button onClick={logout}>logout</button>
-                  <Link to='/login'>Login</Link>
+                <UserMenu user={user} logout={logout}/>
+                
+                
               </div>
               {/* Menu Header */}
 
@@ -85,8 +80,7 @@ const MainNav = ({ children,logout,user }) => {
               {/* Menu Tabs */}
               <MainMenuTabs open={mainNavVisibility} />
 
-              {/* Children Pages */}
-              {/* <div className={`${!mainNavVisibility && "opacity-0 duration-200"}`}>{children}</div> */}
+             
               <div  >{children}</div>
             </div>
             {/* Main Content */}
