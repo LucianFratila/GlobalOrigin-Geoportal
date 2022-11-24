@@ -15,8 +15,8 @@ import useStore from "common/utils/stateStore/useStore";
 
 
 
-const MainNav = ({ children,logout }) => {
-  const user = localStorage.getItem("user");
+const MainNav = ({ children,logout,user }) => {
+  //const user = localStorage.getItem("user");
   
   ///Menu Visibility Controls///
   const mainNavVisibility = useStore((state) => state.mainNavVisibility);

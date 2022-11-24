@@ -39,18 +39,18 @@ function LoginForm({resetUser}){
       axios.post('/users/login',values)
           .then( response => {
             console.log(response);
-                setMessage(response.data.output.message)
+                setMessage(response.data.message)
                 setMessageClass('alert alert-success')    
-                resetUser(fields["email"],response.data.output.jwt);             
+                resetUser(fields["email"],response.data.jwt);             
             })
             .catch( error => {
                 setMessageClass('alert alert-danger')
-                if(error.response.data.output.errors){
+                if(error.response.data.errors){
                     setMessage('Please correct the errors')
-                    setErrors(error.response.data.output.errors)
+                    setErrors(error.response.data.errors)
                 }
                 else{
-                    setMessage(error.response.data.output.message)
+                    setMessage(error.response.data.message)
                     setErrors(defErrors)
                 } 
             })
