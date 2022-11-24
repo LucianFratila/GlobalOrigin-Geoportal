@@ -57,12 +57,29 @@ export default function ConcessionsLayer({map, mapLoaded, layerProps, activateSi
                         'visibility': layerProps.visibility ?  layerProps.visibility : 'none'
                     },
                 }); 
-    
+
+                map.current.addLayer({
+                    "id": "symbols",
+                    "type": "symbol",
+                    "source": name,
+                    "layout": {
+                      "symbol-placement": "line-center",
+                      "text-font": ["Open Sans Regular"],
+                      "text-field": '{Id}',
+                      "text-size": 16,
+                      "text-rotate": -4,
+                      "symbol-spacing": 1,
+                    },
+                    "paint":{
+                      "text-translate":[0,-20],
+                    }
+                });
+           
+   
                 map.current.on('mouseenter', name, (e) => {
 
                     map.current.getCanvas().style.cursor = 'pointer';
                     const popUps = document.getElementsByClassName('mapboxgl-popup');
-
                     if (popUps[0]) popUps[0].remove();   
  
                     const id = e.features[0].properties.Id;
@@ -71,18 +88,22 @@ export default function ConcessionsLayer({map, mapLoaded, layerProps, activateSi
                 });
                         
                 map.current.on('mouseleave',name, () => {
+
                     map.current.getCanvas().style.cursor = '';
                     popup.remove();
                     if (hoveredStateId !== null) {
                         map.current.setFeatureState(
-                        { source: name, id: hoveredStateId },
-                        { hover: false }
+                            { source: name, id: hoveredStateId },
+                            { hover: false }
                         );
                         }
                         hoveredStateId = null;
                 }); 
-            
+       
                 map.current.on('mousemove', name, (e) => {
+
+                    popup.setHTML("Id:" + e.features[0].properties.Id + '<br>'+  "Concession:" + e.features[0].properties.name_geo )
+
                     if (e.features.length > 0) {
                         if (hoveredStateId !== null) {
                             map.current.setFeatureState(
