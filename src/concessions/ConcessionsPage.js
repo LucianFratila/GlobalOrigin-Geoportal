@@ -57,10 +57,10 @@ export default function ConcessionsPage({ map, mapLoaded }) {
       visibility: "visible",
     },
     ufa: {
-      visibility: "none",
+      visibility: "visible",
     },
     ufg: {
-      visibility: "none",
+      visibility: "visible",
     },
     aac: {
       visibility: "visible",
