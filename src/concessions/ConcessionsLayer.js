@@ -1,11 +1,13 @@
-import React, {useEffect,useCallback} from 'react'
+import React, {useEffect,useCallback,useState} from 'react'
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import axios from "axios"
 import { API_SERVER } from '../config';
 import { CgClose } from "react-icons/cg";
-
+import ClipLoader from "react-spinners/ClipLoader";
 
 export default function ConcessionsLayer({map, mapLoaded, layerProps, activateSidePanel}){
+    
+    const [isLoading,setIsLoading]=useState(true)
 
     const paint={
         'fill-color': '#627BC1',
@@ -37,6 +39,16 @@ export default function ConcessionsLayer({map, mapLoaded, layerProps, activateSi
 
     let hoveredStateId = null;
 
+    const getData = useCallback(
+        () => {
+            setIsLoading(true)
+            axios.get(`/concessions/vectors`)
+                .then(response => {
+                    setIsLoading(false)
+                    map.current.getSource(name).setData(response.data);
+                }) 
+        },[]);
+
     useEffect(()=>{
         
         if(mapLoaded){
@@ -45,7 +57,7 @@ export default function ConcessionsLayer({map, mapLoaded, layerProps, activateSi
                 map.current.addSource(name, {
                     type: 'geojson',
                     generateId: true, // This ensures that all features have unique IDs
-                    data: API_SERVER + '/concessions/vectors'
+                    //data: API_SERVER + '/concessions/vectors'
                 });
                    
                 map.current.addLayer({
@@ -58,7 +70,9 @@ export default function ConcessionsLayer({map, mapLoaded, layerProps, activateSi
                     },
                 }); 
 
-                map.current.addLayer({
+                getData()
+
+         /*       map.current.addLayer({
                     "id": "symbols",
                     "type": "symbol",
                     "source": name,
@@ -74,7 +88,7 @@ export default function ConcessionsLayer({map, mapLoaded, layerProps, activateSi
                       "text-translate":[0,-20],
                     }
                 });
-           
+           */
    
                 map.current.on('mouseenter', name, (e) => {
 
@@ -141,7 +155,7 @@ export default function ConcessionsLayer({map, mapLoaded, layerProps, activateSi
     let block
     if (layerProps.visibility=='visible') {
         block = <span key='1' className='flex items-center justify-between' >
-                    <span style={{backgroundColor:`${paint["fill-color"]}`}} className="w-3 h-3 mr-1"></span>
+                    {isLoading ? <ClipLoader color={paint["fill-color"]} size="20"/> : <span style={{backgroundColor:`${paint["fill-color"]}`}} className="w-3 h-3 mr-1"></span>}
                     <span className=' mr-5 w-40 text-sm justify-start'>Concessions</span>
                     <button className=' text-maintext hover:text-white'>
                     <CgClose />

@@ -1,8 +1,11 @@
-import React, {useEffect,useCallback} from 'react'
+import React, {useEffect,useCallback,useState} from 'react'
 import axios from "axios"
 import { CgClose } from "react-icons/cg";
+import ClipLoader from "react-spinners/ClipLoader";
 
 export default function AACLayer({map, mapLoaded, layerProps}){
+
+    const [isLoading,setIsLoading]=useState(true)
 
     const paint={
         'fill-color': 'orange'
@@ -12,9 +15,11 @@ export default function AACLayer({map, mapLoaded, layerProps}){
 
     const getData = useCallback(
         () => {
+            setIsLoading(true)
             const bounds = map.current.getBounds();
             axios.get(`/annual_allowable_cuts/vectors`)
                 .then(response => {
+                    setIsLoading(false)
                     map.current.getSource(name).setData(response.data);
                 }) 
         },[]);
@@ -69,7 +74,7 @@ export default function AACLayer({map, mapLoaded, layerProps}){
     let block
     if (layerProps.visibility=='visible') {
         block = <span key='1' className='flex items-center justify-between' >
-                    <span style={{backgroundColor:`${paint["fill-color"]}`}} className="w-3 h-3 mr-1"></span>
+                    {isLoading ? <ClipLoader color={paint["fill-color"]} size="20"/> : <span style={{backgroundColor:`${paint["fill-color"]}`}} className="w-3 h-3 mr-1"></span>}
                     <span className=' mr-5 w-40 text-sm justify-start'>AAC's</span>
                     <button className=' text-maintext hover:text-white'>
                     <CgClose />
