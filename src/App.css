@@ -73,3 +73,16 @@ a {
   border-bottom: 2px solid green;
   padding-bottom: 4px;
 }
+
+
+/* change background and tip color to green */
+.mypopup .mapboxgl-popup-content {
+  opacity:0.9 !important;
+  background-color: rgb(10, 25, 41);
+  color: lightgrey !important;
+}
+
+.mypopup .mapboxgl-popup-tip {
+  opacity:0.9 !important;
+  border-top-color: rgb(10, 25, 41)
+}

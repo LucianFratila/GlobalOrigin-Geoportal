@@ -7,15 +7,15 @@ import AACLayer from './AACLayer'
 import axios from "axios"
 
 
-export default function ConcessionsLayers({map, mapLoaded, layersProps,activateSidePanel}){
+export default function ConcessionsLayers({map, mapLoaded, layersProps, activateSidePanel}){
     
 
     return(
         <React.Fragment>
-            <ConcessionsLayer map={map} mapLoaded={mapLoaded} layerProps={layersProps.concessions}/>
-            <UFALayer map={map} mapLoaded={mapLoaded} layerProps={layersProps.ufa}/>
-            <UFGLayer map={map} mapLoaded={mapLoaded} layerProps={layersProps.ufg}/>
-            <AACLayer map={map} mapLoaded={mapLoaded} layerProps={layersProps.aac}/>
+            <ConcessionsLayer map={map} mapLoaded={mapLoaded} layerProps={layersProps.concessions} activateSidePanel={activateSidePanel}/>
+            <UFALayer map={map} mapLoaded={mapLoaded} layerProps={layersProps.ufa} activateSidePanel={activateSidePanel}/>
+            <UFGLayer map={map} mapLoaded={mapLoaded} layerProps={layersProps.ufg} activateSidePanel={activateSidePanel}/>
+            <AACLayer map={map} mapLoaded={mapLoaded} layerProps={layersProps.aac} activateSidePanel={activateSidePanel}/>
         </React.Fragment>
     )
 

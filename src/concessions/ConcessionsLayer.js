@@ -2,20 +2,30 @@ import React, {useEffect,useCallback} from 'react'
 import {addVectorLayer,removeVectorLayer} from 'map/VectorLayer'
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import axios from "axios"
+import { CgController } from 'react-icons/cg';
 
 
-export default function ConcessionsLayer({map, mapLoaded, layerProps}){
+export default function ConcessionsLayer({map, mapLoaded, layerProps, activateSidePanel}){
 
     const paint={
-        'fill-color': 'red'
+        'fill-color': '#627BC1',
+        'fill-opacity': [
+        'case',
+        ['boolean', ['feature-state', 'hover'], false],
+        1,
+        0.5
+        ]
     }
+
+    
     const name='concessions'
     const type='fill'
 
     const popup = new mapboxgl.Popup({
         closeButton: false,
-        closeOnClick: false
-        });
+        closeOnClick: false,
+        className: "mypopup" 
+        }).trackPointer();
 
     const getData = useCallback(
         () => {
@@ -33,7 +43,9 @@ export default function ConcessionsLayer({map, mapLoaded, layerProps}){
                 'visibility',
                 layerProps.visibility
                 );
-    },[layerProps.visibility])        
+    },[layerProps.visibility])   
+
+    let hoveredStateId = null;
 
     useEffect(()=>{
         
@@ -41,7 +53,8 @@ export default function ConcessionsLayer({map, mapLoaded, layerProps}){
             if(!map.current.getSource(name)){
                
                 map.current.addSource(name, {
-                    type: 'geojson'
+                    type: 'geojson',
+                    generateId: true // This ensures that all features have unique IDs
                 });
                    
                 map.current.addLayer({
@@ -56,37 +69,57 @@ export default function ConcessionsLayer({map, mapLoaded, layerProps}){
 
                 getData()
     
-              //  map.current.on('moveend',name, getData);
-
                 map.current.on('mouseenter', name, (e) => {
                     // Change the cursor style as a UI indicator.
+
                     map.current.getCanvas().style.cursor = 'pointer';
                     const popUps = document.getElementsByClassName('mapboxgl-popup');
                     /** Check if there is already a popup on the map and if so, remove it */
                     if (popUps[0]) popUps[0].remove();   
-                    // Copy coordinates array.
-                    const coordinates = e.features[0].geometry.coordinates.slice();
-                    const id = e.features[0].properties.id;
-                        
-                    // Ensure that if the map is zoomed out such that multiple
-                    // copies of the feature are visible, the popup appears
-                    // over the copy being pointed to.
-                    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-                    }
-                        
-                    // Populate the popup and set its coordinates
-                    // based on the feature found.
-                    popup.setLngLat(coordinates).setHTML(id).addTo(map.current);
+ 
+                    const id = e.features[0].properties.Id;
+                    popup.setHTML("Id:" + id+'<br>'+  "Concession:" + e.features[0].properties.name_geo ).addTo(map.current)
+                               
                 });
                         
                 map.current.on('mouseleave',name, () => {
+                    console.log('mouseleave')
                     map.current.getCanvas().style.cursor = '';
                     popup.remove();
-                });    
-            }
-        }
+                    if (hoveredStateId !== null) {
+                        map.current.setFeatureState(
+                        { source: name, id: hoveredStateId },
+                        { hover: false }
+                        );
+                        }
+                        hoveredStateId = null;
+                }); 
+            
+                map.current.on('mousemove', name, (e) => {
+                    console.log(e)
+                    if (e.features.length > 0) {
+                    if (hoveredStateId !== null) {
+                    map.current.setFeatureState(
+                    { source: name, id: hoveredStateId },
+                    { hover: false }
+                    );
+                    }
+                    hoveredStateId = e.features[0].id;
+                    map.current.setFeatureState(
+                    { source: name, id: hoveredStateId },
+                    { hover: true }
+                    );
+                    }
+                });
 
+                map.current.on('click', name, (e) => {
+
+                   
+                    activateSidePanel({'id':e.features[0].properties.Id,
+                                       'concession':e.features[0].properties.name_geo})
+                })
+        }
+    }
     },[mapLoaded])
 
     useEffect(()=>{
