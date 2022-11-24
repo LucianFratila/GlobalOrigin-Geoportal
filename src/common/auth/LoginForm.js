@@ -36,7 +36,7 @@ function LoginForm({resetUser}){
 
       setMessage("Loading...")
       
-      axios.post('/authentication/login',values)
+      axios.post('/users/login',values)
           .then( response => {
             console.log(response);
                 setMessage(response.data.output.message)

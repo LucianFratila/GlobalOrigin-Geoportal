@@ -18,18 +18,13 @@ import HarvestingPage from "harvesting/HarvestingPage";
 ///// UI Components Imports//////
 import MainNav from "components/mainNav/mainNav";
 
-
 import Map from "map/Map";
-
-
 
 function App() {
   const [lang, setLang] = useState("en");
   const [user, setUser] = useState(GetObject("user") ? GetObject("user") : "guest");
   const [jwt, setJwt] = useState(GetObject("jwt") ? GetObject("jwt") : "");
   const [mapLoaded, setMapLoaded] = useState(false);
-
-
 
   const map = useRef(null);
 
@@ -52,7 +47,6 @@ function App() {
     <Router>
       <LangContext.Provider value={lang}>
         <main className=' w-full h-full'>
-
           <MainNav>
             <Routes>
               <Route exact path='/' element={<ConcessionsPage map={map} mapLoaded={mapLoaded} />} />
@@ -63,7 +57,6 @@ function App() {
               <Route exact path='/forgot' element={<ForgotForm />} />
             </Routes>
           </MainNav>
-
           <Map map={map} setMapLoaded={setMapLoaded}></Map>
         </main>
       </LangContext.Provider>

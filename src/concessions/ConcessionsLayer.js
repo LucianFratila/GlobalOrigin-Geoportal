@@ -7,14 +7,11 @@ import axios from "axios"
 export default function ConcessionsLayer({map, mapLoaded, layerProps}){
 
     const paint={
-        'circle-radius': 4,
-        'circle-stroke-width': 2,
-        'circle-color': 'red',
-        'circle-stroke-color': 'white'
+        'fill-color': 'red'
     }
     const name='concessions'
-    const type='circle'
-    
+    const type='fill'
+
     const popup = new mapboxgl.Popup({
         closeButton: false,
         closeOnClick: false
@@ -23,7 +20,7 @@ export default function ConcessionsLayer({map, mapLoaded, layerProps}){
     const getData = useCallback(
         () => {
             const bounds = map.current.getBounds();
-            axios.get(`http://hrttrt.zenithmaps.com/marcaje/vectors?bbox=${bounds.getWest()},${bounds.getSouth()},${bounds.getEast()},${bounds.getNorth()}&resolution=5`)
+            axios.get(`/concessions/vectors`)
                 .then(response => {
                     map.current.getSource(name).setData(response.data);
                 }) 
@@ -59,7 +56,7 @@ export default function ConcessionsLayer({map, mapLoaded, layerProps}){
 
                 getData()
     
-                map.current.on('moveend',name, getData);
+              //  map.current.on('moveend',name, getData);
 
                 map.current.on('mouseenter', name, (e) => {
                     // Change the cursor style as a UI indicator.
@@ -98,7 +95,7 @@ export default function ConcessionsLayer({map, mapLoaded, layerProps}){
             if(map.current.getSource(name)){
                 map.current.removeLayer(name)
                 map.current.removeSource(name)
-                map.current.off('moveend',name,getData)
+             //   map.current.off('moveend',name,getData)
             }
         }
 

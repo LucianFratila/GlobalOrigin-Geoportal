@@ -7,18 +7,15 @@ import axios from "axios"
 export default function UFGLayer({map, mapLoaded, layerProps}){
 
     const paint={
-        'circle-radius': 4,
-        'circle-stroke-width': 2,
-        'circle-color': 'blue',
-        'circle-stroke-color': 'white'
+        'fill-color': 'blue'
     }
     const name='ufg'
-    const type='circle'
+    const type='fill'
 
     const getData = useCallback(
         () => {
             const bounds = map.current.getBounds();
-            axios.get(`http://hrttrt.zenithmaps.com/marcaje/vectors?bbox=${bounds.getWest()},${bounds.getSouth()},${bounds.getEast()},${bounds.getNorth()}&resolution=5`)
+            axios.get(`/management_units/vectors`)
                 .then(response => {
                     map.current.getSource(name).setData(response.data);
                 }) 
@@ -53,7 +50,7 @@ export default function UFGLayer({map, mapLoaded, layerProps}){
 
                 getData()
     
-                map.current.on('moveend',name, getData);
+             //   map.current.on('moveend',name, getData);
 
             }
         }
@@ -66,7 +63,7 @@ export default function UFGLayer({map, mapLoaded, layerProps}){
             if(map.current.getSource(name)){
                 map.current.removeLayer(name)
                 map.current.removeSource(name)
-                map.current.off('moveend',name,getData)
+             //   map.current.off('moveend',name,getData)
             }
         }
 
