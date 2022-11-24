@@ -25,6 +25,15 @@ export default function UFGLayer({map, mapLoaded, layerProps}){
         },[]);
 
     useEffect(()=>{
+        if(map.current)
+            map.current.setLayoutProperty(
+                name,
+                'visibility',
+                layerProps.visibility
+                );
+    },[layerProps.visibility])       
+    
+    useEffect(()=>{
         if(mapLoaded){
             if(!map.current.getSource(name)){
 

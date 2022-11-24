@@ -14,6 +14,7 @@ export default function ConcessionsLayer({map, mapLoaded, layerProps}){
     }
     const name='concessions'
     const type='circle'
+    
     const popup = new mapboxgl.Popup({
         closeButton: false,
         closeOnClick: false
@@ -27,6 +28,15 @@ export default function ConcessionsLayer({map, mapLoaded, layerProps}){
                     map.current.getSource(name).setData(response.data);
                 }) 
         },[]);
+
+    useEffect(()=>{
+        if(map.current)
+            map.current.setLayoutProperty(
+                name,
+                'visibility',
+                layerProps.visibility
+                );
+    },[layerProps.visibility])        
 
     useEffect(()=>{
         
