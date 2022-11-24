@@ -32,6 +32,7 @@ export default function ConcessionsPage({ map, mapLoaded }) {
 
   function activateSidePanel(data){
     showSidePanel()
+    hideMainNav()
     SetLayerData(data)
   }
 
@@ -86,7 +87,7 @@ export default function ConcessionsPage({ map, mapLoaded }) {
           {/* <ToggleCheckBox  name={'Concession Visibility'}  /> */}
         </div>
         {/* filters */}
-        <section className=' rounded-md p-4  bg-neutral-700'>
+        <section className='  rounded-md p-4  bg-neutral-700'>
           <div>
             <h1 className=' text-white py-4'>Filters</h1>
           </div>

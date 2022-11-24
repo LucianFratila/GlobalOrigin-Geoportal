@@ -29,8 +29,8 @@ const MainNav = ({ children,logout,user }) => {
       <div>
         <div className='absolute z-50 h-[100%]   '>
           <div
-            className={`bg-primary/95 overflow-x-auto  h-[100%]   ${
-              mainNavVisibility ? ` lg:w-[500px] md:w-[500px] sm:w-[300px] xs: w-[300px]  ` : ` w-16`
+            className={`bg-primary/95 overflow-x-hidden  h-[100%]   ${
+              mainNavVisibility ? ` lg:w-[500px] md:w-[500px] sm:w-[300px] xs: w-[300px]  ` : ` w-0`
             } duration-1000`}
           >
             <div className={`grid grid-cols-2  whitespace-nowrap items-center`}>
@@ -61,7 +61,7 @@ const MainNav = ({ children,logout,user }) => {
                 </button>
                 <button
                   onClick={toggleMainNav}
-                  className={`${!mainNavVisibility ? "bg-gray-600 hover:bg-gray-500 px-1 py-2  rounded-md" : ""}`}
+                  className={`${!mainNavVisibility ? "bg-gray-600 hover:bg-gray-500 px-1 py-2 fixed -left-1  duration-500   rounded-md" : ""}`}
                 >
                   {!mainNavVisibility ? (
                     <IoMdArrowDropleft
@@ -80,18 +80,18 @@ const MainNav = ({ children,logout,user }) => {
 
             {/* Main Content */}
             <div
-              className={`${
-                !mainNavVisibility ? " opacity-0 duration-200" : "opacity-100 duration-200 delay-500"
-              }  flex flex-col p-4 `}
+              className={` whitespace-pre  p-4 `}
             >
               {/* Menu Tabs */}
               <MainMenuTabs open={mainNavVisibility} />
 
               {/* Children Pages */}
-              <div className={`${!mainNavVisibility && "opacity-0 duration-200"}`}>{children}</div>
+              {/* <div className={`${!mainNavVisibility && "opacity-0 duration-200"}`}>{children}</div> */}
+              <div  >{children}</div>
             </div>
             {/* Main Content */}
           </div>
+          
         </div>
       </div>
       {/* DESKTOP MENU */}
