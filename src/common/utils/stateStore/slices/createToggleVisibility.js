@@ -35,6 +35,8 @@
     hideSidePanel:() => set(() => ({ sidePanel: false })),
 
 
+    jwt:null,
+    setJwt:(data) => set((state) => ({ jwt: data })),
 
 })
 

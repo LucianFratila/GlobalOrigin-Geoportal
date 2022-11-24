@@ -145,11 +145,10 @@ export default function ConcessionsPage({ map, mapLoaded }) {
               <ToggleCheckBox toggleState={AACvisibility} toggleAction={toggleAAC} name={"AAG"} />
             </div>
           </div>
-          <button onClick={activateSidePanel}>Click me</button>
           {/* Layer toggles */}
         </section>
       </main>
-      <SidePanel />
+      <SidePanel data={layerData} />
       <MapLegendConcession>
         <ConcessionsLayers
           map={map}
