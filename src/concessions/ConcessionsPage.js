@@ -1,12 +1,11 @@
 import React from "react";
-import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 import ToggleCheckBox from "components/reusable/toggleCheckbox";
 import InputSelectOptions from "components/reusable/inputSelectOptions";
 
 import ConcessionsLayers from "./ConcessionsLayers";
 import MapLegendConcession from "./ConcessionLegend";
-import SidePanel from "common/pannels/sidepanel";
+import SidePanel from "components/sidePanel";
 
 import useStore from "common/utils/stateStore/useStore";
 
@@ -23,7 +22,14 @@ export default function ConcessionsPage({ map, mapLoaded }) {
   
   const AACvisibility = useStore((state) => state.AACvisibility);
   const toggleAAC = useStore((state) => state.toggleAAC);
+
+  const showSidePanel = useStore((state) => state.showSidePanel);
+  const hideMainNav = useStore((state) => state.hideMainNav);
   //////////LAYER VISIBILITY CONTROLS///////////////
+
+  function activateSidePanel(data){
+    
+  }
 
   ////MockUp Data////
   const dataSelecteInput = {
@@ -61,7 +67,6 @@ export default function ConcessionsPage({ map, mapLoaded }) {
     },
   };
 
-  console.log(layersProps);
 
   return (
     <React.Fragment>
@@ -142,13 +147,16 @@ export default function ConcessionsPage({ map, mapLoaded }) {
               <ToggleCheckBox toggleState={AACvisibility} toggleAction={toggleAAC} name={"AAG"} />
             </div>
           </div>
+          <button onClick={showSidePanel}>Click me</button>
+          {/* Layer toggles */}
         </section>
-        <Link className='mainnavlink text-maintext' to={`/sidepanel`}>
-          side
-        </Link>
-        <SidePanel />
+        
+        
+        
+    
+        
       </main>
-
+      {/* <SidePanel/> */}
       <MapLegendConcession>
         <ConcessionsLayers map={map} mapLoaded={mapLoaded} layersProps={layersProps}></ConcessionsLayers>
       </MapLegendConcession>

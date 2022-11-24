@@ -15,7 +15,7 @@ import useStore from "common/utils/stateStore/useStore";
 
 
 
-const MainNav = ({ children }) => {
+const MainNav = ({ children,logout }) => {
   const user = localStorage.getItem("user");
   
   ///Menu Visibility Controls///
@@ -42,6 +42,7 @@ const MainNav = ({ children }) => {
                   <button className=' hover:text-white'>
                     <IoMdArrowDropdown size={20} />
                   </button>
+                  <button onClick={logout}>logout</button>
                 </p>
               </div>
               {/* Menu Header */}

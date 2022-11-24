@@ -11,12 +11,13 @@ import { LangContext } from "./common/languages/Translate";
 import LoginForm from "./common/auth/LoginForm";
 import RegisterForm from "./common/auth/RegisterForm";
 import ForgotForm from "./common/auth/ForgotForm";
-// import SidePanel from "common/pannels/sidepanel.js";
+
 import ConcessionsPage from "concessions/ConcessionsPage";
 import HarvestingPage from "harvesting/HarvestingPage";
 
 ///// UI Components Imports//////
 import MainNav from "components/mainNav/mainNav";
+import SidePanel from "components/sidePanel";
 
 
 import Map from "map/Map";
@@ -53,14 +54,14 @@ function App() {
       <LangContext.Provider value={lang}>
         <main className=' w-full h-full'>
 
-          <MainNav>
+          <MainNav logout={()=>resetUser("guest","")}>
             <Routes>
               <Route exact path='/' element={<ConcessionsPage map={map} mapLoaded={mapLoaded} />} />
               <Route exact path='/concessions' element={<ConcessionsPage map={map} mapLoaded={mapLoaded} />} />
               <Route exact path='/harvesting' element={<HarvestingPage map={map} mapLoaded={mapLoaded} />} />
               <Route exact path='/login' element={<LoginForm resetUser={resetUser} />} />
               <Route exact path='/register' element={<RegisterForm />} />
-              <Route exact path='/forgot' element={<ForgotForm />} />
+              <Route exact path='/forgot' element={<ForgotForm />} /> 
             </Routes>
           </MainNav>
 
