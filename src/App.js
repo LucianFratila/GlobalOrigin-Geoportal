@@ -12,6 +12,10 @@ import LoginForm from "./common/auth/LoginForm";
 import RegisterForm from "./common/auth/RegisterForm";
 import ForgotForm from "./common/auth/ForgotForm";
 
+///// Import React Query/////////
+import { QueryClient, QueryClientProvider } from "react-query";
+
+///// Import Main Components//////
 import ConcessionsPage from "concessions/ConcessionsPage";
 import HarvestingPage from "harvesting/HarvestingPage";
 
@@ -19,8 +23,9 @@ import HarvestingPage from "harvesting/HarvestingPage";
 import MainNav from "components/mainNav/mainNav";
 import useStore from "common/utils/stateStore/useStore";
 
-
 import Map from "map/Map";
+// Create a query client for ReactQuery//
+const queryClient = new QueryClient();
 
 function App() {
   const [lang, setLang] = useState("en");
@@ -37,33 +42,35 @@ function App() {
 
   useEffect(() => {
     SetObject("jwt", jwt);
-    setJwtStore(jwt)
+    setJwtStore(jwt);
   }, [jwt]);
 
   function resetUser(user, jwt) {
     setUser(user);
     setJwt(jwt);
   }
-  
-  ////Am bagat JWT in contextul de limba, pt teste//////
+
+  // QueryClientProvider este providerul care te lasa sa accesezi oriunde in aplicatie react query
   return (
-    <Router>
-      <LangContext.Provider value={lang}> 
-        <main className=' w-full h-full'>
-          <MainNav logout={()=>resetUser("guest","")} user={user}>
-            <Routes>
-              <Route exact path='/' element={<ConcessionsPage map={map} mapLoaded={mapLoaded} />} />
-              <Route exact path='/concessions' element={<ConcessionsPage map={map} mapLoaded={mapLoaded} />} />
-              <Route exact path='/harvesting' element={<HarvestingPage map={map} mapLoaded={mapLoaded} />} />
-              <Route exact path='/login' element={<LoginForm resetUser={resetUser} />} />
-              <Route exact path='/register' element={<RegisterForm />} />
-              <Route exact path='/forgot' element={<ForgotForm />} /> 
-            </Routes>
-          </MainNav>
-          <Map map={map} setMapLoaded={setMapLoaded}></Map>
-        </main>
-      </LangContext.Provider>
-    </Router>
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <LangContext.Provider value={lang}>
+          <main className=' w-full h-full'>
+            <MainNav logout={() => resetUser("guest", "")} user={user}>
+              <Routes>
+                <Route exact path='/' element={<ConcessionsPage map={map} mapLoaded={mapLoaded} />} />
+                <Route exact path='/concessions' element={<ConcessionsPage map={map} mapLoaded={mapLoaded} />} />
+                <Route exact path='/harvesting' element={<HarvestingPage map={map} mapLoaded={mapLoaded} />} />
+                <Route exact path='/login' element={<LoginForm resetUser={resetUser} />} />
+                <Route exact path='/register' element={<RegisterForm />} />
+                <Route exact path='/forgot' element={<ForgotForm />} />
+              </Routes>
+            </MainNav>
+            <Map map={map} setMapLoaded={setMapLoaded}></Map>
+          </main>
+        </LangContext.Provider>
+      </Router>
+    </QueryClientProvider>
   );
 }
 

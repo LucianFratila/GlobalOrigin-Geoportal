@@ -149,7 +149,7 @@ export default function ConcessionsPage({ map, mapLoaded }) {
           {/* Layer toggles */}
         </section>
       </main>
-      <SidePanel data={layerData} title={'Concessions'}  />
+      <SidePanel layerData={layerData} title={'Concessions'}  />
       <MapLegendConcession layersProps={layersProps}>
         <ConcessionsLayers
           map={map}

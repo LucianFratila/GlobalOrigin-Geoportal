@@ -6,7 +6,10 @@ import { CgMiniPlayer } from "react-icons/cg";
 import { CgClose } from "react-icons/cg";
 import { PulseLoader } from "react-spinners";
 
-const SidePanel = ({ data, title }) => {
+///React Query Imports///
+import { useQuery } from "react-query";
+
+const SidePanel = ({ layerData, title }) => {
   //////////VISIBILITY CONTROLS///////////////
   const sidePanel = useStore((state) => state.sidePanel);
   const hideSidePanel = useStore((state) => state.hideSidePanel);
@@ -14,40 +17,41 @@ const SidePanel = ({ data, title }) => {
   const [value, setValue] = useState(null);
   const jwt = useStore((state) => state.jwt);
   //////////VISIBILITY CONTROLS///////////////
-
   function onClose() {
     hideSidePanel();
     showMainNav();
   }
+  const getData = async (id) => {
+    return await axios.get(`https://gabon-dev.globalorigin.org/api/concessions/${id}`, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+  };
 
-  async function getData(id) {
-    try {
-      const res = await axios.get(`https://gabon-dev.globalorigin.org/api/concessions/${id}`, {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      });
-      setValue(res.data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  const useData = (id) => {
+    useQuery(["concession", id], getData(id));
+  };
 
-  useEffect(() => {
-    setValue(null);
-  }, [data]);
+  
+  // const { data, error, isError, isLoading }= useData()
+  
 
-  useEffect(() => {
-    let mount = true;
-    if (mount) {
-      if (data && jwt) {
-        getData(data.id);
-      }
-    }
-    return () => (mount = false);
-  }, [data, jwt]);
-  console.log(value);
-  if (data) {
+  // useEffect(() => {
+  //   setValue(null);
+  // }, [layerData]);
+
+  // useEffect(() => {
+  //   let mount = true;
+  //   if (mount) {
+  //     if (layerData && jwt) {
+  //       getData(layerData.id);
+  //     }
+  //   }
+  //   return () => (mount = false);
+  // }, [layerData, jwt]);
+  // console.log(value);
+  if (layerData) {
     return (
       <>
         {/* DESKTOP MENU */}
@@ -84,13 +88,11 @@ const SidePanel = ({ data, title }) => {
               </div>
               {/* Entity Name */}
               <div className='px-4 my-3'>
-                <span>
-                  <h1 className=' text-maintext text-2xl'>{data.concession}</h1>
-                </span>
+                <span>{/* <h1 className=' text-maintext text-2xl'>{data.concession}</h1> */}</span>
               </div>
               {/* Menu Header */}
 
-              {value ? (
+              {false ? (
                 <>
                   <div className='p-4  rounded-md mx-4 bg-neutral-700 text-maintext'>
                     <div className='my-2'>
@@ -98,15 +100,15 @@ const SidePanel = ({ data, title }) => {
                     </div>
                     <div className=' flex flex-row justify-between overflow-x-hidden '>
                       <span>
-                        <h1 className=" text-sm">{`Company(s) involved:`}</h1>
-                        <p className=" underline">{value.Name}</p>
+                        <h1 className=' text-sm'>{`Company(s) involved:`}</h1>
+                        <p className=' underline'>{value.Name}</p>
                       </span>
                       <span>
-                      <h1 className=" text-sm">{`CreatedAt:`}</h1>
-                      <p>{value.CreatedAt}</p>
+                        <h1 className=' text-sm'>{`CreatedAt:`}</h1>
+                        <p>{value.CreatedAt}</p>
                       </span>
                     </div>
-                    
+
                     {/* <p>Continent: {value.Continent}</p>
                     <p>CreatedAt: {value.CreatedAt}</p>
                     <p>UpdatedAt: {value.UpdatedAt}</p>
