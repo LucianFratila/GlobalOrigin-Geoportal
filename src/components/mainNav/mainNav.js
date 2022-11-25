@@ -5,7 +5,6 @@ import { IoMdArrowDropleft } from "react-icons/io";
 import { AiOutlineSearch } from "react-icons/ai";
 import { CgClose } from "react-icons/cg";
 
-
 ////Component imports////
 import MainMenuTabs from "./mainMenuTabs";
 import UserMenu from "./userMenu";
@@ -13,16 +12,13 @@ import UserMenu from "./userMenu";
 ////Utilis Imports////
 import useStore from "common/utils/stateStore/useStore";
 
-
-
-
-const MainNav = ({ children,logout,user }) => {
+const MainNav = ({ children, logout, user }) => {
   //const user = localStorage.getItem("user");
-  
+
   ///Menu Visibility Controls///
   const mainNavVisibility = useStore((state) => state.mainNavVisibility);
-  const toggleMainNav = useStore(state => state.toggleMainNav);
-  
+  const toggleMainNav = useStore((state) => state.toggleMainNav);
+  const sidePanel = useStore((state) => state.sidePanel);
 
   return (
     <>
@@ -35,13 +31,10 @@ const MainNav = ({ children,logout,user }) => {
             } duration-1000`}
           >
             <div className={`grid grid-cols-2  whitespace-nowrap items-center`}>
-            
               {/* Menu Header */}
               <div className={`${!mainNavVisibility && "opacity-0"} transition delay-300 duration-600 p-4 `}>
                 <h1 className='text-xl text-maintext '>Gabon Geoportal</h1>
-                <UserMenu user={user} logout={logout}/>
-                
-                
+                <UserMenu user={user} logout={logout} />
               </div>
               {/* Menu Header */}
 
@@ -56,15 +49,27 @@ const MainNav = ({ children,logout,user }) => {
                 </button>
                 <button
                   onClick={toggleMainNav}
-                  className={`${!mainNavVisibility ? "bg-gray-600 hover:bg-gray-500 px-1 py-2 fixed -left-1  duration-500   rounded-md" : ""}`}
+                  className={`${
+                    !mainNavVisibility
+                      ? "bg-gray-600 hover:bg-gray-500 px-1 py-2 fixed -left-1  duration-500   rounded-md"
+                      : ""
+                  }`}
                 >
                   {!mainNavVisibility ? (
-                    <IoMdArrowDropleft
-                      className={`text-maintext text-2xl rotate-180 duration-300 ${!mainNavVisibility && "scale-100"} `}
-                    />
+                    sidePanel ? (
+                      ""
+                    ) : (
+                      <IoMdArrowDropleft
+                        className={`text-maintext text-2xl rotate-180 duration-300 ${
+                          !mainNavVisibility && "scale-100"
+                        } `}
+                      />
+                    )
                   ) : (
                     <CgClose
-                      className={`text-maintext text-2xl hover:text-white duration-300 ${!mainNavVisibility && " scale-100"}`}
+                      className={`text-maintext text-2xl hover:text-white duration-300 ${
+                        !mainNavVisibility && " scale-100"
+                      }`}
                     />
                   )}
                 </button>
@@ -74,18 +79,14 @@ const MainNav = ({ children,logout,user }) => {
             {/* Menu Header */}
 
             {/* Main Content */}
-            <div
-              className={` whitespace-pre  p-4 `}
-            >
+            <div className={` whitespace-pre  p-4 `}>
               {/* Menu Tabs */}
               <MainMenuTabs open={mainNavVisibility} />
 
-             
-              <div  >{children}</div>
+              <div>{children}</div>
             </div>
             {/* Main Content */}
           </div>
-          
         </div>
       </div>
       {/* DESKTOP MENU */}
