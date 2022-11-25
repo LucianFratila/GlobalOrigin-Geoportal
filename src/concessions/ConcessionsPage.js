@@ -27,6 +27,7 @@ export default function ConcessionsPage({ map, mapLoaded }) {
 
   const showSidePanel = useStore((state) => state.showSidePanel);
   const hideMainNav = useStore((state) => state.hideMainNav);
+
   //////////LAYER VISIBILITY CONTROLS///////////////
 
   function activateSidePanel(data) {
@@ -151,8 +152,8 @@ export default function ConcessionsPage({ map, mapLoaded }) {
           {/* Layer toggles */}
         </section>
       </main>
-      <SidePanel data={layerData} />
-      <MapLegendConcession>
+      <SidePanel layerData={layerData} title={'Concessions'}  />
+      <MapLegendConcession layersProps={layersProps}>
         <ConcessionsLayers
           map={map}
           mapLoaded={mapLoaded}
