@@ -59,6 +59,9 @@ export default function ConcessionsPage({ map, mapLoaded }) {
   let layersProps = {
     concessions: {
       visibility: `${concessionLayerVisibility ? `visible` : `none`}`,
+      filters:{
+                'Company':'CIFHO Moyabi(de ex.)'
+      }
     },
     ufa: {
       visibility: `${UFAvisibility ? `visible` : `none`}`,

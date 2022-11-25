@@ -21,10 +21,10 @@ const SidePanel = ({ data }) => {
 
   async function getData(id) {
     try {
-      const res = await axios.get(`https://gabon-dev.globalorigin.org/api/concessions/${id}`, {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
+      const res = await axios.get(`/api/concessions/${id}`, {
+      //  headers: {
+       //   Authorization: `Bearer ${jwt}`,
+     //   },
       });
       setValue(res.data.data);
     } catch (error) {
