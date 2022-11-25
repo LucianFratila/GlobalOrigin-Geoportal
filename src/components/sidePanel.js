@@ -46,7 +46,7 @@ const SidePanel = ({ data, title }) => {
     }
     return () => (mount = false);
   }, [data, jwt]);
-
+  console.log(value);
   if (data) {
     return (
       <>
@@ -92,14 +92,14 @@ const SidePanel = ({ data, title }) => {
 
               {value ? (
                 <>
-                  <div className='p-4   rounded-md mx-4 bg-neutral-700 text-maintext'>
+                  <div className='p-4  rounded-md mx-4 bg-neutral-700 text-maintext'>
                     <div className='my-2'>
                       <h1 className=' text-maintext font-mono'>Details</h1>
                     </div>
-                    <div className='flex flex-row  justify-between  '>
+                    <div className=' flex flex-row justify-between overflow-x-hidden '>
                       <span>
                         <h1 className=" text-sm">{`Company(s) involved:`}</h1>
-                        <p className=" underline">{data.concession}</p>
+                        <p className=" underline">{value.Name}</p>
                       </span>
                       <span>
                       <h1 className=" text-sm">{`CreatedAt:`}</h1>
