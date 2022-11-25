@@ -66,12 +66,15 @@ export default function ConcessionsPage({ map, mapLoaded }) {
     },
     ufa: {
       visibility: `${UFAvisibility ? `visible` : `none`}`,
+      filters:{}
     },
     ufg: {
       visibility: `${UFGvisibility ? `visible` : `none`}`,
+      filters:{}
     },
     aac: {
       visibility: `${AACvisibility ? `visible` : `none`}`,
+      filters:{}
     },
   };
 
