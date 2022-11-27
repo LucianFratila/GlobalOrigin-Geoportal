@@ -1,6 +1,5 @@
-import React from "react";
+import React,{useEffect} from "react";
 import useStore from "common/utils/stateStore/useStore";
-import axios from "axios";
 ////React Icons Imports@spinners//////
 import { CgMiniPlayer } from "react-icons/cg";
 import { CgClose } from "react-icons/cg";
@@ -8,31 +7,29 @@ import { PulseLoader } from "react-spinners";
 
 ///React Query Imports///
 import { useQuery } from "react-query";
+import { getConcession } from "common/axios/endpoints";
 
 const SidePanel = ({ layerData, title }) => {
   //////////VISIBILITY CONTROLS///////////////
   const sidePanel = useStore((state) => state.sidePanel);
   const hideSidePanel = useStore((state) => state.hideSidePanel);
+  
   const showMainNav = useStore((state) => state.showMainNav);
   const jwt = useStore((state) => state.jwt);
   //////////VISIBILITY CONTROLS///////////////
   function onClose() {
     hideSidePanel();
     showMainNav();
-  }
-  const fetchData =  (id) => {
-    return axios.get(`https://gabon-dev.globalorigin.org/api/concessions/${id}`, {
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
-    });
-  };
- 
+  } 
+  
   const dataId = layerData?.id
-  const {data:concession, isLoading,error}= useQuery(['concession',dataId],()=>fetchData(dataId),{
+  const {data:concession, isLoading,error}= useQuery(['concession',dataId],()=>getConcession(dataId,jwt),{
     // The query will not execute until the condition
     enabled: !!dataId,
   })
+
+
+  
   
   
   return (

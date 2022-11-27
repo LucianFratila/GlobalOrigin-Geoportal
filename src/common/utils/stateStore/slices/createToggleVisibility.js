@@ -9,6 +9,8 @@
     //// global state for Concession Map Layer Visibility ////
     concessionLayerVisibility:true,
     concessionLayerData:null,
+    showConcession:() => set(() => ({ concessionLayerVisibility: true })),
+    hideConcession:() => set(() => ({ concessionLayerVisibility: false })),
     toggleConcessionLayer:() => set(state => ({ concessionLayerVisibility: !state.concessionLayerVisibility })),
     changeConcesionLayerData:(data) => set((state) => ({ concessionLayerData: data })),
 

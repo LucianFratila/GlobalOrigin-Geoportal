@@ -3,8 +3,9 @@ import axios from "axios"
 import { CgClose } from "react-icons/cg";
 import ClipLoader from "react-spinners/ClipLoader";
 
+import useStore from 'common/utils/stateStore/useStore';
 export default function AACLayer({map, mapLoaded, layerProps}){
-
+    const hideAAC = useStore((state) => state.hideAAC);
     const [isLoading,setIsLoading]=useState(true)
 
     const paint={
@@ -76,7 +77,7 @@ export default function AACLayer({map, mapLoaded, layerProps}){
         block = <span key='1' className='flex items-center justify-between' >
                     {isLoading ? <ClipLoader color={paint["fill-color"]} size="20"/> : <span style={{backgroundColor:`${paint["fill-color"]}`}} className="w-3 h-3 mr-1"></span>}
                     <span className=' mr-5 w-40 text-sm justify-start'>AAC's</span>
-                    <button className=' text-maintext hover:text-white'>
+                    <button onClick={hideAAC} className=' text-maintext hover:text-white'>
                     <CgClose />
                     </button>
                 </span>

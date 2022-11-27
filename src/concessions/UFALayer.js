@@ -1,93 +1,82 @@
-import React, {useEffect,useCallback,useState} from 'react'
-import axios from "axios"
+import React, { useEffect, useCallback, useState } from "react";
+import axios from "axios";
 import { CgClose } from "react-icons/cg";
 import ClipLoader from "react-spinners/ClipLoader";
+import useStore from "common/utils/stateStore/useStore";
+export default function UFALayer({ map, mapLoaded, layerProps }) {
+  const hideUFA = useStore((state) => state.hideUFA);
+  const [isLoading, setIsLoading] = useState(true);
 
-export default function UFALayer({map, mapLoaded, layerProps}){
+  const paint = {
+    "fill-color": "green",
+  };
+  const name = "ufa";
+  const type = "fill";
 
-    const [isLoading,setIsLoading]=useState(true)
+  const getData = useCallback(() => {
+    setIsLoading(true);
+    axios.get(`/development_units/vectors`).then((response) => {
+      setIsLoading(false);
+      map.current.getSource(name).setData(response.data);
+    });
+  }, []);
 
-    const paint={
-        'fill-color': 'green'
-    }
-    const name='ufa'
-    const type='fill'
+  useEffect(() => {
+    if (map.current) map.current.setLayoutProperty(name, "visibility", layerProps.visibility);
+  }, [layerProps.visibility]);
 
-    const getData = useCallback(
-        () => {
-            setIsLoading(true)
-            axios.get(`/development_units/vectors`)
-                .then(response => {
-                    setIsLoading(false)
-                    map.current.getSource(name).setData(response.data);
-                }) 
-        },[]);
+  useEffect(() => {
+    if (mapLoaded) {
+      if (!map.current.getSource(name)) {
+        map.current.addSource(name, {
+          type: "geojson",
+        });
 
-    useEffect(()=>{
-        if(map.current)
-            map.current.setLayoutProperty(
-                name,
-                'visibility',
-                layerProps.visibility
-                );
-    },[layerProps.visibility])      
+        map.current.addLayer({
+          id: name,
+          type: type,
+          source: name,
+          paint: paint,
+          layout: {
+            visibility: layerProps.visibility ? layerProps.visibility : "none",
+          },
+        });
 
-    useEffect(()=>{
-        if(mapLoaded){
-            if(!map.current.getSource(name)){
+        getData();
 
-                map.current.addSource(name, {
-                    type: 'geojson'
-                });
-                   
-                map.current.addLayer({
-                    'id': name,
-                    'type': type,
-                    'source': name,
-                    'paint': paint,
-                    'layout': {
-                        'visibility': layerProps.visibility ?  layerProps.visibility : 'none'
-                        },
-                }); 
-
-                getData()
-    
-              //  map.current.on('moveend',name, getData);
-            }
-        }
-
-    },[mapLoaded])
-
-    useEffect(()=>{
-
-        return () => {
-            if(map.current.getSource(name)){
-                map.current.removeLayer(name)
-                map.current.removeSource(name)
-              //  map.current.off('moveend',name,getData)
-            }
-        }
-
-    },[])
-
-
-    let block
-    if (layerProps.visibility=='visible') {
-        block = <span key='1' className='flex items-center justify-between' >
-                    {isLoading ? <ClipLoader color={paint["fill-color"]} size="20"/> : <span style={{backgroundColor:`${paint["fill-color"]}`}} className="w-3 h-3 mr-1"></span>}
-                    <span className=' mr-5 w-40 text-sm justify-start'>UFA's</span>
-                    <button className=' text-maintext hover:text-white'>
-                    <CgClose />
-                    </button>
-                </span>
-      } else {
-        block= '' 
+        //  map.current.on('moveend',name, getData);
       }
+    }
+  }, [mapLoaded]);
 
-    return(
-        <React.Fragment>
-            {block}
-        </React.Fragment>
-    )
+  useEffect(() => {
+    return () => {
+      if (map.current.getSource(name)) {
+        map.current.removeLayer(name);
+        map.current.removeSource(name);
+        //  map.current.off('moveend',name,getData)
+      }
+    };
+  }, []);
 
+  let block;
+  if (layerProps.visibility == "visible") {
+    block = (
+      <span key='1' className='flex items-center justify-between'>
+        {isLoading ? (
+          <ClipLoader color={paint["fill-color"]} size='20' />
+        ) : (
+          <span style={{ backgroundColor: `${paint["fill-color"]}` }} className='w-3 h-3 mr-1'></span>
+        )}
+        <span className=' mr-5 w-40 text-sm justify-start'>UFA's</span>
+        <button onClick={hideUFA} className=' text-maintext hover:text-white'>
+          <CgClose />
+        </button>
+      </span>
+    );
+  } else {
+    block = "";
+  }
+
+  return <React.Fragment>{block}</React.Fragment>;
 }

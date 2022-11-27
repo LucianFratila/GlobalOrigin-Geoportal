@@ -2,9 +2,10 @@ import React, {useEffect,useCallback,useState} from 'react'
 import axios from "axios"
 import { CgClose } from "react-icons/cg";
 import ClipLoader from "react-spinners/ClipLoader";
+import useStore from 'common/utils/stateStore/useStore';
 
 export default function UFGLayer({map, mapLoaded, layerProps}){
-
+    const hideUFG = useStore((state) => state.hideUFG);
     const [isLoading,setIsLoading]=useState(true)
 
     const paint={
@@ -78,7 +79,7 @@ export default function UFGLayer({map, mapLoaded, layerProps}){
         block = <span key='1' className='flex items-center justify-between' >
                     {isLoading ? <ClipLoader color={paint["fill-color"]} size="20"/> : <span style={{backgroundColor:`${paint["fill-color"]}`}} className="w-3 h-3 mr-1"></span>}
                     <span className=' mr-5 w-40 text-sm justify-start'>UFG's</span>
-                    <button className=' text-maintext hover:text-white'>
+                    <button onClick={hideUFG} className=' text-maintext hover:text-white'>
                     <CgClose />
                     </button>
                 </span>

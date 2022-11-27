@@ -69,7 +69,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       
       <Router>
-        <LangContext.Provider value={lang}>
+        <LangContext.Provider value={{lang,jwt}}>
           <main className=' w-full h-full'>
             <MainNav logout={() => resetUser("guest", "")} user={user}>
               <Routes>
@@ -88,7 +88,7 @@ function App() {
         </LangContext.Provider>
       </Router>
       {/* E un devtools pt react query, util ca sa vezi cum vin datele */}
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       
     </QueryClientProvider>
   );

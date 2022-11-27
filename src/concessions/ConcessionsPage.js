@@ -12,9 +12,11 @@ import useStore from "common/utils/stateStore/useStore";
 
 ///React Query Imports///
 import { useQuery } from "react-query";
+import { getCompanies } from "common/axios/endpoints";
 
 export default function ConcessionsPage({ map, mapLoaded }) {
   const [layerData, SetLayerData] = useState(null);
+
 
   //////////LAYER VISIBILITY CONTROLS///////////////
   const concessionLayerVisibility = useStore((state) => state.concessionLayerVisibility);
@@ -62,12 +64,10 @@ export default function ConcessionsPage({ map, mapLoaded }) {
   ////MockUp Data////
 
   /////////Fetch Company/////////////
-  const fetchData =  () => {
-    return axios.get(`https://gabon-dev.globalorigin.org/api/companies/list`);
-  };
-  const {data:companies, isLoading,error}= useQuery('companies',fetchData)
+  const {data:companies, isLoading,error}= useQuery('companies',getCompanies)
   const compdata = companies?.data.data
   /////////Fetch Company/////////////
+  
   ////lift up state to return selected company//////
   const [companyName,setCompanyName] = useState('')
   
