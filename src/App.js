@@ -13,7 +13,8 @@ import RegisterForm from "./common/auth/RegisterForm";
 import ForgotForm from "./common/auth/ForgotForm";
 
 ///// Import React Query/////////
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider,  } from "react-query";
+import { ReactQueryDevtools } from 'react-query/devtools'
 
 ///// Import Main Components//////
 import ConcessionsPage from "concessions/ConcessionsPage";
@@ -66,6 +67,7 @@ function App() {
   // QueryClientProvider este providerul care te lasa sa accesezi oriunde in aplicatie react query
   return (
     <QueryClientProvider client={queryClient}>
+      
       <Router>
         <LangContext.Provider value={lang}>
           <main className=' w-full h-full'>
@@ -82,8 +84,12 @@ function App() {
             <MapControls ZOOM_IN={ZOOM_IN} ZOOM_OUT={ZOOM_OUT} ROTATE_NORTH={ROTATE_NORTH}/>
             <Map map={map} setMapLoaded={setMapLoaded}></Map>
           </main>
+          
         </LangContext.Provider>
       </Router>
+      {/* E un devtools pt react query, util ca sa vezi cum vin datele */}
+      <ReactQueryDevtools initialIsOpen={false} />
+      
     </QueryClientProvider>
   );
 }
