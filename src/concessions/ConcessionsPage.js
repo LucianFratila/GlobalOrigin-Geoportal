@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 import ToggleCheckBox from "components/reusable/toggleCheckbox";
 import InputSelectOptions from "components/reusable/inputSelectOptions";
@@ -8,6 +9,9 @@ import MapLegendConcession from "./ConcessionLegend";
 import SidePanel from "components/sidePanel";
 
 import useStore from "common/utils/stateStore/useStore";
+
+///React Query Imports///
+import { useQuery } from "react-query";
 
 export default function ConcessionsPage({ map, mapLoaded }) {
   const [layerData, SetLayerData] = useState(null);
@@ -57,6 +61,16 @@ export default function ConcessionsPage({ map, mapLoaded }) {
   };
   ////MockUp Data////
 
+  /////////Fetch Company/////////////
+  const fetchData =  () => {
+    return axios.get(`https://gabon-dev.globalorigin.org/api/companies/list`);
+  };
+  const {data:companies, isLoading,error}= useQuery('companies',fetchData)
+  const compdata = companies?.data.data
+  /////////Fetch Company/////////////
+
+
+
   let layersProps = {
     concessions: {
       visibility: `${concessionLayerVisibility ? `visible` : `none`}`,
@@ -89,7 +103,7 @@ export default function ConcessionsPage({ map, mapLoaded }) {
           </div>
           <div className='flex flex-row gap-2'>
             {/* Company */}
-            <InputSelectOptions selected={"Company Name"} data={dataSelecteInput.company} />
+            <InputSelectOptions selected={"Company Name"} data={compdata} isLoading={isLoading} />
             {/* Concessions */}
             <InputSelectOptions selected={"Concessions"} data={dataSelecteInput.concessions} />
           </div>

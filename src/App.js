@@ -22,6 +22,7 @@ import HarvestingPage from "harvesting/HarvestingPage";
 ///// UI Components Imports//////
 import MainNav from "components/mainNav/mainNav";
 import useStore from "common/utils/stateStore/useStore";
+import MapControls from "components/mapcontrols";
 
 import Map from "map/Map";
 // Create a query client for ReactQuery//
@@ -35,6 +36,18 @@ function App() {
   const setJwtStore = useStore((state) => state.setJwt);
   const map = useRef(null);
   AxiosInit(API_SERVER, jwt);
+
+  function ZOOM_IN() {
+    map.current.zoomIn(1);
+  }
+
+  function ZOOM_OUT() {
+    map.current.zoomOut(1);
+  }
+
+  function ROTATE_NORTH() {
+    map.current.rotateTo(0, { duration: 2000 });
+  }
 
   useEffect(() => {
     SetObject("user", user);
@@ -66,6 +79,7 @@ function App() {
                 <Route exact path='/forgot' element={<ForgotForm />} />
               </Routes>
             </MainNav>
+            <MapControls ZOOM_IN={ZOOM_IN} ZOOM_OUT={ZOOM_OUT} ROTATE_NORTH={ROTATE_NORTH}/>
             <Map map={map} setMapLoaded={setMapLoaded}></Map>
           </main>
         </LangContext.Provider>
