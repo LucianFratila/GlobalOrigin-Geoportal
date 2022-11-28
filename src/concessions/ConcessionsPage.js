@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 import ToggleCheckBox from "components/reusable/toggleCheckbox";
 import InputSelectOptions from "components/reusable/inputSelectOptions";
@@ -9,8 +10,13 @@ import SidePanel from "components/sidePanel";
 
 import useStore from "common/utils/stateStore/useStore";
 
+///React Query Imports///
+import { useQuery } from "react-query";
+import { getCompanies } from "common/axios/endpoints";
+
 export default function ConcessionsPage({ map, mapLoaded }) {
   const [layerData, SetLayerData] = useState(null);
+
 
   //////////LAYER VISIBILITY CONTROLS///////////////
   const concessionLayerVisibility = useStore((state) => state.concessionLayerVisibility);
@@ -57,11 +63,26 @@ export default function ConcessionsPage({ map, mapLoaded }) {
   };
   ////MockUp Data////
 
+  /////////Fetch Company/////////////
+  const {data:companies, isLoading,error}= useQuery('companies',getCompanies)
+  const compdata = companies?.data.data
+  /////////Fetch Company/////////////
+  
+  ////lift up state to return selected company//////
+  const [companyName,setCompanyName] = useState('')
+  
+  function selectedCompany(item){
+    return setCompanyName(item)
+  }
+  ////////////////////////////////////
+
+
+
   let layersProps = {
     concessions: {
       visibility: `${concessionLayerVisibility ? `visible` : `none`}`,
       filters:{
-                'Company':'CIFHO Moyabi(de ex.)'
+                'Company':`${companyName}`
       }
     },
     ufa: {
@@ -89,7 +110,7 @@ export default function ConcessionsPage({ map, mapLoaded }) {
           </div>
           <div className='flex flex-row gap-2'>
             {/* Company */}
-            <InputSelectOptions selected={"Company Name"} data={dataSelecteInput.company} />
+            <InputSelectOptions selected={"Company Name"} returnSelected = {selectedCompany} data={compdata} isLoading={isLoading} />
             {/* Concessions */}
             <InputSelectOptions selected={"Concessions"} data={dataSelecteInput.concessions} />
           </div>

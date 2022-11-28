@@ -5,7 +5,11 @@ import { API_SERVER } from "../config";
 import { CgClose } from "react-icons/cg";
 import ClipLoader from "react-spinners/ClipLoader";
 
+import useStore from "common/utils/stateStore/useStore";
+
 export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateSidePanel }) {
+
+  const hideConcession = useStore((state) => state.hideConcession);
   const [isLoading, setIsLoading] = useState(true);
 
   const paint = {
@@ -119,6 +123,7 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
       if (map.current.getSource(name)) {
         map.current.removeLayer(name);
         map.current.removeSource(name);
+        
       }
     };
   }, []);
@@ -133,7 +138,7 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
           <span style={{ backgroundColor: `${paint["fill-color"]}` }} className='w-3 h-3 mr-1'></span>
         )}
         <span className=' mr-5 w-40 text-sm justify-start'>Concessions</span>
-        <button className=' text-maintext hover:text-white'>
+        <button onClick={hideConcession} className=' text-maintext hover:text-white'>
           <CgClose />
         </button>
       </span>
