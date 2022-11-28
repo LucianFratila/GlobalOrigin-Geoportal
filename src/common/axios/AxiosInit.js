@@ -1,57 +1,55 @@
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import jwt_decode from 'jwt-decode'
 import dayjs from 'dayjs'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-export default function AxiosInit(jwt,refreshToken,resetUser){
 
-    axios.defaults.withCredentials = false;
-    axios.defaults.baseURL = BASE_URL; 
-    //axios.defaults.headers.withCredentials=true;  
-    //axios.defaults.headers.common["Jwt"] = jwt;
-    axios.defaults.headers.common["Authorization"]=`Bearer ${jwt}`;
-    axios.defaults.headers.common["Content-Type"]= "application/json";
-    axios.defaults.headers.common["Accept"]= "application/json";
+export default function AxiosDefaults(jwt,refreshToken,resetUser,myInterceptor){
 
-    axios.interceptors.request.use(async req => {
-        //console.log(req)
-        
-        if(!jwt){
-          console.log('not jwt')
-          return req
-        }
+  console.log('setAxiosDefaults')
+  axios.defaults.headers.common["Authorization"]=`Bearer ${jwt}`;
+  axios.defaults.headers.common["Content-Type"]= "application/json";
+  axios.defaults.headers.common["Accept"]= "application/json";
+  axios.defaults.baseURL = BASE_URL; 
+  //axios.defaults.withCredentials = false;
+  
+  if(myInterceptor.current)
+    axios.interceptors.request.eject(myInterceptor.current);
 
-        const user = jwt_decode(jwt)
-        const isExpired = dayjs.unix(user.exp).diff(dayjs()) < 1;
-    
-        if(!isExpired) {
-          console.log('not expired')
-          return req
-        }
-        else console.log('refresh')
-         
+  myInterceptor.current=axios.interceptors.request.use(req => {
+    console.log()
+    if(!jwt){
+      console.log('not jwt')
+      return req
+    }
+
+    const user = jwt_decode(jwt)
+    console.log(dayjs.unix(user.exp).diff(dayjs()))
+    const isExpired = dayjs.unix(user.exp).diff(dayjs()) < 1;
+    if(isExpired){
       const axiosInstance = axios.create({
         BASE_URL,
       });
-
-      const response = await axiosInstance.post(`/users/refresh_token`, {
+  
+      axiosInstance.post(`/users/refresh_token`, {
         "access_token":jwt,
         "refresh_token": refreshToken
-      });
-     // console.log(response)
+      }).then(response=>{
+                     console.log("refreshed")
+                     resetUser('user refreshed',response.data.jwt,response.data.refresh_token) 
+                    });
+    }
 
-      resetUser('user refreshed',response.data.jwt,response.data.refresh_token)
-      axios.defaults.headers.common["Authorization"]=`Bearer ${response.data.jwt}`;
 
-        return req
-      }
+    return req;
 
-      
-    )
+  })
 
 }
+
+
+ 
 
 /*If needed : this makes all request unique so no browser cache is used 
 config => {

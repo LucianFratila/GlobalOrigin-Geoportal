@@ -2,7 +2,6 @@
 import "./App.css";
 import { useState, useEffect, useRef } from "react";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
-import AxiosInit from "./common/axios/AxiosInit";
 import { API_SERVER } from "./config";
 import { SetObject, GetObject } from "./common/utils/StorageObject.js";
 import { LangContext } from "./common/languages/Translate";
@@ -24,6 +23,7 @@ import HarvestingPage from "harvesting/HarvestingPage";
 import MainNav from "components/mainNav/mainNav";
 import useStore from "common/utils/stateStore/useStore";
 import MapControls from "components/mapcontrols";
+import AxiosDefaults from "./common/axios/AxiosInit";
 
 import Map from "map/Map";
 // Create a query client for ReactQuery//
@@ -37,8 +37,13 @@ function App() {
   const [mapLoaded, setMapLoaded] = useState(false);
   const setJwtStore = useStore((state) => state.setJwt);
   const map = useRef(null);
-  
-  AxiosInit(jwt , refreshToken, resetUser);
+
+  const myInterceptor=useRef();
+
+  useEffect(()=>{
+  //  AxiosDefaults(jwt,refreshToken,resetUser,myInterceptor)
+  },[])
+    
 
   function ZOOM_IN() {
     map.current.zoomIn(1);
@@ -58,12 +63,11 @@ function App() {
 
   useEffect(() => {
     SetObject("jwt", jwt);
-   // setJwtStore(jwt);
+    AxiosDefaults(jwt,refreshToken,resetUser,myInterceptor)
   }, [jwt]);
 
   useEffect(() => {
     SetObject("refresh_token", refreshToken);
-  //  setJwtStore(jwt);
   }, [refreshToken]);
 
   function resetUser(user, jwt, refresh_token) {
