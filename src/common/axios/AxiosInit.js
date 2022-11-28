@@ -14,9 +14,10 @@ export default function AxiosDefaults(jwt,refreshToken,resetUser,myInterceptor){
   axios.defaults.baseURL = BASE_URL; 
   //axios.defaults.withCredentials = false;
   
-  if(myInterceptor.current)
+  if(myInterceptor.current){
+    alert("eject")
     axios.interceptors.request.eject(myInterceptor.current);
-
+  }
   myInterceptor.current=axios.interceptors.request.use(req => {
     console.log()
     if(!jwt){
@@ -25,7 +26,7 @@ export default function AxiosDefaults(jwt,refreshToken,resetUser,myInterceptor){
     }
 
     const user = jwt_decode(jwt)
-    console.log(dayjs.unix(user.exp).diff(dayjs()))
+    console.log(dayjs.unix(user.exp).diff(dayjs()) + ':' + req.url)
     const isExpired = dayjs.unix(user.exp).diff(dayjs()) < 1;
     if(isExpired){
       const axiosInstance = axios.create({
