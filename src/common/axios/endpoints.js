@@ -14,3 +14,7 @@ export const getConcessions = async (params) => {
   return await axios.get(`/concessions/vectors${params}`);
 };
 
+// export const getTreesInConcession = async (params) => {
+//   return await axios.get(`/concessions/vectors${params}`);
+// };
+

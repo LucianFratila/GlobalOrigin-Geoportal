@@ -49,11 +49,14 @@ export default function ConcessionsPage({ map, mapLoaded }) {
   ////lift up state to return selected company//////
   const [companyName, setCompanyName] = useState(null);
   const [concessionName, setConcessionName] = useState(null);
-  const [inputSearchValue, setInputSearchValue]=useState(null)
-  
-  
+  const [inputSearchValue, setInputSearchValue] = useState(null);
+
   function selectedCompany(item) {
-    const parse = `{${item}}`;
+    console.log(item);
+    let parse = `{}`;
+    if (item !== "Company Name" && item !=='') {
+      parse = `{${item}}`;
+    }
 
     if (parse !== "") {
       return setCompanyName(JSON.parse(parse));
@@ -73,16 +76,16 @@ export default function ConcessionsPage({ map, mapLoaded }) {
   const concessdata = concessionCompId?.data.features;
 
   function selectedConcession(item) {
-    return setConcessionName(item)
+    return setConcessionName(item);
   }
   ////////////////////////////////////
   /////////Fetch /////////////
 
-  let concessionForm = false
-  let searchForm =false
-  companyName===null?concessionForm = true:concessionForm = false
-  concessionName===null?searchForm = true:searchForm = false
-  
+  let concessionForm = false;
+  let searchForm = false;
+  companyName === null ? (concessionForm = true) : (concessionForm = false);
+  concessionName === null ? (searchForm = true) : (searchForm = false);
+
   let layersProps = {
     concessions: {
       visibility: `${concessionLayerVisibility ? `visible` : `none`}`,
@@ -130,7 +133,7 @@ export default function ConcessionsPage({ map, mapLoaded }) {
               isLoading={concessionLoading}
             />
           </div>
-          <SearchFilter disable={searchForm} getInputData={setInputSearchValue}/>
+          <SearchFilter disable={searchForm} getInputData={setInputSearchValue} />
           {/* Layer toggles */}
           <div className=' py-5 gap-3 flex flex-col'>
             <div className='flex py-3 gap-3'>
