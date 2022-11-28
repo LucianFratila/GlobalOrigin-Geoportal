@@ -75,7 +75,7 @@ export default function AACLayer({map, mapLoaded, layerProps}){
     let block
     if (layerProps.visibility=='visible') {
         block = <span key='1' className='flex items-center justify-between' >
-                    {isLoading ? <ClipLoader color={paint["fill-color"]} size="20"/> : <span style={{backgroundColor:`${paint["fill-color"]}`}} className="w-3 h-3 mr-1"></span>}
+                    {isLoading ? <ClipLoader color={paint["fill-color"]} size="20px"/> : <span style={{backgroundColor:`${paint["fill-color"]}`}} className="w-3 h-3 mr-1"></span>}
                     <span className=' mr-5 w-40 text-sm justify-start'>AAC's</span>
                     <button onClick={hideAAC} className=' text-maintext hover:text-white'>
                     <CgClose />

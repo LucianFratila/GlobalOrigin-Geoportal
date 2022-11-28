@@ -22,7 +22,11 @@ export default function UFALayer({ map, mapLoaded, layerProps }) {
   }, []);
 
   useEffect(() => {
-    if (map.current) map.current.setLayoutProperty(name, "visibility", layerProps.visibility);
+    if (map.current && map.current.getSource(name))
+        map.current.setLayoutProperty(
+          name, "visibility",
+          layerProps.visibility
+        );
   }, [layerProps.visibility]);
 
   useEffect(() => {
@@ -64,7 +68,7 @@ export default function UFALayer({ map, mapLoaded, layerProps }) {
     block = (
       <span key='1' className='flex items-center justify-between'>
         {isLoading ? (
-          <ClipLoader color={paint["fill-color"]} size='20' />
+          <ClipLoader color={paint["fill-color"]} size='20px' />
         ) : (
           <span style={{ backgroundColor: `${paint["fill-color"]}` }} className='w-3 h-3 mr-1'></span>
         )}

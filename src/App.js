@@ -33,10 +33,12 @@ function App() {
   const [lang, setLang] = useState("en");
   const [user, setUser] = useState(GetObject("user") ? GetObject("user") : "guest");
   const [jwt, setJwt] = useState(GetObject("jwt") ? GetObject("jwt") : "");
+  const [refreshToken, setRefreshToken] = useState(GetObject("refresh_token") ? GetObject("refresh_token") : "");
   const [mapLoaded, setMapLoaded] = useState(false);
   const setJwtStore = useStore((state) => state.setJwt);
   const map = useRef(null);
-  AxiosInit(API_SERVER, jwt);
+  
+  AxiosInit(jwt , refreshToken, resetUser);
 
   function ZOOM_IN() {
     map.current.zoomIn(1);
@@ -56,12 +58,18 @@ function App() {
 
   useEffect(() => {
     SetObject("jwt", jwt);
-    setJwtStore(jwt);
+   // setJwtStore(jwt);
   }, [jwt]);
 
-  function resetUser(user, jwt) {
+  useEffect(() => {
+    SetObject("refresh_token", refreshToken);
+  //  setJwtStore(jwt);
+  }, [refreshToken]);
+
+  function resetUser(user, jwt, refresh_token) {
     setUser(user);
     setJwt(jwt);
+    setRefreshToken(refresh_token);
   }
 
   // QueryClientProvider este providerul care te lasa sa accesezi oriunde in aplicatie react query

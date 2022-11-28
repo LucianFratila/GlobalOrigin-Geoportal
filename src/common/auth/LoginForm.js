@@ -5,6 +5,7 @@ import ButtonCtrl from '../controls/ButtonCtrl.js'
 //import Translate from '../languages/Translate.js'
 import { Link } from 'react-router-dom'
 
+
 function LoginForm({resetUser}){
 
     const defFields={"email":'',"password":""}
@@ -38,10 +39,10 @@ function LoginForm({resetUser}){
       
       axios.post('/users/login',values)
           .then( response => {
-            console.log(response);
+                console.log(response);
                 setMessage(response.data.message)
-                setMessageClass('alert alert-success')    
-                resetUser(fields["email"],response.data.jwt);             
+                setMessageClass('alert alert-success')   
+                resetUser(fields["email"],response.data.jwt,response.data.refresh_token);             
             })
             .catch( error => {
                 setMessageClass('alert alert-danger')

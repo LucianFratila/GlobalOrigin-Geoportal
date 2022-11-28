@@ -133,7 +133,7 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
     block = (
       <span key='1' className='flex items-center justify-between'>
         {isLoading ? (
-          <ClipLoader color={paint["fill-color"]} size='20' />
+          <ClipLoader color={paint["fill-color"]} size='20px' />
         ) : (
           <span style={{ backgroundColor: `${paint["fill-color"]}` }} className='w-3 h-3 mr-1'></span>
         )}
