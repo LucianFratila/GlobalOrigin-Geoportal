@@ -38,10 +38,9 @@ function App() {
   const setJwtStore = useStore((state) => state.setJwt);
   const map = useRef(null);
 
-  const myInterceptor=useRef();
 
   useEffect(()=>{
-  //  AxiosDefaults(jwt,refreshToken,resetUser,myInterceptor)
+    AxiosDefaults(resetUser)
   },[])
     
 
@@ -63,7 +62,7 @@ function App() {
 
   useEffect(() => {
     SetObject("jwt", jwt);
-    AxiosDefaults(jwt,refreshToken,resetUser,myInterceptor)
+    
   }, [jwt]);
 
   useEffect(() => {
