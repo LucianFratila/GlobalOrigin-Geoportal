@@ -7,7 +7,6 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export default function AxiosInit(jwt,refreshToken,resetUser){
 
-    alert(BASE_URL)  
     axios.defaults.withCredentials = false;
     axios.defaults.baseURL = BASE_URL; 
     //axios.defaults.headers.withCredentials=true;  
@@ -45,19 +44,6 @@ export default function AxiosInit(jwt,refreshToken,resetUser){
 
       
     )
-    axios.interceptors.response.use(function (response) {
-      //const navigate = useNavigate();
-      // Any status code that lie within the range of 2xx cause this function to trigger
-      // Do something with response data
-      return response;
-    }, function (error) {
-
-        //const navigate = useNavigate();
-       // navigate("/login");
-      // Any status codes that falls outside the range of 2xx cause this function to trigger
-      // Do something with response error
-      return Promise.reject(error);
-    });
 
 }
 
