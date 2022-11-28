@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import axios from "axios";
 
 import ToggleCheckBox from "components/reusable/toggleCheckbox";
-import InputSelectOptions from "components/reusable/inputSelectOptions";
+import InputSelectCompany from "./components/inputSelectCompany";
+import InputSelectConcession from "./components/inputSelectConcession";
 
 import ConcessionsLayers from "./ConcessionsLayers";
 import MapLegendConcession from "./ConcessionLegend";
@@ -12,11 +12,10 @@ import useStore from "common/utils/stateStore/useStore";
 
 ///React Query Imports///
 import { useQuery } from "react-query";
-import { getCompanies } from "common/axios/endpoints";
+import { getCompanies, getConcessions } from "common/axios/endpoints";
 
 export default function ConcessionsPage({ map, mapLoaded }) {
   const [layerData, SetLayerData] = useState(null);
-
 
   //////////LAYER VISIBILITY CONTROLS///////////////
   const concessionLayerVisibility = useStore((state) => state.concessionLayerVisibility);
@@ -63,39 +62,59 @@ export default function ConcessionsPage({ map, mapLoaded }) {
   };
   ////MockUp Data////
 
-  /////////Fetch Company/////////////
-  const {data:companies, isLoading,error}= useQuery('companies',getCompanies)
-  const compdata = companies?.data.data
-  /////////Fetch Company/////////////
-  
+  /////////Fetch /////////////
+  const { data: companies, isLoading, error } = useQuery("companies", getCompanies);
+  const compdata = companies?.data.data;
+
   ////lift up state to return selected company//////
-  const [companyName,setCompanyName] = useState('')
+  const [companyName, setCompanyName] = useState(null);
+
+  function selectedCompany(item) {
+    const parse = `{${item}}`;
+    
+    if (parse !== '') {
+      return setCompanyName(JSON.parse(parse));
+    }
+  }
   
-  function selectedCompany(item){
-    return setCompanyName(item)
+
+  const compId = companyName?.id;
+ 
+  const { data: concessionCompId } = useQuery(
+    ["concessionCompId", compId],
+    () => getConcessions(`?Company=${compId}`),
+    {
+      // The query will not execute until the condition
+      enabled: !!compId,
+    }
+  );
+  const concessdata = concessionCompId?.data.features;
+
+
+  function selectedConcession(item) {
+    console.log();
   }
   ////////////////////////////////////
-
-
+  /////////Fetch /////////////
 
   let layersProps = {
     concessions: {
       visibility: `${concessionLayerVisibility ? `visible` : `none`}`,
-      filters:{
-                'Company':`${companyName}`
-      }
+      filters: {
+        Company: `${companyName}`,
+      },
     },
     ufa: {
       visibility: `${UFAvisibility ? `visible` : `none`}`,
-      filters:{}
+      filters: {},
     },
     ufg: {
       visibility: `${UFGvisibility ? `visible` : `none`}`,
-      filters:{}
+      filters: {},
     },
     aac: {
       visibility: `${AACvisibility ? `visible` : `none`}`,
-      filters:{}
+      filters: {},
     },
   };
 
@@ -110,9 +129,14 @@ export default function ConcessionsPage({ map, mapLoaded }) {
           </div>
           <div className='flex flex-row gap-2'>
             {/* Company */}
-            <InputSelectOptions selected={"Company Name"} returnSelected = {selectedCompany} data={compdata} isLoading={isLoading} />
+            <InputSelectCompany
+              selected={"Company Name"}
+              returnSelected={selectedCompany}
+              data={compdata}
+              isLoading={isLoading}
+            />
             {/* Concessions */}
-            <InputSelectOptions selected={"Concessions"} data={dataSelecteInput.concessions} />
+            <InputSelectConcession selected={"Concessions"} data={concessdata} />
           </div>
           <div>
             <form>
@@ -176,7 +200,7 @@ export default function ConcessionsPage({ map, mapLoaded }) {
           {/* Layer toggles */}
         </section>
       </main>
-      <SidePanel layerData={layerData} title={'Concessions'}  />
+      <SidePanel layerData={layerData} title={"Concessions"} />
       <MapLegendConcession layersProps={layersProps}>
         <ConcessionsLayers
           map={map}

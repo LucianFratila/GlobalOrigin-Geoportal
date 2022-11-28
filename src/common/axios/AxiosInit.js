@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import jwt_decode from 'jwt-decode'
 import dayjs from 'dayjs'
