@@ -39,7 +39,13 @@ export default function AACLayer({map, mapLoaded, layerProps}){
             if(!map.current.getSource(name)){
 
                 map.current.addSource(name, {
-                    type: 'geojson'
+                    type: 'geojson',
+                    data:{
+                            "type": "FeatureCollection",
+                            "features": [
+                                { "type": "Feature", "properties": {}, "geometry": null }
+                            ]
+                        }
                 });
                    
                 map.current.addLayer({

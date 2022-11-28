@@ -1,12 +1,13 @@
 import axios from "axios";
 import jwt_decode from 'jwt-decode'
 import dayjs from 'dayjs'
+import { GetObject } from "../utils/StorageObject";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 
-export default function AxiosDefaults(jwt,refreshToken,resetUser,myInterceptor){
-
+export default function AxiosDefaults(resetUser){
+  let jwt=GetObject('jwt')
   console.log('setAxiosDefaults')
   axios.defaults.headers.common["Authorization"]=`Bearer ${jwt}`;
   axios.defaults.headers.common["Content-Type"]= "application/json";
@@ -14,12 +15,12 @@ export default function AxiosDefaults(jwt,refreshToken,resetUser,myInterceptor){
   axios.defaults.baseURL = BASE_URL; 
   //axios.defaults.withCredentials = false;
   
-  if(myInterceptor.current){
-    alert("eject")
-    axios.interceptors.request.eject(myInterceptor.current);
-  }
-  myInterceptor.current=axios.interceptors.request.use(req => {
-    console.log()
+ let refCount=0;
+
+ axios.interceptors.request.use(async req => {
+    let jwt=GetObject('jwt')
+    let refreshToken=GetObject('refresh_token')
+
     if(!jwt){
       console.log('not jwt')
       return req
@@ -27,24 +28,23 @@ export default function AxiosDefaults(jwt,refreshToken,resetUser,myInterceptor){
 
     const user = jwt_decode(jwt)
     console.log(dayjs.unix(user.exp).diff(dayjs()) + ':' + req.url)
-    const isExpired = dayjs.unix(user.exp).diff(dayjs()) < 1;
-    if(isExpired){
-      const axiosInstance = axios.create({
-        BASE_URL,
-      });
-  
-      axiosInstance.post(`/users/refresh_token`, {
-        "access_token":jwt,
-        "refresh_token": refreshToken
-      }).then(response=>{
-                     console.log("refreshed")
-                     resetUser('user refreshed',response.data.jwt,response.data.refresh_token) 
-                    });
-    }
+    const isExpired = dayjs.unix(user.exp).diff(dayjs()) < 1500000;
 
+    if(!isExpired) return req  
 
-    return req;
+    const axiosInstance = axios.create({
+      BASE_URL,
+    });
 
+    const response = await axiosInstance.post(`/users/refresh_token`, {
+                        "access_token":jwt,
+                        "refresh_token": refreshToken
+                      })
+
+    resetUser('user refreshed : ' + refCount++,response.data.jwt,response.data.refresh_token) 
+        
+    req.headers.Authorization = `Bearer ${response.data.jwt}`
+    return req                                 
   })
 
 }
