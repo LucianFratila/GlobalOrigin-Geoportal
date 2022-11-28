@@ -2,7 +2,7 @@ const InputSelectCompany = ({ selected, data,returnSelected }) => {
   
   return (
     <select onClick={(e)=>returnSelected(e.target.value)} className=' bg-gray-600 text-maintext w-full p-3 rounded-md'>
-      <option disabled={true} defaultValue={selected}>{selected}</option>
+      <option  defaultValue={selected}>{selected}</option>
       {data ? (
         <>
           {data.map((i) => (

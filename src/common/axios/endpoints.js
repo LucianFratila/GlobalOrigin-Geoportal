@@ -11,6 +11,6 @@ export const getConcession = async (id, jwt) => {
 };
 
 export const getConcessions = async (params) => {
-  return await axios.get(`${BASE_URL}/concessions/vectors${params}`);
+  return await axios.get(`/concessions/vectors${params}`);
 };
 
