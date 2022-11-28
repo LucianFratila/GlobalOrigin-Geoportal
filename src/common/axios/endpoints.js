@@ -6,6 +6,8 @@ export const getCompanies = async () => {
   return await axios.get(`${BASE_URL}/companies/list`);
 };
 
+
+
 export const getConcession = async (id, jwt) => {
   return await axios.get(`${BASE_URL}/concessions/${id}`, {
     headers: {
@@ -13,3 +15,8 @@ export const getConcession = async (id, jwt) => {
     },
   });
 };
+
+export const getConcessions = async (params) => {
+  return await axios.get(`${BASE_URL}/concessions/vectors${params}`);
+};
+
