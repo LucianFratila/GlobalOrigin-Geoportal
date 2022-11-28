@@ -79,7 +79,7 @@ function App() {
       <Router>
         <LangContext.Provider value={{lang,jwt}}>
           <main className=' w-full h-full'>
-            <MainNav logout={() => resetUser("guest", "")} user={user}>
+            <MainNav logout={() => resetUser("guest","","")} user={user}>
               <Routes>
                 <Route exact path='/' element={<ConcessionsPage map={map} mapLoaded={mapLoaded} />} />
                 <Route exact path='/concessions' element={<ConcessionsPage map={map} mapLoaded={mapLoaded} />} />

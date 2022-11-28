@@ -26,7 +26,7 @@ export default function AACLayer({map, mapLoaded, layerProps}){
         },[]);
 
     useEffect(()=>{
-        if(map.current)
+        if(map.current && map.current.getSource(name))
             map.current.setLayoutProperty(
                 name,
                 'visibility',

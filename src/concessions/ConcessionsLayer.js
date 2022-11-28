@@ -27,7 +27,7 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
   }).trackPointer();
 
   useEffect(() => {
-    if (map.current) map.current.setLayoutProperty(name, "visibility", layerProps.visibility);
+    if (map.current && map.current.getSource(name)) map.current.setLayoutProperty(name, "visibility", layerProps.visibility);
   }, [layerProps.visibility]);
 
   let hoveredStateId = null;

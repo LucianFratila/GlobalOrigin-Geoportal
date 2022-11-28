@@ -17,6 +17,12 @@ export default function AxiosInit(jwt,refreshToken,resetUser){
 
     axios.interceptors.request.use(async req => {
         //console.log(req)
+        
+        if(!jwt){
+          console.log('not jwt')
+          return req
+        }
+
         const user = jwt_decode(jwt)
         const isExpired = dayjs.unix(user.exp).diff(dayjs()) < 1;
     
@@ -24,7 +30,7 @@ export default function AxiosInit(jwt,refreshToken,resetUser){
           console.log('not expired')
           return req
         }
-        else console.log('expired')
+        else console.log('refresh')
          
       const axiosInstance = axios.create({
         BASE_URL,
@@ -36,7 +42,7 @@ export default function AxiosInit(jwt,refreshToken,resetUser){
       });
      // console.log(response)
 
-      resetUser('user',response.data.jwt,response.data.refresh_token)
+      resetUser('user refreshed',response.data.jwt,response.data.refresh_token)
       axios.defaults.headers.common["Authorization"]=`Bearer ${response.data.jwt}`;
 
         return req

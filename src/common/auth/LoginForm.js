@@ -46,7 +46,7 @@ function LoginForm({resetUser}){
             })
             .catch( error => {
                 setMessageClass('alert alert-danger')
-                if(error.response.data.errors){
+                if(error.response && error.response.data && error.response.data.errors){
                     setMessage('Please correct the errors')
                     setErrors(error.response.data.errors)
                 }
