@@ -7,6 +7,7 @@ import InputSelectConcession from "./components/inputSelectConcession";
 import ConcessionsLayers from "./ConcessionsLayers";
 import MapLegendConcession from "./ConcessionLegend";
 import SidePanel from "components/sidePanel";
+import SearchFilter from "./components/inputSearchFilter";
 
 import useStore from "common/utils/stateStore/useStore";
 
@@ -41,46 +42,27 @@ export default function ConcessionsPage({ map, mapLoaded }) {
     SetLayerData(data);
   }
 
-  ////MockUp Data////
-  const dataSelecteInput = {
-    company: [
-      { name: "company 1", id: 1 },
-      { name: "company 2", id: 2 },
-      { name: "company 3", id: 3 },
-      { name: "company 4", id: 4 },
-      { name: "company 5", id: 5 },
-      { name: "company 6", id: 6 },
-    ],
-    concessions: [
-      { name: "concessions 1", id: 1 },
-      { name: "concessions 2", id: 2 },
-      { name: "concessions 3", id: 3 },
-      { name: "concessions 4", id: 4 },
-      { name: "concessions 5", id: 5 },
-      { name: "concessions 6", id: 6 },
-    ],
-  };
-  ////MockUp Data////
-
   /////////Fetch /////////////
-  const { data: companies, isLoading, error } = useQuery("companies", getCompanies);
+  const { data: companies, isLoading: companieLoading, error } = useQuery("companies", getCompanies);
   const compdata = companies?.data.data;
 
   ////lift up state to return selected company//////
   const [companyName, setCompanyName] = useState(null);
-
+  const [concessionName, setConcessionName] = useState(null);
+  const [inputSearchValue, setInputSearchValue]=useState(null)
+  
+  
   function selectedCompany(item) {
     const parse = `{${item}}`;
-    
-    if (parse !== '') {
+
+    if (parse !== "") {
       return setCompanyName(JSON.parse(parse));
     }
   }
-  
 
   const compId = companyName?.id;
- 
-  const { data: concessionCompId } = useQuery(
+
+  const { data: concessionCompId, isLoading: concessionLoading } = useQuery(
     ["concessionCompId", compId],
     () => getConcessions(`?Company=${compId}`),
     {
@@ -90,13 +72,17 @@ export default function ConcessionsPage({ map, mapLoaded }) {
   );
   const concessdata = concessionCompId?.data.features;
 
-
   function selectedConcession(item) {
-    console.log();
+    return setConcessionName(item)
   }
   ////////////////////////////////////
   /////////Fetch /////////////
 
+  let concessionForm = false
+  let searchForm =false
+  companyName===null?concessionForm = true:concessionForm = false
+  concessionName===null?searchForm = true:searchForm = false
+  
   let layersProps = {
     concessions: {
       visibility: `${concessionLayerVisibility ? `visible` : `none`}`,
@@ -133,41 +119,18 @@ export default function ConcessionsPage({ map, mapLoaded }) {
               selected={"Company Name"}
               returnSelected={selectedCompany}
               data={compdata}
-              isLoading={isLoading}
+              isLoading={companieLoading}
             />
             {/* Concessions */}
-            <InputSelectConcession selected={"Concessions"} data={concessdata} />
+            <InputSelectConcession
+              disable={concessionForm}
+              returnSelected={selectedConcession}
+              selected={"Concessions"}
+              data={concessdata}
+              isLoading={concessionLoading}
+            />
           </div>
-          <div>
-            <form>
-              <div className='relative py-3'>
-                <div className='flex absolute text-maintext  inset-y-0 left-0 items-center pl-3 pointer-events-none'>
-                  <svg
-                    aria-hidden='true'
-                    className='w-5 h-5 text-gray-500 dark:text-gray-400'
-                    fill='none'
-                    stroke='currentColor'
-                    viewBox='0 0 24 24'
-                    xmlns='http://www.w3.org/2000/svg'
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth='2'
-                      d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'
-                    ></path>
-                  </svg>
-                </div>
-                <input
-                  type='search'
-                  id='default-search'
-                  className='block bg-gray-600 placeholder text-maintext p-4 pl-10 rounded-md w-full text-sm'
-                  placeholder='Search for AAC ID, tree ID...'
-                  required
-                />
-              </div>
-            </form>
-          </div>
+          <SearchFilter disable={searchForm} getInputData={setInputSearchValue}/>
           {/* Layer toggles */}
           <div className=' py-5 gap-3 flex flex-col'>
             <div className='flex py-3 gap-3'>
