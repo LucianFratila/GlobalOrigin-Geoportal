@@ -45,8 +45,13 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
       if (!map.current.getSource(name)) {
         map.current.addSource(name, {
           type: "geojson",
-          generateId: true, // This ensures that all features have unique IDs
-          //data: API_SERVER + '/concessions/vectors'
+          generateId: true,
+          data:{
+                  "type": "FeatureCollection",
+                  "features": [
+                      { "type": "Feature", "properties": {}, "geometry": null }
+                  ]
+              }
         });
 
         map.current.addLayer({
