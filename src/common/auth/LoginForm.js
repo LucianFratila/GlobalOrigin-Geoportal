@@ -1,115 +1,127 @@
-import React , { useState } from 'react'
-import axios from 'axios'
-import InputCtrl from '../controls/InputCtrl.js'
-import ButtonCtrl from '../controls/ButtonCtrl.js'
+import React, { useState } from "react";
+import axios from "axios";
+import InputCtrl from "../controls/InputCtrl.js";
+import ButtonCtrl from "../controls/ButtonCtrl.js";
 //import Translate from '../languages/Translate.js'
-import { Link } from 'react-router-dom'
+import { Link } from "react-router-dom";
 
+function LoginForm({ resetUser }) {
+  const defFields = { email: "", password: "" };
+  const defErrors = { email: "", password: "" };
 
-function LoginForm({resetUser}){
+  const [fields, setFields] = useState(defFields);
+  const [errors, setErrors] = useState(defErrors);
 
-    const defFields={"email":'',"password":""}
-    const defErrors={"email":'',"password":""}
+  const [message, setMessage] = useState("");
+  const [messageClass, setMessageClass] = useState("");
 
-    const [fields,setFields]=useState(defFields)
-    const [errors,setErrors]=useState(defErrors)
+  const handleChange = (field, value) => {
+    let fieldsChanged = { ...fields };
+    fieldsChanged[field] = value;
+    setFields(fieldsChanged);
 
-    const [message,setMessage]=useState('')
-    const [messageClass,setMessageClass]=useState('')
+    if (errors[field]) {
+      let errorsChanged = { ...errors };
+      errorsChanged[field] = "";
+      setErrors(errorsChanged);
+    }
+  };
 
-    const handleChange = (field,value)=>{
-        let fieldsChanged={...fields}
-        fieldsChanged[field]=value
-        setFields(fieldsChanged)
-        
-        if(errors[field]){
-          let errorsChanged={...errors}
-          errorsChanged[field]=''
-          setErrors(errorsChanged)
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    const data = new FormData(event.currentTarget);
+    const values = Object.fromEntries(data.entries());
+
+    setMessage("Loading...");
+
+    axios
+      .post("/users/login", values)
+      .then((response) => {
+        console.log(response);
+        setMessage(response.data.message);
+        setMessageClass("alert alert-success");
+        resetUser(fields["email"], response.data.jwt, response.data.refresh_token);
+      })
+      .catch((error) => {
+        setMessageClass("alert alert-danger");
+        if (error.response && error.response.data && error.response.data.errors) {
+          setMessage("Please correct the errors");
+          setErrors(error.response.data.errors);
+        } else {
+          setMessage(error.response.data.message);
+          setErrors(defErrors);
         }
-    }
-  
-    const handleSubmit = (event) => {
-      event.preventDefault();  
-
-      const data = new FormData(event.currentTarget)
-      const values = Object.fromEntries(data.entries())
-
-      setMessage("Loading...")
-      
-      axios.post('/users/login',values)
-          .then( response => {
-                console.log(response);
-                setMessage(response.data.message)
-                setMessageClass('alert alert-success')   
-                resetUser(fields["email"],response.data.jwt,response.data.refresh_token);             
-            })
-            .catch( error => {
-                setMessageClass('alert alert-danger')
-                if(error.response && error.response.data && error.response.data.errors){
-                    setMessage('Please correct the errors')
-                    setErrors(error.response.data.errors)
-                }
-                else{
-                    setMessage(error.response.data.message)
-                    setErrors(defErrors)
-                } 
-            })
-    }
-  
-      return (
-        <React.Fragment>
-          <div className='container text-center pt-5'>
-              <div className="card mx-auto mb-5" style={{width:'500px'}} >
-                <h5 className="card-header success-color white-text text-center py-4">
-                  <strong>Sign in</strong>
-                </h5>
-                <div className="card-body px-lg-5">
-                  <form onSubmit={handleSubmit} >
-                            <InputCtrl
-                                label="Email"
-                                name="email"
-                                type="text"
-                                value={fields["email"]}
-                                onChange={handleChange}
-                                placeholder=''
-                                error={errors.email}
-                                className=""
-                            />
-                            <InputCtrl
-                                label="Password"
-                                name="password"
-                                type="password"
-                                value={fields["password"]}
-                                onChange={handleChange}
-                                placeholder=''
-                                error={errors.password}
-                                className=""
-                            />
-                            <div className="d-flex justify-content-between">
-                              <div className="form-check">
-                                <input type="checkbox" className="form-check-input" id="rememberMe" name="rememberMe" value=''/>
-                                <label className="form-check-label" htmlFor="rememberMe">Remember me</label>
-                              </div>
-                              <div>
-                                <Link  className="text-success" to="/forgot">Forgot password?</Link>
-                              </div>
-                            </div>
-                            <ButtonCtrl
-                                type="submit"
-                                label="Submit"
-                                className="btn btn-outline-success btn-rounded btn-block my-4 waves-effect z-depth-0"
-                            />
-                            <p>Not a member? 
-                              <Link className="text-success" to="/register">Register</Link>
-                            </p>
-                        </form>
-                        <div className={messageClass}>{message}</div>
-                    </div>   
+      });
+  };
+  console.log(message);
+  return (
+    <React.Fragment>
+      <section className='mt-4 flex justify-center '>
+        <div className='w-full  rounded-lg shadow  md:mt-0 sm:max-w-md xl:p-0 bg-primary '>
+          <div className='p-6 space-y-4 md:space-y-6 sm:p-8'>
+            <h1 className='text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white'>
+              Sign in to your account
+            </h1>
+            <form onSubmit={handleSubmit} className='space-y-4 md:space-y-6' action='#'>
+              <div>
+                <label htmlFor='email' className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'>
+                  Your email
+                </label>
+                <InputCtrl
+                  label='Email'
+                  name='email'
+                  type='text'
+                  value={fields["email"]}
+                  onChange={handleChange}
+                  placeholder=''
+                  error={errors.email}
+                  className=''
+                />
+              </div>
+              <div>
+                <label htmlFor='password' className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'>
+                  Password
+                </label>
+                <InputCtrl
+                  label='Password'
+                  name='password'
+                  type='password'
+                  value={fields["password"]}
+                  onChange={handleChange}
+                  placeholder=''
+                  error={errors.password}
+                  className=''
+                />
+              </div>
+              <div className='flex items-center justify-between'>
+                <div className='flex items-start'>
+                  <div className='flex items-center h-5'>
+                    <input
+                      id='remember'
+                      aria-describedby='remember'
+                      type='checkbox'
+                      className='w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800'
+                      required=''
+                    />
+                  </div>
+                  <div className='ml-3 text-sm'>
+                    <label htmlFor='remember' className='text-gray-500 dark:text-gray-300'>
+                      Remember me
+                    </label>
+                  </div>
                 </div>
-            </div>             
-        </React.Fragment>
-      );
-  }
+                <a href='#' className='text-sm font-medium text-primary-600 hover:underline dark:text-primary-500'>
+                  Forgot password?
+                </a>
+              </div>
+              <ButtonCtrl type='submit' label='Submit' />
+            </form>
+          </div>
+        </div>
+      </section>
+    </React.Fragment>
+  );
+}
 
-  export default LoginForm
+export default LoginForm;
