@@ -11,6 +11,7 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
 
   const hideConcession = useStore((state) => state.hideConcession);
   const [isLoading, setIsLoading] = useState(true);
+  const [params,setParams]=useState('')
 
   const paint = {
     "fill-color": "#627BC1",
@@ -30,15 +31,27 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
     if (map.current && map.current.getSource(name)) map.current.setLayoutProperty(name, "visibility", layerProps.visibility);
   }, [layerProps.visibility]);
 
+  useEffect(() => {
+    //if (map.current && map.current.getSource(name)) map.current.setLayoutProperty(name, "visibility", layerProps.visibility);
+    console.log(layerProps.filters.Company)
+    if(layerProps.filters.Company){
+      setParams(`Company=${layerProps.filters.Company}`)
+    }
+  }, [layerProps.filters]);
+
+  useEffect(()=>{
+    getData()
+  },[params])
+
   let hoveredStateId = null;
 
   const getData = useCallback(() => {
     setIsLoading(true);
-    axios.get(`/concessions/vectors`).then((response) => {
+    axios.get(`/concessions/vectors?${params}`).then((response) => {
       setIsLoading(false);
       map.current.getSource(name).setData(response.data);
     });
-  }, []);
+  }, [params]);
 
   useEffect(() => {
     if (mapLoaded) {
@@ -65,24 +78,6 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
         });
 
         getData();
-
-        /*       map.current.addLayer({
-                    "id": "symbols",
-                    "type": "symbol",
-                    "source": name,
-                    "layout": {
-                      "symbol-placement": "line-center",
-                      "text-font": ["Open Sans Regular"],
-                      "text-field": '{Id}',
-                      "text-size": 16,
-                      "text-rotate": -4,
-                      "symbol-spacing": 1,
-                    },
-                    "paint":{
-                      "text-translate":[0,-20],
-                    }
-                });
-           */
 
         map.current.on("mouseenter", name, (e) => {
           map.current.getCanvas().style.cursor = "pointer";

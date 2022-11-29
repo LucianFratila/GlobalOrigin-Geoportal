@@ -71,7 +71,7 @@ export default function ConcessionsPage({ map, mapLoaded }) {
     }
   );
   const concessdata = concessionCompId?.data.features;
-
+/**/
   function selectedConcession(item) {
     return setConcessionName(item)
   }
@@ -87,7 +87,7 @@ export default function ConcessionsPage({ map, mapLoaded }) {
     concessions: {
       visibility: `${concessionLayerVisibility ? `visible` : `none`}`,
       filters: {
-        Company: `${companyName}`,
+        Company: `${compId ? compId : ''}`,
       },
     },
     ufa: {
