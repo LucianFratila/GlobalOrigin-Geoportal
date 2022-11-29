@@ -22,7 +22,7 @@ export default function AxiosDefaults(resetUser){
     let refreshToken=GetObject('refresh_token')
 
     if(!jwt){
-      console.log('not jwt')
+      console.log('no jwt')
       return req
     }
 
@@ -35,15 +35,24 @@ export default function AxiosDefaults(resetUser){
     const axiosInstance = axios.create({
       BASE_URL,
     });
-
-    const response = await axiosInstance.post(`/users/refresh_token`, {
-                        "access_token":jwt,
-                        "refresh_token": refreshToken
-                      })
-
-    resetUser('user refreshed : ' + refCount++,response.data.jwt,response.data.refresh_token) 
-        
+    let response
+    try{
+         response = await axiosInstance.post(`/users/refresh_token`, {
+                          "access_token":jwt,
+                          "refresh_token": refreshToken
+                        })
+    }catch(err){
+      console.log(err)
+      if(err.response.data.message=='Expired token'){
+        resetUser('Session expired! Please login!',"","")
+        return req
+      }
+    }
+    
+    resetUser(user.data.email + ' : ' + refCount++,response.data.jwt,response.data.refresh_token) 
+    axios.defaults.headers.common["Authorization"]=`Bearer ${response.data.jwt}`    
     req.headers.Authorization = `Bearer ${response.data.jwt}`
+
     return req                                 
   })
 

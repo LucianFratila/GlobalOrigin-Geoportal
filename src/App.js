@@ -1,5 +1,6 @@
 // import logo from './logo.svg';
 import "./App.css";
+import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { API_SERVER } from "./config";
@@ -62,7 +63,7 @@ function App() {
 
   useEffect(() => {
     SetObject("jwt", jwt);
-    
+    axios.defaults.headers.common["Authorization"]=`Bearer ${jwt}`;
   }, [jwt]);
 
   useEffect(() => {
