@@ -4,7 +4,7 @@ export const getCompanies = async () => {
   return await axios.get(`/companies/list`);
 };
 
-export const getConcession = async (id, jwt) => {
+export const getConcession = async (id) => {
   return await axios.get(`/concessions/${id}`);
 };
 

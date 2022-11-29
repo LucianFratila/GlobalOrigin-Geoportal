@@ -33,7 +33,7 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
 
   useEffect(() => {
     //if (map.current && map.current.getSource(name)) map.current.setLayoutProperty(name, "visibility", layerProps.visibility);
-    console.log(layerProps.filters.Company)
+    // console.log(layerProps.filters.Company)
     if(layerProps.filters.Company){
       setParams(`Company=${layerProps.filters.Company}`)
     }
