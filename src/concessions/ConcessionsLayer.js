@@ -1,7 +1,6 @@
 import React, { useEffect, useCallback, useState } from "react";
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import axios from "axios";
-import { API_SERVER } from "../config";
 import { CgClose } from "react-icons/cg";
 import ClipLoader from "react-spinners/ClipLoader";
 
@@ -14,8 +13,16 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
   const [params,setParams]=useState('')
 
   const paint = {
-    "fill-color": "#627BC1",
-    "fill-opacity": ["case", ["boolean", ["feature-state", "hover"], false], 1, 0.5],
+      "fill-outline-color": ["case", ["boolean", ["feature-state", "hover"], false],"#000000", "#627BC1"],
+      "fill-opacity": ['interpolate',
+        ['linear'],
+        ['zoom'],
+        6,
+        1,
+        12,
+        0],
+      "fill-color":"#627BC1",
+
   };
 
   const name = "concessions";
@@ -32,8 +39,6 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
   }, [layerProps.visibility]);
 
   useEffect(() => {
-    //if (map.current && map.current.getSource(name)) map.current.setLayoutProperty(name, "visibility", layerProps.visibility);
-    console.log(layerProps.filters.Company)
     if(layerProps.filters.Company){
       setParams(`Company=${layerProps.filters.Company}`)
     }

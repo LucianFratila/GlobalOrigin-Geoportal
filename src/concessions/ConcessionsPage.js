@@ -102,6 +102,10 @@ export default function ConcessionsPage({ map, mapLoaded }) {
       visibility: `${AACvisibility ? `visible` : `none`}`,
       filters: {},
     },
+    treeinventory: {
+      visibility:  `visible`,
+      filters: {},
+    },
   };
 
   return (

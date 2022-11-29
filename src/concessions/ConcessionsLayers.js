@@ -4,7 +4,8 @@ import ConcessionsLayer from './ConcessionsLayer'
 import UFALayer from './UFALayer'
 import UFGLayer from './UFGLayer'
 import AACLayer from './AACLayer'
-import axios from "axios"
+import TreeInventoryLayer from './TreeInventoryLayer'
+
 
 
 export default function ConcessionsLayers({map, mapLoaded, layersProps, activateSidePanel}){
@@ -12,10 +13,11 @@ export default function ConcessionsLayers({map, mapLoaded, layersProps, activate
 
     return(
         <React.Fragment>
-            <ConcessionsLayer map={map} mapLoaded={mapLoaded} layerProps={layersProps.concessions} activateSidePanel={activateSidePanel}/>
-            <UFALayer map={map} mapLoaded={mapLoaded} layerProps={layersProps.ufa} activateSidePanel={activateSidePanel}/>
-            <UFGLayer map={map} mapLoaded={mapLoaded} layerProps={layersProps.ufg} activateSidePanel={activateSidePanel}/>
+            <TreeInventoryLayer map={map} mapLoaded={mapLoaded} layerProps={layersProps.treeinventory} activateSidePanel={activateSidePanel}/>
             <AACLayer map={map} mapLoaded={mapLoaded} layerProps={layersProps.aac} activateSidePanel={activateSidePanel}/>
+            <UFGLayer map={map} mapLoaded={mapLoaded} layerProps={layersProps.ufg} activateSidePanel={activateSidePanel}/>
+            <UFALayer map={map} mapLoaded={mapLoaded} layerProps={layersProps.ufa} activateSidePanel={activateSidePanel}/>
+            <ConcessionsLayer map={map} mapLoaded={mapLoaded} layerProps={layersProps.concessions} activateSidePanel={activateSidePanel}/>
         </React.Fragment>
     )
 

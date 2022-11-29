@@ -8,7 +8,6 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export default function AxiosDefaults(resetUser){
   let jwt=GetObject('jwt')
-  console.log('setAxiosDefaults')
   axios.defaults.headers.common["Authorization"]=`Bearer ${jwt}`;
   axios.defaults.headers.common["Content-Type"]= "application/json";
   axios.defaults.headers.common["Accept"]= "application/json";
