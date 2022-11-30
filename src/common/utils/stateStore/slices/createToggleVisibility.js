@@ -19,7 +19,7 @@
     showUFA:() => set(() => ({ UFAvisibility: true })),
     hideUFA:() => set(() => ({ UFAvisibility: false })),
 
-    UFGvisibility:true,
+    UFGvisibility:false,
     toggleUFG:() => set(state => ({ UFGvisibility: !state.UFGvisibility })),
     showUFG:() => set(() => ({ UFGvisibility: true })),
     hideUFG:() => set(() => ({ UFGvisibility: false })),
