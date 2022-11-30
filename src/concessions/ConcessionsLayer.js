@@ -37,7 +37,7 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
     if(layerProps.filters.Company){
       setParams(`Company=${layerProps.filters.Company}`)
     }
-  }, [layerProps.filters]);
+  },    [layerProps.filters]);
 
   useEffect(()=>{
     getData()

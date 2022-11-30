@@ -6,7 +6,7 @@ import InputSelectConcession from "./components/inputSelectConcession";
 
 import ConcessionsLayers from "./ConcessionsLayers";
 import MapLegendConcession from "./ConcessionLegend";
-import SidePanel from "components/sidePanel";
+import ConcessionSidePanel from "concessions/components/panels/ConcessionSidePanel";
 import SearchFilter from "./components/inputSearchFilter";
 
 import useStore from "common/utils/stateStore/useStore";
@@ -32,13 +32,13 @@ export default function ConcessionsPage({ map, mapLoaded }) {
   const AACvisibility = useStore((state) => state.AACvisibility);
   const toggleAAC = useStore((state) => state.toggleAAC);
 
-  const showSidePanel = useStore((state) => state.showSidePanel);
+  const showConcessionSidePanel = useStore((state) => state.showConcessionSidePanel);
   const hideMainNav = useStore((state) => state.hideMainNav);
 
   //////////LAYER VISIBILITY CONTROLS///////////////
 
   function activateSidePanel(data) {
-    showSidePanel();
+    showConcessionSidePanel();
     hideMainNav();
     SetLayerData(data);
   }
@@ -171,7 +171,7 @@ export default function ConcessionsPage({ map, mapLoaded }) {
           {/* Layer toggles */}
         </section>
       </main>
-      <SidePanel layerData={layerData} title={"Concessions"} />
+      <ConcessionSidePanel layerData={layerData}  />
       <MapLegendConcession layersProps={layersProps}>
         <ConcessionsLayers
           map={map}
