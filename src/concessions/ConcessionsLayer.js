@@ -13,16 +13,10 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
   const [params,setParams]=useState('')
 
   const paint = {
-      "fill-outline-color": ["case", ["boolean", ["feature-state", "hover"], false],"#000000", "#627BC1"],
-      "fill-opacity": ['interpolate',
-        ['linear'],
-        ['zoom'],
-        5,
-        1,
-        8,
-        0],
-      "fill-color":"#627BC1",
-
+    //  "fill-opacity": ['interpolate',['linear'],['zoom'],5, 1, 8,0],
+    //  "fill-color":"#627BC1",
+      'fill-color': ['interpolate',['linear'],['zoom'], 5,'rgba(215,118,102,1)',8, 'rgba(215,118,102,0)'],
+      'fill-outline-color':["case", ["boolean", ["feature-state", "hover"], false],'rgb(115,18,2)','rgb(215,118,102)'],
   };
 
   const name = "concessions";
@@ -138,9 +132,9 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
     block = (
       <span key='1' className='flex items-center justify-between'>
         {isLoading ? (
-          <ClipLoader color={paint["fill-color"]} size='20px' />
+          <ClipLoader color='rgba(215,118,102,1)' size='20px' />
         ) : (
-          <span style={{ backgroundColor: `${paint["fill-color"]}` }} className='w-3 h-3 mr-1'></span>
+          <span style={{ backgroundColor:'rgba(215,118,102,1)'}} className='w-3 h-3 mr-1'></span>
         )}
         <span className=' mr-5 w-40 text-sm justify-start'>Concessions</span>
         <button onClick={hideConcession} className=' text-maintext hover:text-white'>

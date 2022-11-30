@@ -9,14 +9,8 @@ export default function UFGLayer({map, mapLoaded, layerProps}){
     const [isLoading,setIsLoading]=useState(true)
 
     const paint={
-        'fill-color': 'blue',
-        "fill-opacity": ['interpolate',
-        ['linear'],
-        ['zoom'],
-        9,
-        1,
-        12,
-        0],
+        'fill-color': ['interpolate',['linear'],['zoom'], 9,'rgba(215,118,102,1)',12, 'rgba(215,118,102,0)'],
+        'fill-outline-color':["case", ["boolean", ["feature-state", "hover"], false],'rgb(115,18,2)','rgb(215,118,102)'],
     }
     const name='ufg'
     const type='fill'
@@ -90,7 +84,7 @@ export default function UFGLayer({map, mapLoaded, layerProps}){
     let block
     if (layerProps.visibility=='visible') {
         block = <span key='1' className='flex items-center justify-between' >
-                    {isLoading ? <ClipLoader color={paint["fill-color"]} size="20px"/> : <span style={{backgroundColor:`${paint["fill-color"]}`}} className="w-3 h-3 mr-1"></span>}
+                    {isLoading ? <ClipLoader color='rgba(215,118,102,1)' size="20px"/> : <span style={{ backgroundColor:'rgba(215,118,102,1)'}} className="w-3 h-3 mr-1"></span>}
                     <span className=' mr-5 w-40 text-sm justify-start'>UFG's</span>
                     <button onClick={hideUFG} className=' text-maintext hover:text-white'>
                     <CgClose />

@@ -9,9 +9,8 @@ export default function AACLayer({map, mapLoaded, layerProps}){
     const [isLoading,setIsLoading]=useState(true)
 
     const paint={
-        'fill-color': ['interpolate',['linear'],['zoom'], 11,'rgba(255,69,0,1)',14, 'rgba(255,69,0,0)'],
-     //   "fill-opacity": ['interpolate',['linear'],['zoom'], 9, 1,13, 0],
-        'fill-outline-color':'rgb(255,69,0)'
+        'fill-color': ['interpolate',['linear'],['zoom'], 11,'rgba(215,118,102,1)',14, 'rgba(215,118,102,0)'],
+        'fill-outline-color':["case", ["boolean", ["feature-state", "hover"], false],'rgb(115,18,2)','rgb(215,118,102)'],
     }
     const name='aac'
     const type='fill'
@@ -83,7 +82,7 @@ export default function AACLayer({map, mapLoaded, layerProps}){
     let block
     if (layerProps.visibility=='visible') {
         block = <span key='1' className='flex items-center justify-between' >
-                    {isLoading ? <ClipLoader color={paint["fill-outline-color"]} size="20px"/> : <span style={{backgroundColor:`${paint["fill-outline-color"]}`}} className="w-3 h-3 mr-1"></span>}
+                    {isLoading ? <ClipLoader color='rgba(215,118,102,1)' size="20px"/> : <span style={{ backgroundColor:'rgba(215,118,102,1)'}} className="w-3 h-3 mr-1"></span>}
                     <span className=' mr-5 w-40 text-sm justify-start'>AAC's</span>
                     <button onClick={hideAAC} className=' text-maintext hover:text-white'>
                     <CgClose />
