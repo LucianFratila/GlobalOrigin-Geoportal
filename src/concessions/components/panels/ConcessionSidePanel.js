@@ -38,7 +38,6 @@ const ConcessionSidePanel = ({ layerData }) => {
   let falledPercentage = ((am.falled * 100) / totalSpecies).toFixed(1);
   let livePercentage = ((am.live * 100) / totalSpecies).toFixed(1);
   let markedPercentage = ((am.marked * 100) / totalSpecies).toFixed(1);
-
   return (
     <>
       {/* DESKTOP MENU */}

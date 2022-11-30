@@ -103,7 +103,7 @@ export default function TreeInventoryLayer({ map, mapLoaded, layerProps, activat
         });
 
         map.current.on("click", name, (e) => {
-          activateSidePanel({ id: e.features[0].properties.Id, concession: e.features[0].properties.name_geo });
+          activateSidePanel({ id: e.features[0].properties.Id, species: e.features[0].properties.species_geo});
         });
       }
     }
