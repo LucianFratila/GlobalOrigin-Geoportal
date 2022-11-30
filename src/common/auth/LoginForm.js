@@ -115,7 +115,7 @@ function LoginForm({ resetUser }) {
                   Forgot password?
                 </a>
               </div>
-              <ButtonCtrl type='submit' label='Submit' />
+              <ButtonCtrl type='submit' label='Submit' message={message} />
             </form>
           </div>
         </div>
