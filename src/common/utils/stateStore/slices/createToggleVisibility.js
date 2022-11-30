@@ -36,6 +36,10 @@
     showConcessionSidePanel:() => set(() => ({ concessionSidePanelVisibility: true })),
     hideConcessionSidePanel:() => set(() => ({ concessionSidePanelVisibility: false })),
 
+    AACSidePanelVisibility:false,
+    showAACSidePanel:() => set(() => ({ AACSidePanelVisibility: true })),
+    hideAACSidePanel:() => set(() => ({ AACSidePanelVisibility: false })),
+
 
     jwt:null,
     setJwt:(data) => set((state) => ({ jwt: data })),

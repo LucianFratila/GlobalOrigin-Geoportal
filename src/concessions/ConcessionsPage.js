@@ -7,6 +7,7 @@ import InputSelectConcession from "./components/inputSelectConcession";
 import ConcessionsLayers from "./ConcessionsLayers";
 import MapLegendConcession from "./ConcessionLegend";
 import ConcessionSidePanel from "concessions/components/panels/ConcessionSidePanel";
+import AACSidePanel from "./components/panels/AACSidePanel";
 import SearchFilter from "./components/inputSearchFilter";
 
 import useStore from "common/utils/stateStore/useStore";
@@ -32,16 +33,27 @@ export default function ConcessionsPage({ map, mapLoaded }) {
   const AACvisibility = useStore((state) => state.AACvisibility);
   const toggleAAC = useStore((state) => state.toggleAAC);
 
-  const showConcessionSidePanel = useStore((state) => state.showConcessionSidePanel);
-  const hideMainNav = useStore((state) => state.hideMainNav);
+
 
   //////////LAYER VISIBILITY CONTROLS///////////////
 
-  function activateSidePanel(data) {
+  //////////////////SIDE PANEL CONTROLS //////////////////
+  const showConcessionSidePanel = useStore((state) => state.showConcessionSidePanel);
+  const showAACSidePanel = useStore((state) => state.showAACSidePanel);
+  const hideMainNav = useStore((state) => state.hideMainNav);
+
+  function activateConcessionSidePanel(data) {
     showConcessionSidePanel();
     hideMainNav();
     SetLayerData(data);
   }
+
+  function activateAACSidePanel(data) {
+    showAACSidePanel();
+    hideMainNav();
+    SetLayerData(data);
+  }
+  //////////////////SIDE PANEL CONTROLS //////////////////
 
   /////////Fetch /////////////
   const { data: companies, isLoading: companieLoading, error } = useQuery("companies", getCompanies);
@@ -171,13 +183,14 @@ export default function ConcessionsPage({ map, mapLoaded }) {
           {/* Layer toggles */}
         </section>
       </main>
+      <AACSidePanel layerData={layerData} />
       <ConcessionSidePanel layerData={layerData}  />
       <MapLegendConcession layersProps={layersProps}>
         <ConcessionsLayers
           map={map}
           mapLoaded={mapLoaded}
           layersProps={layersProps}
-          activateSidePanel={activateSidePanel}
+          activateSidePanel={activateConcessionSidePanel}
         ></ConcessionsLayers>
       </MapLegendConcession>
     </React.Fragment>

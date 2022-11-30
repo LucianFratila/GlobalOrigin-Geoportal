@@ -33,7 +33,6 @@ const ConcessionSidePanel = ({ layerData }) => {
   let trees = useTrees();
   let totalTrees = trees?.falled + trees?.live + trees?.marked;
   let species = trees?.species;
-  console.log(species);
   let am = species["African Mahogany"];
   let totalSpecies = am.falled + am.live + am.marked;
   let falledPercentage = ((am.falled * 100) / totalSpecies).toFixed(1);
