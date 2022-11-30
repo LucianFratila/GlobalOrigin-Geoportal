@@ -18,7 +18,8 @@ import { useQuery } from "react-query";
 import { getCompanies, getConcessions } from "common/axios/endpoints";
 
 export default function ConcessionsPage({ map, mapLoaded }) {
-  const [layerData, SetLayerData] = useState(null);
+  const [layerConcessionData, SetLayerConcessionData] = useState(null);
+  const [layerAACData, setLayerAACData] = useState(null);
 
   //////////LAYER VISIBILITY CONTROLS///////////////
   const concessionLayerVisibility = useStore((state) => state.concessionLayerVisibility);
@@ -45,13 +46,13 @@ export default function ConcessionsPage({ map, mapLoaded }) {
   function activateConcessionSidePanel(data) {
     showConcessionSidePanel();
     hideMainNav();
-    SetLayerData(data);
+    SetLayerConcessionData(data);
   }
 
   function activateAACSidePanel(data) {
     showAACSidePanel();
     hideMainNav();
-    SetLayerData(data);
+    setLayerAACData(data);
   }
   //////////////////SIDE PANEL CONTROLS //////////////////
 
@@ -183,14 +184,15 @@ export default function ConcessionsPage({ map, mapLoaded }) {
           {/* Layer toggles */}
         </section>
       </main>
-      <AACSidePanel layerData={layerData} />
-      <ConcessionSidePanel layerData={layerData}  />
+      <AACSidePanel layerData={layerAACData} />
+      <ConcessionSidePanel layerData={layerConcessionData}  />
       <MapLegendConcession layersProps={layersProps}>
         <ConcessionsLayers
           map={map}
           mapLoaded={mapLoaded}
           layersProps={layersProps}
-          activateSidePanel={activateConcessionSidePanel}
+          activateConcessionSidePanel={activateConcessionSidePanel}
+          activateAACSidePanel={activateAACSidePanel}
         ></ConcessionsLayers>
       </MapLegendConcession>
     </React.Fragment>
