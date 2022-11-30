@@ -11,6 +11,7 @@ import SearchFilter from "./components/inputSearchFilter";
 
 import useStore from "common/utils/stateStore/useStore";
 
+
 ///React Query Imports///
 import { useQuery } from "react-query";
 import { getCompanies, getConcessions } from "common/axios/endpoints";
@@ -103,6 +104,10 @@ export default function ConcessionsPage({ map, mapLoaded }) {
     },
     aac: {
       visibility: `${AACvisibility ? `visible` : `none`}`,
+      filters: {},
+    },
+    treeinventory: {
+      visibility:  `visible`,
       filters: {},
     },
   };

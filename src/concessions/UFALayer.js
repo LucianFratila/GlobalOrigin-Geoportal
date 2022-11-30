@@ -9,6 +9,13 @@ export default function UFALayer({ map, mapLoaded, layerProps }) {
 
   const paint = {
     "fill-color": "green",
+    "fill-opacity": ['interpolate',
+    ['linear'],
+    ['zoom'],
+    7,
+    1,
+    10,
+    0],
   };
   const name = "ufa";
   const type = "fill";

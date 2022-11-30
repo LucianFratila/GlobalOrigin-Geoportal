@@ -8,6 +8,7 @@ import { PulseLoader } from "react-spinners";
 ///React Query Imports///
 import { useQuery } from "react-query";
 import { getConcession } from "common/axios/endpoints";
+import useTrees from 'common/utils/useTrees'
 
 const SidePanel = ({ layerData, title }) => {
   //////////VISIBILITY CONTROLS///////////////
@@ -29,7 +30,8 @@ const SidePanel = ({ layerData, title }) => {
   })
 
 
-  
+  let trees= JSON.stringify(useTrees())
+
   
   
   return (
@@ -88,7 +90,7 @@ const SidePanel = ({ layerData, title }) => {
                       <p>{concession.data.data.CreatedAt}</p>
                     </span>
                   </div>
-
+                  {trees}
                   {/* <p>Continent: {value.Continent}</p>
                   <p>CreatedAt: {value.CreatedAt}</p>
                   <p>UpdatedAt: {value.UpdatedAt}</p>

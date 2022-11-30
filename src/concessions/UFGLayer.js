@@ -9,7 +9,14 @@ export default function UFGLayer({map, mapLoaded, layerProps}){
     const [isLoading,setIsLoading]=useState(true)
 
     const paint={
-        'fill-color': 'blue'
+        'fill-color': 'blue',
+        "fill-opacity": ['interpolate',
+        ['linear'],
+        ['zoom'],
+        9,
+        1,
+        12,
+        0],
     }
     const name='ufg'
     const type='fill'

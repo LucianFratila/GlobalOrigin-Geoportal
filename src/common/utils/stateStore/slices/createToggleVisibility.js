@@ -14,7 +14,7 @@
     toggleConcessionLayer:() => set(state => ({ concessionLayerVisibility: !state.concessionLayerVisibility })),
     changeConcesionLayerData:(data) => set((state) => ({ concessionLayerData: data })),
 
-    UFAvisibility:false,
+    UFAvisibility:true,
     toggleUFA:() => set(state => ({ UFAvisibility: !state.UFAvisibility })),
     showUFA:() => set(() => ({ UFAvisibility: true })),
     hideUFA:() => set(() => ({ UFAvisibility: false })),
@@ -24,7 +24,7 @@
     showUFG:() => set(() => ({ UFGvisibility: true })),
     hideUFG:() => set(() => ({ UFGvisibility: false })),
 
-    AACvisibility:false,
+    AACvisibility:true,
     toggleAAC:() => set(state => ({ AACvisibility: !state.AACvisibility })),
     showAAC:() => set(() => ({ AACvisibility: true })),
     hideAAC:() => set(() => ({ AACvisibility: false })),
