@@ -13,7 +13,7 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
   const [params,setParams]=useState('')
 
   const paint = {
-      "fill-opacity": ['interpolate',['linear'],['zoom'],5, 1, 8,0],
+      "fill-opacity": ['interpolate',['linear'],['zoom'],7, 0.8, 10,0],
       "fill-color":["case", ["boolean", ["feature-state", "hover"], false],'rgb(115,18,2)','rgb(215,118,102)'],
       'fill-outline-color':'rgb(115,18,2)',
      // 'fill-color': ['interpolate',['linear'],['zoom'], 5,'rgba(215,118,102,1)',8, 'rgba(215,118,102,0)'],
