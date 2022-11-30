@@ -17,9 +17,9 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
       "fill-opacity": ['interpolate',
         ['linear'],
         ['zoom'],
-        6,
+        5,
         1,
-        12,
+        8,
         0],
       "fill-color":"#627BC1",
 
