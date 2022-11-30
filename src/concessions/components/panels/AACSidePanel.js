@@ -14,7 +14,7 @@ import { getConcession } from "common/axios/endpoints";
 
 const AACSidePanel = ({ layerData }) => {
   //////////VISIBILITY CONTROLS///////////////
-  const AACSidePanelVisibility = useStore((state) => state.concessionSidePanelVisibility);
+  const AACSidePanelVisibility = useStore((state) => state.AACSidePanelVisibility);
   const hideAACSidePanel = useStore((state) => state.hideAACSidePanel);
 
   const showMainNav = useStore((state) => state.showMainNav);
