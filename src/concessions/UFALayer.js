@@ -8,14 +8,8 @@ export default function UFALayer({ map, mapLoaded, layerProps }) {
   const [isLoading, setIsLoading] = useState(true);
 
   const paint = {
-    "fill-color": "green",
-    "fill-opacity": ['interpolate',
-    ['linear'],
-    ['zoom'],
-    7,
-    1,
-    10,
-    0],
+    'fill-color': ['interpolate',['linear'],['zoom'],7,'rgba(215,118,102,1)',10, 'rgba(215,118,102,0)'],
+    'fill-outline-color':["case", ["boolean", ["feature-state", "hover"], false],'rgb(115,18,2)','rgb(215,118,102)'],
   };
   const name = "ufa";
   const type = "fill";
@@ -81,9 +75,9 @@ export default function UFALayer({ map, mapLoaded, layerProps }) {
     block = (
       <span key='1' className='flex items-center justify-between'>
         {isLoading ? (
-          <ClipLoader color={paint["fill-color"]} size='20px' />
+          <ClipLoader color='rgba(215,118,102,1)' size='20px' />
         ) : (
-          <span style={{ backgroundColor: `${paint["fill-color"]}` }} className='w-3 h-3 mr-1'></span>
+          <span style={{ backgroundColor:'rgba(215,118,102,1)'}} className='w-3 h-3 mr-1'></span>
         )}
         <span className=' mr-5 w-40 text-sm justify-start'>UFA's</span>
         <button onClick={hideUFA} className=' text-maintext hover:text-white'>
