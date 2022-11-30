@@ -1,10 +1,11 @@
 import React, {useEffect,useCallback,useState} from 'react'
 import axios from "axios"
+import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import { CgClose } from "react-icons/cg";
 import ClipLoader from "react-spinners/ClipLoader";
 
 import useStore from 'common/utils/stateStore/useStore';
-export default function AACLayer({map, mapLoaded, layerProps}){
+export default function AACLayer({map, mapLoaded, layerProps, activateSidePanel}){
     const hideAAC = useStore((state) => state.hideAAC);
     const [isLoading,setIsLoading]=useState(true)
 
@@ -14,6 +15,14 @@ export default function AACLayer({map, mapLoaded, layerProps}){
     }
     const name='aac'
     const type='fill'
+
+    const popup = new mapboxgl.Popup({
+        closeButton: false,
+        closeOnClick: false,
+        className: "mypopup",
+      }).trackPointer();
+
+    let hoveredStateId = null;
 
     const getData = useCallback(
         () => {
@@ -61,7 +70,43 @@ export default function AACLayer({map, mapLoaded, layerProps}){
 
                 getData()
     
-             //   map.current.on('moveend',name, getData);
+                map.current.on("mouseenter", name, (e) => {
+                    map.current.getCanvas().style.cursor = "pointer";
+                    const popUps = document.getElementsByClassName("mapboxgl-popup");
+                    if (popUps[0]) popUps[0].remove();
+          
+                    const id = e.features[0].properties.Id;
+                    popup.setHTML("Id:" + id + "<br>" + "Concession:" + e.features[0].properties.name_geo).addTo(map.current);
+                  });
+          
+                  map.current.on("mouseleave", name, () => {
+                    map.current.getCanvas().style.cursor = "";
+                    popup.remove();
+                    if (hoveredStateId !== null) {
+                      map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: false });
+                    }
+                    hoveredStateId = null;
+                  });
+          
+                  map.current.on("mousemove", name, (e) => {
+                   /* popup.setHTML(
+                      "Id:" + e.features[0].properties.Id + "<br>" + "AAC:" + e.features[0].properties.name_geo
+                    );
+          
+                    if (e.features.length > 0) {
+                      if (hoveredStateId !== null) {
+                        map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: false });
+                      }
+                      hoveredStateId = e.features[0].id;
+                      map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: true });
+                    }
+                    */
+                  });
+          
+                  map.current.on("click", name, (e) => {
+                    console.log(e.features[0].properties)
+                    activateSidePanel({ id: e.features[0].properties.Id, concession: e.features[0].properties.name_geo });
+                  });
             }
         }
 
