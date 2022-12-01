@@ -10,8 +10,9 @@ export default function AACLayer({map, mapLoaded, layerProps, activateSidePanel}
     const [isLoading,setIsLoading]=useState(true)
 
     const paint={
-        'fill-color': ['interpolate',['linear'],['zoom'], 11,'rgba(215,118,102,1)',14, 'rgba(215,118,102,0)'],
-        'fill-outline-color':["case", ["boolean", ["feature-state", "hover"], false],'rgb(115,18,2)','rgb(215,118,102)'],
+        "fill-opacity": ['interpolate',['linear'],['zoom'],11, 0.8, 14,0.1],
+        "fill-color":["case", ["boolean", ["feature-state", "hover"], false],'rgb(115,18,2)','rgb(215,118,102)'],
+        'fill-outline-color':'rgb(115,18,2)',
     }
     const name='aac'
     const type='fill'
@@ -63,6 +64,7 @@ export default function AACLayer({map, mapLoaded, layerProps, activateSidePanel}
                     'type': type,
                     'source': name,
                     'paint': paint,
+                    'maxzoom':15,
                     'layout': {
                         'visibility': layerProps.visibility ?  layerProps.visibility : 'none'
                         },

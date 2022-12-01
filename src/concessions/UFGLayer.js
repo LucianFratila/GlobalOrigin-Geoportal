@@ -1,5 +1,6 @@
 import React, {useEffect,useCallback,useState} from 'react'
 import axios from "axios"
+import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import { CgClose } from "react-icons/cg";
 import ClipLoader from "react-spinners/ClipLoader";
 import useStore from 'common/utils/stateStore/useStore';
@@ -9,11 +10,19 @@ export default function UFGLayer({map, mapLoaded, layerProps}){
     const [isLoading,setIsLoading]=useState(true)
 
     const paint={
-        'fill-color': ['interpolate',['linear'],['zoom'], 9,'rgba(215,118,102,1)',12, 'rgba(215,118,102,0)'],
-        'fill-outline-color':["case", ["boolean", ["feature-state", "hover"], false],'rgb(115,18,2)','rgb(215,118,102)'],
+        "fill-opacity": ['interpolate',['linear'],['zoom'],9, 0.8, 12,0.1],
+        "fill-color":["case", ["boolean", ["feature-state", "hover"], false],'rgb(115,18,2)','rgb(215,118,102)'],
+        'fill-outline-color':'rgb(115,18,2)',
     }
     const name='ufg'
     const type='fill'
+    let hoveredStateId = null;
+
+    const popup = new mapboxgl.Popup({
+        closeButton: false,
+        closeOnClick: false,
+        className: "mypopup",
+      }).trackPointer();
 
     const getData = useCallback(
         () => {
@@ -41,6 +50,7 @@ export default function UFGLayer({map, mapLoaded, layerProps}){
 
                 map.current.addSource(name, {
                     type: 'geojson',
+                    generateId: true,
                     data:{
                             "type": "FeatureCollection",
                             "features": [
@@ -61,8 +71,42 @@ export default function UFGLayer({map, mapLoaded, layerProps}){
 
                 getData()
     
-             //   map.current.on('moveend',name, getData);
+                popup.addTo(map.current);
+      
+                map.current.on("mouseenter", name, (e) => {
+                console.log('mouseenter:'+name);
+                map.current.getCanvas().style.cursor = "pointer";
+                popup.addTo(map.current);
+                });
 
+                map.current.on("mouseleave", name, () => {
+                console.log('mouseleave:'+name);
+                map.current.getCanvas().style.cursor = "";
+                popup.remove();
+                if (hoveredStateId !== null) {
+                    map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: false });
+                }
+                hoveredStateId = null;
+                });
+
+                map.current.on("mousemove", name, (e) => {
+                console.log('mousemove:'+name);
+                popup.setHTML(
+                    "Id:" + e.features[0].properties.Id + "<br>" + "UFG:" + e.features[0].properties.name_geo
+                );
+
+                if (e.features.length > 0) {
+                    if (hoveredStateId !== 'undefined') {
+                    map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: false });
+                    }
+                    hoveredStateId = e.features[0].id;
+                    map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: true });
+                }
+                else{
+                    hoveredStateId = null
+                }
+                
+                });
             }
         }
 
