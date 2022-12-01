@@ -103,6 +103,7 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
         });
 
         map.current.on("mousemove", name, (e) => {
+          e.preventDefault()
           console.log('mousemove:'+name);
           popup.setHTML(
             "Id:" + e.features[0].properties.Id + "<br>" + "Concession:" + e.features[0].properties.name_geo

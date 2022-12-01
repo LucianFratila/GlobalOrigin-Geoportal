@@ -5,7 +5,7 @@ import { CgClose } from "react-icons/cg";
 import ClipLoader from "react-spinners/ClipLoader";
 import useStore from 'common/utils/stateStore/useStore';
 
-export default function UFGLayer({map, mapLoaded, layerProps}){
+export default function UFGLayer({map, mapLoaded, layerProps, activateSidePanel }){
     const hideUFG = useStore((state) => state.hideUFG);
     const [isLoading,setIsLoading]=useState(true)
 
@@ -64,6 +64,8 @@ export default function UFGLayer({map, mapLoaded, layerProps}){
                     'type': type,
                     'source': name,
                     'paint': paint,
+                    minzoom:9,
+                    maxzoom:14,
                     'layout': {
                         'visibility': layerProps.visibility ?  layerProps.visibility : 'none'
                         },
@@ -90,6 +92,7 @@ export default function UFGLayer({map, mapLoaded, layerProps}){
                 });
 
                 map.current.on("mousemove", name, (e) => {
+                    e.preventDefault()
                 console.log('mousemove:'+name);
                 popup.setHTML(
                     "Id:" + e.features[0].properties.Id + "<br>" + "UFG:" + e.features[0].properties.name_geo
@@ -107,6 +110,10 @@ export default function UFGLayer({map, mapLoaded, layerProps}){
                 }
                 
                 });
+
+                map.current.on("click", name, (e) => {
+                    activateSidePanel({ id: e.features[0].properties.Id, species: e.features[0].properties.species_geo});
+                  });
             }
         }
 

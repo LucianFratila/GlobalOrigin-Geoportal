@@ -51,6 +51,7 @@ export default function AACLayer({map, mapLoaded, layerProps, activateSidePanel}
 
                 map.current.addSource(name, {
                     type: 'geojson',
+                    generateId: true,
                     data:{
                             "type": "FeatureCollection",
                             "features": [
@@ -64,51 +65,57 @@ export default function AACLayer({map, mapLoaded, layerProps, activateSidePanel}
                     'type': type,
                     'source': name,
                     'paint': paint,
-                    'maxzoom':15,
+                    minzoom:11,
+                    maxzoom:16,
                     'layout': {
                         'visibility': layerProps.visibility ?  layerProps.visibility : 'none'
                         },
                 }); 
 
                 getData()
-    
+
+                popup.addTo(map.current);
+      
                 map.current.on("mouseenter", name, (e) => {
-                    map.current.getCanvas().style.cursor = "pointer";
-                    const popUps = document.getElementsByClassName("mapboxgl-popup");
-                    if (popUps[0]) popUps[0].remove();
-          
-                    const id = e.features[0].properties.Id;
-                    popup.setHTML("Id:" + id + "<br>" + "AAC:" + e.features[0].properties.name_geo).addTo(map.current);
-                  });
-          
-                  map.current.on("mouseleave", name, () => {
-                    map.current.getCanvas().style.cursor = "";
-                    popup.remove();
-                    if (hoveredStateId !== null) {
-                      map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: false });
+                console.log('mouseenter:'+name);
+                map.current.getCanvas().style.cursor = "pointer";
+                popup.addTo(map.current);
+                });
+
+                map.current.on("mouseleave", name, () => {
+                console.log('mouseleave:'+name);
+                map.current.getCanvas().style.cursor = "";
+                popup.remove();
+                if (hoveredStateId !== null) {
+                    map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: false });
+                }
+                hoveredStateId = null;
+                });
+
+                map.current.on("mousemove", name, (e) => {
+                    e.preventDefault()
+                console.log('mousemove:'+name);
+                popup.setHTML(
+                    "Id:" + e.features[0].properties.Id + "<br>" + "AAC:" + e.features[0].properties.name_geo
+                );
+
+                if (e.features.length > 0) {
+                    if (hoveredStateId !== 'undefined') {
+                    map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: false });
                     }
-                    hoveredStateId = null;
+                    hoveredStateId = e.features[0].id;
+                    map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: true });
+                }
+                else{
+                    hoveredStateId = null
+                }
+                
+                });
+
+                map.current.on("click", name, (e) => {
+                    activateSidePanel({ id: e.features[0].properties.Id, species: e.features[0].properties.species_geo});
                   });
-          
-                  map.current.on("mousemove", name, (e) => {
-                   /* popup.setHTML(
-                      "Id:" + e.features[0].properties.Id + "<br>" + "AAC:" + e.features[0].properties.name_geo
-                    );
-          
-                    if (e.features.length > 0) {
-                      if (hoveredStateId !== null) {
-                        map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: false });
-                      }
-                      hoveredStateId = e.features[0].id;
-                      map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: true });
-                    }
-                    */
-                  });
-          
-                  map.current.on("click", name, (e) => {
-                    
-                    activateSidePanel({ id: e.features[0].properties.Id, concession: e.features[0].properties.name_geo });
-                  });
+
             }
         }
 
