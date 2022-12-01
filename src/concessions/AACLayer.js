@@ -66,7 +66,6 @@ export default function AACLayer({map, mapLoaded, layerProps, activateSidePanel}
                     'source': name,
                     'paint': paint,
                     minzoom:11,
-                    maxzoom:16,
                     'layout': {
                         'visibility': layerProps.visibility ?  layerProps.visibility : 'none'
                         },

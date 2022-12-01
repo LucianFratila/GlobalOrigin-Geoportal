@@ -65,7 +65,6 @@ export default function UFGLayer({map, mapLoaded, layerProps, activateSidePanel 
                     'source': name,
                     'paint': paint,
                     minzoom:9,
-                    maxzoom:14,
                     'layout': {
                         'visibility': layerProps.visibility ?  layerProps.visibility : 'none'
                         },

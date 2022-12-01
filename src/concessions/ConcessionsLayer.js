@@ -75,7 +75,6 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
           type: type,
           source: name,
           paint: paint,
-         // maxzoom:10,
           layout: {
             visibility: layerProps.visibility ? layerProps.visibility : "none",
           },

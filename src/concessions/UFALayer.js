@@ -60,7 +60,6 @@ export default function UFALayer({ map, mapLoaded, layerProps, activateSidePanel
           source: name,
           paint: paint,
           minzoom:8,
-        //  maxzoom:12,
           layout: {
             visibility: layerProps.visibility ? layerProps.visibility : "none",
           },
