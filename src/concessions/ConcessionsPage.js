@@ -19,6 +19,9 @@ import useStore from "common/utils/stateStore/useStore";
 import { useQuery } from "react-query";
 import { getCompanies, getConcessions } from "common/axios/endpoints";
 
+/////
+import { FaUndo } from "react-icons/fa";
+
 export default function ConcessionsPage({ map, mapLoaded }) {
   const [layerConcessionData, setLayerConcessionData] = useState(null);
   const [layerAACData, setLayerAACData] = useState(null);
@@ -194,8 +197,17 @@ export default function ConcessionsPage({ map, mapLoaded }) {
         {/* layer name & visibility */}
         {/* filters */}
         <section className='  rounded-md p-4 mt-3  bg-neutral-700'>
-          <div>
+          <div className=' flex flex-row items-center justify-between'>
             <h1 className=' text-white py-4'>Filters</h1>
+            <button
+              onClick={() => {
+                setConcessionName(null);
+                setCompanyName(null);
+              }}
+              className=' bg-green-600 p-2 text-maintext rounded-full hover:bg-green-700 hover:-rotate-45 duration-300'
+            >
+              <FaUndo size={15} />
+            </button>
           </div>
           <div className='flex flex-row gap-2'>
             {/* Company */}
