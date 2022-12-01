@@ -73,8 +73,6 @@ export default function AACLayer({map, mapLoaded, layerProps, activateSidePanel}
                 }); 
 
                 getData()
-
-                //popup.addTo(map.current);
       
                 map.current.on("mouseenter", name, (e) => {
                     console.log('mouseenter:'+name);
@@ -97,8 +95,6 @@ export default function AACLayer({map, mapLoaded, layerProps, activateSidePanel}
                 map.current.on("mousemove", name, (e) => {
                     console.log('mousemove:'+name);
 
-
-
                     if (e.features.length > 0) {
                         if(e.popupOnTopLayer){
                             popup.remove();
@@ -107,7 +103,7 @@ export default function AACLayer({map, mapLoaded, layerProps, activateSidePanel}
 
                         if(!popup.isOpen())
                         popup.addTo(map.current);
-                        
+
                         if (hoveredStateId !== null) {
                         map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: false });
                         }
@@ -127,7 +123,7 @@ export default function AACLayer({map, mapLoaded, layerProps, activateSidePanel}
                     e.clickOnTopLayer = true;
                     
                     console.log('click:'+name);
-                    activateSidePanel({ id: e.features[0].properties.Id, species: e.features[0].properties.species_geo});
+                    activateSidePanel({ id: e.features[0].properties.Id, species: e.features[0].properties.name_geo});
                   });
 
             }

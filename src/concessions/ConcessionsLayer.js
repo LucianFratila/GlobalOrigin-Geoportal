@@ -83,49 +83,57 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
 
         getData();
 
-        popup.addTo(map.current);
-
+    
         map.current.on("mouseenter", name, (e) => {
           console.log('mouseenter:'+name);
           map.current.getCanvas().style.cursor = "pointer";
-          popup.addTo(map.current);
+      });
 
-        });
-
-        map.current.on("mouseleave", name, () => {
+      map.current.on("mouseleave", name, () => {
           console.log('mouseleave:'+name);
           map.current.getCanvas().style.cursor = "";
-          popup.remove();
+
+          if(popup.isOpen())
+          popup.remove();  
+
           if (hoveredStateId !== null) {
-            map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: false });
+              map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: false });
           }
           hoveredStateId = null;
-        });
+      });
 
-        map.current.on("mousemove", name, (e) => {
-          if(e.popupOnTopLayer){
-            popup.remove();
-            return;
-        }
+      map.current.on("mousemove", name, (e) => {
           console.log('mousemove:'+name);
-          popup.setHTML(
-            "Id:" + e.features[0].properties.Id + "<br>" + "Concession:" + e.features[0].properties.name_geo
-          );
 
           if (e.features.length > 0) {
-            if (hoveredStateId !== null) {
-              map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: false });
-            }
-            hoveredStateId = e.features[0].id;
-            map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: true });
-          }
-        });
+              if(e.popupOnTopLayer){
+                  popup.remove();
+                  return;
+              }
 
-        map.current.on("click", name, (e) => {
+              if(!popup.isOpen())
+              popup.addTo(map.current);
+
+              if (hoveredStateId !== null) {
+              map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: false });
+              }
+              hoveredStateId = e.features[0].id;
+              map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: true });
+              popup.setHTML("Id:" + e.features[0].properties.Id + "<br>" + "Concessions:" + e.features[0].properties.name_geo);
+              e.popupOnTopLayer = true;
+          }
+          else{
+              hoveredStateId = null
+          }
+      
+      });
+
+      map.current.on("click", name, (e) => {
           if(e.clickOnTopLayer) return;
           e.clickOnTopLayer = true;
+          
           console.log('click:'+name);
-          activateSidePanel({ id: e.features[0].properties.Id, concession: e.features[0].properties.name_geo });
+          activateSidePanel({ id: e.features[0].properties.Id, species: e.features[0].properties.name_geo});
         });
 
         map.current.on('zoomend', () => {
