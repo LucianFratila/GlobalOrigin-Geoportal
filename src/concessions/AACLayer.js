@@ -77,42 +77,46 @@ export default function AACLayer({map, mapLoaded, layerProps, activateSidePanel}
                 popup.addTo(map.current);
       
                 map.current.on("mouseenter", name, (e) => {
-                console.log('mouseenter:'+name);
-                map.current.getCanvas().style.cursor = "pointer";
-                popup.addTo(map.current);
+                    console.log('mouseenter:'+name);
+                    map.current.getCanvas().style.cursor = "pointer";
+                    popup.addTo(map.current);
                 });
 
                 map.current.on("mouseleave", name, () => {
-                console.log('mouseleave:'+name);
-                map.current.getCanvas().style.cursor = "";
-                popup.remove();
-                if (hoveredStateId !== null) {
-                    map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: false });
-                }
-                hoveredStateId = null;
+                    console.log('mouseleave:'+name);
+                    map.current.getCanvas().style.cursor = "";
+                    popup.remove();
+                    if (hoveredStateId !== null) {
+                        map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: false });
+                    }
+                    hoveredStateId = null;
                 });
 
                 map.current.on("mousemove", name, (e) => {
                     e.preventDefault()
-                console.log('mousemove:'+name);
-                popup.setHTML(
-                    "Id:" + e.features[0].properties.Id + "<br>" + "AAC:" + e.features[0].properties.name_geo
-                );
+                    console.log('mousemove:'+name);
+                    popup.setHTML(
+                        "Id:" + e.features[0].properties.Id + "<br>" + "AAC:" + e.features[0].properties.name_geo
+                    );
 
-                if (e.features.length > 0) {
-                    if (hoveredStateId !== 'undefined') {
-                    map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: false });
+                    if (e.features.length > 0) {
+                        if (hoveredStateId !== 'undefined') {
+                        map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: false });
+                        }
+                        hoveredStateId = e.features[0].id;
+                        map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: true });
                     }
-                    hoveredStateId = e.features[0].id;
-                    map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: true });
-                }
-                else{
-                    hoveredStateId = null
-                }
+                    else{
+                        hoveredStateId = null
+                    }
                 
                 });
 
                 map.current.on("click", name, (e) => {
+                    if(e.clickOnTopLayer) return;
+                    e.clickOnTopLayer = true;
+                    
+                    console.log('click:'+name);
                     activateSidePanel({ id: e.features[0].properties.Id, species: e.features[0].properties.species_geo});
                   });
 

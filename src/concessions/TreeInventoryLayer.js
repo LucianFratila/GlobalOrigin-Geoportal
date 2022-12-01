@@ -71,16 +71,17 @@ export default function TreeInventoryLayer({ map, mapLoaded, layerProps, activat
 
         getData();
 
-        map.current.on("mouseenter", name, (e) => {
-          map.current.getCanvas().style.cursor = "pointer";
-          const popUps = document.getElementsByClassName("mapboxgl-popup");
-          if (popUps[0]) popUps[0].remove();
+        popup.addTo(map.current);
 
-          const id = e.features[0].properties.Id;
-          popup.setHTML("Id:" + id + "<br>" + "Specie:" + e.features[0].properties.species_geo).addTo(map.current);
+        map.current.on("mouseenter", name, (e) => {
+          e.enterOnTopLayer = true;
+          console.log('mouseenter:'+name);
+          map.current.getCanvas().style.cursor = "pointer";
+          popup.addTo(map.current);
         });
 
         map.current.on("mouseleave", name, () => {
+          console.log('mouseleave:'+name);
           map.current.getCanvas().style.cursor = "";
           popup.remove();
           if (hoveredStateId !== null) {
@@ -90,6 +91,8 @@ export default function TreeInventoryLayer({ map, mapLoaded, layerProps, activat
         });
 
         map.current.on("mousemove", name, (e) => {
+                
+          console.log('mousemove:'+name);
           popup.setHTML(
             "Id:" + e.features[0].properties.Id + "<br>" + "Specie:" + e.features[0].properties.species_geo
           );
@@ -104,6 +107,8 @@ export default function TreeInventoryLayer({ map, mapLoaded, layerProps, activat
         });
 
         map.current.on("click", name, (e) => {
+          e.clickOnTopLayer = true;
+          console.log('click:'+name);
           activateSidePanel({ id: e.features[0].properties.Id, species: e.features[0].properties.species_geo});
         });
       }

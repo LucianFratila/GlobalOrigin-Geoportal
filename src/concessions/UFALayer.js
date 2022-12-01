@@ -87,7 +87,7 @@ export default function UFALayer({ map, mapLoaded, layerProps, activateSidePanel
         });
 
         map.current.on("mousemove", name, (e) => {
-          e.preventDefault()
+          popup.addTo(map.current);
           console.log('mousemove:'+name);
           popup.setHTML(
             "Id:" + e.features[0].properties.Id + "<br>" + "UFA:" + e.features[0].properties.name_geo
@@ -105,7 +105,11 @@ export default function UFALayer({ map, mapLoaded, layerProps, activateSidePanel
           }
           
         });
+
         map.current.on("click", name, (e) => {
+          if(e.clickOnTopLayer) return;
+          e.clickOnTopLayer = true;
+          console.log('click:'+name);
           activateSidePanel({ id: e.features[0].properties.Id, species: e.features[0].properties.species_geo});
         });
       }

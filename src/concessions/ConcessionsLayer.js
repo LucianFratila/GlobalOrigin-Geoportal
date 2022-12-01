@@ -119,6 +119,9 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
         });
 
         map.current.on("click", name, (e) => {
+          if(e.clickOnTopLayer) return;
+          e.clickOnTopLayer = true;
+          console.log('click:'+name);
           activateSidePanel({ id: e.features[0].properties.Id, concession: e.features[0].properties.name_geo });
         });
 

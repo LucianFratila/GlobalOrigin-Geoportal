@@ -112,6 +112,9 @@ export default function UFGLayer({map, mapLoaded, layerProps, activateSidePanel 
                 });
 
                 map.current.on("click", name, (e) => {
+                    if(e.clickOnTopLayer) return;
+                    e.clickOnTopLayer = true;
+                    console.log('click:'+name);
                     activateSidePanel({ id: e.features[0].properties.Id, species: e.features[0].properties.species_geo});
                   });
             }
