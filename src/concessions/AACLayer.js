@@ -104,7 +104,7 @@ export default function AACLayer({map, mapLoaded, layerProps, activateSidePanel}
                   });
           
                   map.current.on("click", name, (e) => {
-                    console.log(e.features[0].properties)
+                    
                     activateSidePanel({ id: e.features[0].properties.Id, concession: e.features[0].properties.name_geo });
                   });
             }

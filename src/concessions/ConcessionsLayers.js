@@ -8,12 +8,12 @@ import TreeInventoryLayer from './TreeInventoryLayer'
 
 
 
-export default function ConcessionsLayers({map, mapLoaded, layersProps, activateConcessionSidePanel,activateAACSidePanel}){
+export default function ConcessionsLayers({map, mapLoaded, layersProps, activateConcessionSidePanel,activateAACSidePanel,activateTreeSidePanel}){
     
 
     return(
         <React.Fragment>
-            <TreeInventoryLayer map={map} mapLoaded={mapLoaded} layerProps={layersProps.treeinventory} activateSidePanel={()=>{}} />
+            <TreeInventoryLayer map={map} mapLoaded={mapLoaded} layerProps={layersProps.treeinventory} activateSidePanel={activateTreeSidePanel} />
             <AACLayer map={map} mapLoaded={mapLoaded} layerProps={layersProps.aac} activateSidePanel={activateAACSidePanel}/>
             <UFGLayer map={map} mapLoaded={mapLoaded} layerProps={layersProps.ufg} activateSidePanel={()=>{}}/>
             <UFALayer map={map} mapLoaded={mapLoaded} layerProps={layersProps.ufa} activateSidePanel={()=>{}}/>

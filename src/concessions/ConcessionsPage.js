@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import ToggleCheckBox from "components/reusable/toggleCheckbox";
 import InputSelectCompany from "./components/inputSelectCompany";
@@ -8,18 +8,19 @@ import ConcessionsLayers from "./ConcessionsLayers";
 import MapLegendConcession from "./ConcessionLegend";
 import ConcessionSidePanel from "concessions/components/panels/ConcessionSidePanel";
 import AACSidePanel from "./components/panels/AACSidePanel";
+import TreeSidePanel from "./components/panels/treeSidePanel";
 import SearchFilter from "./components/inputSearchFilter";
 
 import useStore from "common/utils/stateStore/useStore";
-
 
 ///React Query Imports///
 import { useQuery } from "react-query";
 import { getCompanies, getConcessions } from "common/axios/endpoints";
 
 export default function ConcessionsPage({ map, mapLoaded }) {
-  const [layerConcessionData, SetLayerConcessionData] = useState(null);
+  const [layerConcessionData, setLayerConcessionData] = useState(null);
   const [layerAACData, setLayerAACData] = useState(null);
+  const [layerTreeData, setLayerTreeData] = useState(null);
 
   //////////LAYER VISIBILITY CONTROLS///////////////
   const concessionLayerVisibility = useStore((state) => state.concessionLayerVisibility);
@@ -34,25 +35,43 @@ export default function ConcessionsPage({ map, mapLoaded }) {
   const AACvisibility = useStore((state) => state.AACvisibility);
   const toggleAAC = useStore((state) => state.toggleAAC);
 
-
-
   //////////LAYER VISIBILITY CONTROLS///////////////
 
   //////////////////SIDE PANEL CONTROLS //////////////////
+
+  //show panels
   const showConcessionSidePanel = useStore((state) => state.showConcessionSidePanel);
   const showAACSidePanel = useStore((state) => state.showAACSidePanel);
+  const showTreeSidePanel = useStore((state) => state.showTreeSidePanel);
+
+  //hide panels
   const hideMainNav = useStore((state) => state.hideMainNav);
+  const hideConcessionSidePanel = useStore((state) => state.hideConcessionSidePanel);
+  const hideAACSidePanel = useStore((state) => state.hideAACSidePanel);
+  const hideTreeSidePanel = useStore((state) => state.hideTreeSidePanel);
 
   function activateConcessionSidePanel(data) {
     showConcessionSidePanel();
     hideMainNav();
-    SetLayerConcessionData(data);
+    hideAACSidePanel();
+    hideTreeSidePanel();
+    setLayerConcessionData(data);
   }
 
   function activateAACSidePanel(data) {
     showAACSidePanel();
     hideMainNav();
+    hideConcessionSidePanel();
+    hideTreeSidePanel();
     setLayerAACData(data);
+  }
+
+  function activateTreeSidePanel(data) {
+    showTreeSidePanel();
+    hideMainNav();
+    hideConcessionSidePanel();
+    hideAACSidePanel();
+    setLayerTreeData(data);
   }
   //////////////////SIDE PANEL CONTROLS //////////////////
 
@@ -68,7 +87,7 @@ export default function ConcessionsPage({ map, mapLoaded }) {
   function selectedCompany(item) {
     console.log(item);
     let parse = `{}`;
-    if (item !== "Company Name" && item !=='') {
+    if (item !== "Company Name" && item !== "") {
       parse = `{${item}}`;
     }
 
@@ -88,7 +107,7 @@ export default function ConcessionsPage({ map, mapLoaded }) {
     }
   );
   const concessdata = concessionCompId?.data.features;
-/**/
+  /**/
   function selectedConcession(item) {
     return setConcessionName(item);
   }
@@ -104,7 +123,7 @@ export default function ConcessionsPage({ map, mapLoaded }) {
     concessions: {
       visibility: `${concessionLayerVisibility ? `visible` : `none`}`,
       filters: {
-        Company: `${compId ? compId : ''}`,
+        Company: `${compId ? compId : ""}`,
       },
     },
     ufa: {
@@ -120,7 +139,7 @@ export default function ConcessionsPage({ map, mapLoaded }) {
       filters: {},
     },
     treeinventory: {
-      visibility:  `visible`,
+      visibility: `visible`,
       filters: {},
     },
   };
@@ -184,8 +203,9 @@ export default function ConcessionsPage({ map, mapLoaded }) {
           {/* Layer toggles */}
         </section>
       </main>
+      <TreeSidePanel layerData={layerTreeData} />
       <AACSidePanel layerData={layerAACData} />
-      <ConcessionSidePanel layerData={layerConcessionData}  />
+      <ConcessionSidePanel layerData={layerConcessionData} />
       <MapLegendConcession layersProps={layersProps}>
         <ConcessionsLayers
           map={map}
@@ -193,6 +213,7 @@ export default function ConcessionsPage({ map, mapLoaded }) {
           layersProps={layersProps}
           activateConcessionSidePanel={activateConcessionSidePanel}
           activateAACSidePanel={activateAACSidePanel}
+          activateTreeSidePanel={activateTreeSidePanel}
         ></ConcessionsLayers>
       </MapLegendConcession>
     </React.Fragment>
