@@ -9,6 +9,8 @@ import MapLegendConcession from "./ConcessionLegend";
 import ConcessionSidePanel from "concessions/components/panels/ConcessionSidePanel";
 import AACSidePanel from "./components/panels/AACSidePanel";
 import TreeSidePanel from "./components/panels/treeSidePanel";
+import UFGSidePanel from "./components/panels/UFGSidePanel";
+import UFASidePanel from "./components/panels/UFASidePanel";
 import SearchFilter from "./components/inputSearchFilter";
 
 import useStore from "common/utils/stateStore/useStore";
@@ -21,6 +23,8 @@ export default function ConcessionsPage({ map, mapLoaded }) {
   const [layerConcessionData, setLayerConcessionData] = useState(null);
   const [layerAACData, setLayerAACData] = useState(null);
   const [layerTreeData, setLayerTreeData] = useState(null);
+  const [layerUFGData, setLayerUFGData] = useState(null);
+  const [layerUFAData, setLayerUFAData] = useState(null);
 
   //////////LAYER VISIBILITY CONTROLS///////////////
   const concessionLayerVisibility = useStore((state) => state.concessionLayerVisibility);
@@ -43,35 +47,75 @@ export default function ConcessionsPage({ map, mapLoaded }) {
   const showConcessionSidePanel = useStore((state) => state.showConcessionSidePanel);
   const showAACSidePanel = useStore((state) => state.showAACSidePanel);
   const showTreeSidePanel = useStore((state) => state.showTreeSidePanel);
+  const showUFGSidePanel = useStore((state) => state.showUFGSidePanel);
+  const showUFASidePanel = useStore((state) => state.showUFASidePanel);
 
   //hide panels
   const hideMainNav = useStore((state) => state.hideMainNav);
   const hideConcessionSidePanel = useStore((state) => state.hideConcessionSidePanel);
   const hideAACSidePanel = useStore((state) => state.hideAACSidePanel);
   const hideTreeSidePanel = useStore((state) => state.hideTreeSidePanel);
+  const hideUFGSidePanel = useStore((state) => state.hideUFGSidePanel);
+  const hideUFASidePanel = useStore((state) => state.hideUFASidePanel);
 
   function activateConcessionSidePanel(data) {
     showConcessionSidePanel();
     hideMainNav();
+
     hideAACSidePanel();
     hideTreeSidePanel();
+    hideUFGSidePanel();
+    hideUFASidePanel();
+
     setLayerConcessionData(data);
   }
 
   function activateAACSidePanel(data) {
     showAACSidePanel();
     hideMainNav();
+
     hideConcessionSidePanel();
     hideTreeSidePanel();
+    hideUFGSidePanel();
+    hideUFASidePanel();
+
     setLayerAACData(data);
   }
 
   function activateTreeSidePanel(data) {
     showTreeSidePanel();
     hideMainNav();
+
     hideConcessionSidePanel();
     hideAACSidePanel();
+    hideUFGSidePanel();
+    hideUFASidePanel();
+
     setLayerTreeData(data);
+  }
+
+  function activateUFGSidePanel(data) {
+    showUFGSidePanel();
+    hideMainNav();
+
+    hideConcessionSidePanel();
+    hideAACSidePanel();
+    hideUFASidePanel();
+    hideTreeSidePanel();
+
+    setLayerUFGData(data);
+  }
+
+  function activateUFASidePanel(data) {
+    showUFASidePanel();
+    hideMainNav();
+
+    hideConcessionSidePanel();
+    hideAACSidePanel();
+    hideUFGSidePanel();
+    hideTreeSidePanel();
+
+    setLayerUFAData(data);
   }
   //////////////////SIDE PANEL CONTROLS //////////////////
 
@@ -203,6 +247,8 @@ export default function ConcessionsPage({ map, mapLoaded }) {
           {/* Layer toggles */}
         </section>
       </main>
+      <UFASidePanel layerData={layerUFAData} />
+      <UFGSidePanel layerData={layerUFGData} />
       <TreeSidePanel layerData={layerTreeData} />
       <AACSidePanel layerData={layerAACData} />
       <ConcessionSidePanel layerData={layerConcessionData} />
@@ -214,6 +260,8 @@ export default function ConcessionsPage({ map, mapLoaded }) {
           activateConcessionSidePanel={activateConcessionSidePanel}
           activateAACSidePanel={activateAACSidePanel}
           activateTreeSidePanel={activateTreeSidePanel}
+          activateUFGSidePanel={activateUFGSidePanel}
+          activateUFASidePanel={activateUFASidePanel}
         ></ConcessionsLayers>
       </MapLegendConcession>
     </React.Fragment>

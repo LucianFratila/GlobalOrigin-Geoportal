@@ -43,6 +43,14 @@ const createToggleVisibility = (set) => ({
   showTreeSidePanel: () => set(() => ({ treeSidePanelVisibility: true })),
   hideTreeSidePanel: () => set(() => ({ treeSidePanelVisibility: false })),
 
+  UGFSidePanelVisibility: false,
+  showUFGSidePanel: () => set(() => ({ UGFSidePanelVisibility: true })),
+  hideUFGSidePanel: () => set(() => ({ UGFSidePanelVisibility: false })),
+
+  UFASidePanelVisibility: false,
+  showUFASidePanel: () => set(() => ({ UFASidePanelVisibility: true })),
+  hideUFASidePanel: () => set(() => ({ UFASidePanelVisibility: false })),
+
   jwt: null,
   setJwt: (data) => set((state) => ({ jwt: data })),
 });
