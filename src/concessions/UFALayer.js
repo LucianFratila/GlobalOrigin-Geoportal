@@ -59,8 +59,8 @@ export default function UFALayer({ map, mapLoaded, layerProps, activateSidePanel
           type: type,
           source: name,
           paint: paint,
-          minzoom:7,
-          maxzoom:12,
+          minzoom:10,
+        //  maxzoom:12,
           layout: {
             visibility: layerProps.visibility ? layerProps.visibility : "none",
           },
@@ -87,14 +87,17 @@ export default function UFALayer({ map, mapLoaded, layerProps, activateSidePanel
         });
 
         map.current.on("mousemove", name, (e) => {
-          popup.addTo(map.current);
+          if(e.popupOnTopLayer){
+            popup.remove();
+            return;
+        }
           console.log('mousemove:'+name);
           popup.setHTML(
             "Id:" + e.features[0].properties.Id + "<br>" + "UFA:" + e.features[0].properties.name_geo
           );
 
           if (e.features.length > 0) {
-            if (hoveredStateId !== 'undefined') {
+            if (hoveredStateId !== null) {
               map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: false });
             }
             hoveredStateId = e.features[0].id;

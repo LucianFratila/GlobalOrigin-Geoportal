@@ -74,18 +74,20 @@ export default function AACLayer({map, mapLoaded, layerProps, activateSidePanel}
 
                 getData()
 
-                popup.addTo(map.current);
+                //popup.addTo(map.current);
       
                 map.current.on("mouseenter", name, (e) => {
                     console.log('mouseenter:'+name);
                     map.current.getCanvas().style.cursor = "pointer";
-                    popup.addTo(map.current);
                 });
 
                 map.current.on("mouseleave", name, () => {
                     console.log('mouseleave:'+name);
                     map.current.getCanvas().style.cursor = "";
-                    popup.remove();
+
+                    if(popup.isOpen())
+                    popup.remove();  
+
                     if (hoveredStateId !== null) {
                         map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: false });
                     }
@@ -93,18 +95,26 @@ export default function AACLayer({map, mapLoaded, layerProps, activateSidePanel}
                 });
 
                 map.current.on("mousemove", name, (e) => {
-                    e.preventDefault()
                     console.log('mousemove:'+name);
-                    popup.setHTML(
-                        "Id:" + e.features[0].properties.Id + "<br>" + "AAC:" + e.features[0].properties.name_geo
-                    );
+
+
 
                     if (e.features.length > 0) {
-                        if (hoveredStateId !== 'undefined') {
+                        if(e.popupOnTopLayer){
+                            popup.remove();
+                            return;
+                        }
+
+                        if(!popup.isOpen())
+                        popup.addTo(map.current);
+                        
+                        if (hoveredStateId !== null) {
                         map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: false });
                         }
                         hoveredStateId = e.features[0].id;
                         map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: true });
+                        popup.setHTML("Id:" + e.features[0].properties.Id + "<br>" + "AAC:" + e.features[0].properties.name_geo);
+                        e.popupOnTopLayer = true;
                     }
                     else{
                         hoveredStateId = null

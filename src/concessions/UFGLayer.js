@@ -92,14 +92,17 @@ export default function UFGLayer({map, mapLoaded, layerProps, activateSidePanel 
                 });
 
                 map.current.on("mousemove", name, (e) => {
-                    e.preventDefault()
+                    if(e.popupOnTopLayer){
+                        popup.remove();
+                        return;
+                    }
                 console.log('mousemove:'+name);
                 popup.setHTML(
                     "Id:" + e.features[0].properties.Id + "<br>" + "UFG:" + e.features[0].properties.name_geo
                 );
 
                 if (e.features.length > 0) {
-                    if (hoveredStateId !== 'undefined') {
+                    if (hoveredStateId !== null) {
                     map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: false });
                     }
                     hoveredStateId = e.features[0].id;

@@ -75,7 +75,7 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
           type: type,
           source: name,
           paint: paint,
-          maxzoom:10,
+         // maxzoom:10,
           layout: {
             visibility: layerProps.visibility ? layerProps.visibility : "none",
           },
@@ -103,7 +103,10 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
         });
 
         map.current.on("mousemove", name, (e) => {
-          e.preventDefault()
+          if(e.popupOnTopLayer){
+            popup.remove();
+            return;
+        }
           console.log('mousemove:'+name);
           popup.setHTML(
             "Id:" + e.features[0].properties.Id + "<br>" + "Concession:" + e.features[0].properties.name_geo

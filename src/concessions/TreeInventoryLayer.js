@@ -71,19 +71,20 @@ export default function TreeInventoryLayer({ map, mapLoaded, layerProps, activat
 
         getData();
 
-        popup.addTo(map.current);
+        //popup.addTo(map.current);
 
         map.current.on("mouseenter", name, (e) => {
-          e.enterOnTopLayer = true;
           console.log('mouseenter:'+name);
           map.current.getCanvas().style.cursor = "pointer";
-          popup.addTo(map.current);
         });
 
         map.current.on("mouseleave", name, () => {
-          console.log('mouseleave:'+name);
+          console.log('mouseleave:' + name);
           map.current.getCanvas().style.cursor = "";
-          popup.remove();
+
+          if(popup.isOpen())
+            popup.remove();  
+
           if (hoveredStateId !== null) {
             map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: false });
           }
@@ -93,9 +94,9 @@ export default function TreeInventoryLayer({ map, mapLoaded, layerProps, activat
         map.current.on("mousemove", name, (e) => {
                 
           console.log('mousemove:'+name);
-          popup.setHTML(
-            "Id:" + e.features[0].properties.Id + "<br>" + "Specie:" + e.features[0].properties.species_geo
-          );
+          
+          if(!popup.isOpen())
+            popup.addTo(map.current);
 
           if (e.features.length > 0) {
             if (hoveredStateId !== null) {
@@ -103,13 +104,15 @@ export default function TreeInventoryLayer({ map, mapLoaded, layerProps, activat
             }
             hoveredStateId = e.features[0].id;
             map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: true });
+            popup.setHTML("Id:" + e.features[0].properties.treed_id_geo + "<br>" + "Specie:" + e.features[0].properties.species_geo);
+            e.popupOnTopLayer = true;
           }
         });
 
         map.current.on("click", name, (e) => {
           e.clickOnTopLayer = true;
           console.log('click:'+name);
-          activateSidePanel({ id: e.features[0].properties.Id, species: e.features[0].properties.species_geo});
+          activateSidePanel({ id: e.features[0].properties.treed_id_geo, species: e.features[0].properties.species_geo});
         });
       }
     }
