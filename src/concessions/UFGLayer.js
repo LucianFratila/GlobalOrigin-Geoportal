@@ -65,7 +65,6 @@ export default function UFGLayer({map, mapLoaded, layerProps, activateSidePanel 
                     'source': name,
                     'paint': paint,
                     minzoom:9,
-                    maxzoom:14,
                     'layout': {
                         'visibility': layerProps.visibility ?  layerProps.visibility : 'none'
                         },
@@ -73,50 +72,55 @@ export default function UFGLayer({map, mapLoaded, layerProps, activateSidePanel 
 
                 getData()
     
-                popup.addTo(map.current);
-      
+            
                 map.current.on("mouseenter", name, (e) => {
-                console.log('mouseenter:'+name);
-                map.current.getCanvas().style.cursor = "pointer";
-                popup.addTo(map.current);
+                    console.log('mouseenter:'+name);
+                    map.current.getCanvas().style.cursor = "pointer";
                 });
 
                 map.current.on("mouseleave", name, () => {
-                console.log('mouseleave:'+name);
-                map.current.getCanvas().style.cursor = "";
-                popup.remove();
-                if (hoveredStateId !== null) {
-                    map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: false });
-                }
-                hoveredStateId = null;
+                    console.log('mouseleave:'+name);
+                    map.current.getCanvas().style.cursor = "";
+
+                    if(popup.isOpen())
+                    popup.remove();  
+
+                    if (hoveredStateId !== null) {
+                        map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: false });
+                    }
+                    hoveredStateId = null;
                 });
 
                 map.current.on("mousemove", name, (e) => {
-                    if(e.popupOnTopLayer){
-                        popup.remove();
-                        return;
-                    }
-                console.log('mousemove:'+name);
-                popup.setHTML(
-                    "Id:" + e.features[0].properties.Id + "<br>" + "UFG:" + e.features[0].properties.name_geo
-                );
+                    console.log('mousemove:'+name);
 
-                if (e.features.length > 0) {
-                    if (hoveredStateId !== null) {
-                    map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: false });
+                    if (e.features.length > 0) {
+                        if(e.popupOnTopLayer){
+                            popup.remove();
+                            return;
+                        }
+
+                        if(!popup.isOpen())
+                        popup.addTo(map.current);
+
+                        if (hoveredStateId !== null) {
+                        map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: false });
+                        }
+                        hoveredStateId = e.features[0].id;
+                        map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: true });
+                        popup.setHTML("Id:" + e.features[0].properties.Id + "<br>" + "UFG:" + e.features[0].properties.name_geo);
+                        e.popupOnTopLayer = true;
                     }
-                    hoveredStateId = e.features[0].id;
-                    map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: true });
-                }
-                else{
-                    hoveredStateId = null
-                }
+                    else{
+                        hoveredStateId = null
+                    }
                 
                 });
 
                 map.current.on("click", name, (e) => {
                     if(e.clickOnTopLayer) return;
                     e.clickOnTopLayer = true;
+                    
                     console.log('click:'+name);
                     activateSidePanel({ id: e.features[0].properties.Id, UFG: e.features[0].properties});
                   });

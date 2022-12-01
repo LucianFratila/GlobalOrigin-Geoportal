@@ -66,15 +66,12 @@ export default function AACLayer({map, mapLoaded, layerProps, activateSidePanel}
                     'source': name,
                     'paint': paint,
                     minzoom:11,
-                    maxzoom:16,
                     'layout': {
                         'visibility': layerProps.visibility ?  layerProps.visibility : 'none'
                         },
                 }); 
 
                 getData()
-
-                //popup.addTo(map.current);
       
                 map.current.on("mouseenter", name, (e) => {
                     console.log('mouseenter:'+name);
@@ -97,8 +94,6 @@ export default function AACLayer({map, mapLoaded, layerProps, activateSidePanel}
                 map.current.on("mousemove", name, (e) => {
                     console.log('mousemove:'+name);
 
-
-
                     if (e.features.length > 0) {
                         if(e.popupOnTopLayer){
                             popup.remove();
@@ -107,7 +102,7 @@ export default function AACLayer({map, mapLoaded, layerProps, activateSidePanel}
 
                         if(!popup.isOpen())
                         popup.addTo(map.current);
-                        
+
                         if (hoveredStateId !== null) {
                         map.current.setFeatureState({ source: name, id: hoveredStateId }, { hover: false });
                         }
