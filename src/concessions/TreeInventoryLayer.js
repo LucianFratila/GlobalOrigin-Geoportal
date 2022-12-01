@@ -63,6 +63,7 @@ export default function TreeInventoryLayer({ map, mapLoaded, layerProps, activat
           type: type,
           source: name,
           paint: paint,
+          minzoom:10,
           layout: {
             visibility: layerProps.visibility ? layerProps.visibility : "none",
           },

@@ -76,7 +76,7 @@ export default function AACLayer({map, mapLoaded, layerProps, activateSidePanel}
                     if (popUps[0]) popUps[0].remove();
           
                     const id = e.features[0].properties.Id;
-                    popup.setHTML("Id:" + id + "<br>" + "Concession:" + e.features[0].properties.name_geo).addTo(map.current);
+                    popup.setHTML("Id:" + id + "<br>" + "AAC:" + e.features[0].properties.name_geo).addTo(map.current);
                   });
           
                   map.current.on("mouseleave", name, () => {
