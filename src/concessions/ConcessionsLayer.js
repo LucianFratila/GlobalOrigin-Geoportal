@@ -135,9 +135,7 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
           activateSidePanel({ id: e.features[0].properties.Id, species: e.features[0].properties.name_geo});
         });
 
-        map.current.on('zoomend', () => {
-          console.log(map.current.getZoom());
-          });
+
       }
     }
   }, [mapLoaded]);

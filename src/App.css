@@ -86,3 +86,20 @@ a {
   opacity:0.9 !important;
   border-top-color: rgb(10, 25, 41)
 }
+
+.vertical-slider {
+  height: 200px;
+  width: 25px;
+}
+
+.vertical-slider .example-thumb {
+  left: 1px;
+  width: 4px;
+  line-height: 4px;
+  height: 4px;
+}
+
+.vertical-slider .example-track {
+  left: 23px;
+  width: 3px;
+}

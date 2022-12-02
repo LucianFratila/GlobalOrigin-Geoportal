@@ -206,7 +206,7 @@ export default function ConcessionsPage({ map, mapLoaded }) {
       <TreeSidePanel layerData={layerTreeData} />
       <AACSidePanel layerData={layerAACData} />
       <ConcessionSidePanel layerData={layerConcessionData} />
-      <MapLegendConcession layersProps={layersProps}>
+      <MapLegendConcession layersProps={layersProps} map={map} mapLoaded={mapLoaded}>
         <ConcessionsLayers
           map={map}
           mapLoaded={mapLoaded}
