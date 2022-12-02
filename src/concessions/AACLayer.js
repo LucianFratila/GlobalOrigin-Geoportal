@@ -3,16 +3,18 @@ import axios from "axios"
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import { CgClose } from "react-icons/cg";
 import ClipLoader from "react-spinners/ClipLoader";
+import getOpacity from "common/utils/getOpacity";
 
 import useStore from 'common/utils/stateStore/useStore';
 export default function AACLayer({map, mapLoaded, layerProps, activateSidePanel}){
     const hideAAC = useStore((state) => state.hideAAC);
     const [isLoading,setIsLoading]=useState(false)
+    const [fillOpacity,setFillOpacity]=useState(1)
     
     const isLoadedRef = useRef(false);
 
     const paint={
-        "fill-opacity": ['interpolate',['linear'],['zoom'],11, 0.8, 14,0.1],
+        "fill-opacity": ['interpolate',['linear'],['zoom'],11, 0.8, 14,0],
         "fill-color":["case", ["boolean", ["feature-state", "hover"], false],'rgb(115,18,2)','rgb(215,118,102)'],
         'fill-outline-color':'rgb(115,18,2)',
     }
@@ -34,7 +36,6 @@ export default function AACLayer({map, mapLoaded, layerProps, activateSidePanel}
             axios.get(`/annual_allowable_cuts/vectors`)
                 .then(response => {
                     setIsLoading(false)
-                    isLoadedRef.current=true;
                     map.current.getSource(name).setData(response.data);
                 }) 
         },[]);
@@ -68,20 +69,30 @@ export default function AACLayer({map, mapLoaded, layerProps, activateSidePanel}
                     'type': type,
                     'source': name,
                     'paint': paint,
-                    minzoom:11,
                     'layout': {
                         'visibility': layerProps.visibility ?  layerProps.visibility : 'none'
                         },
                 }); 
       
                 map.current.on('zoom', (e) => {
-                    console.log()
-                    if(!isLoadedRef.current && map.current.getZoom()>11 && map.current.getZoom()<14)
-                      getData()
+                    let zoom = map.current.getZoom()
+
+                    if(zoom<10 || zoom >13)
+                        setFillOpacity(0)
+                    else  
+                        setFillOpacity(getOpacity(10,0.8,13,0.1,zoom))
+
+                    if(!isLoadedRef.current && zoom>10 && zoom<13){
+                        isLoadedRef.current=true;
+                        getData()
+                    }
                   });
                 
-                  if(!isLoadedRef.current && map.current.getZoom()>11 && map.current.getZoom()<14)
+                if(!isLoadedRef.current && map.current.getZoom()>10 && map.current.getZoom()<13)
                     getData();
+
+                if( map.current.getZoom()<10 ||  map.current.getZoom() >13)
+                    setFillOpacity(0)
 
                 map.current.on("mouseenter", name, (e) => {
  //                   console.log('mouseenter:'+name);
@@ -155,7 +166,7 @@ export default function AACLayer({map, mapLoaded, layerProps, activateSidePanel}
     let block
     if (layerProps.visibility=='visible') {
         block = <span key='1' className='flex items-center justify-between' >
-                    {isLoading ? <ClipLoader color='rgba(215,118,102,1)' size="20px"/> : <span style={{ backgroundColor:'rgba(215,118,102,1)'}} className="w-3 h-3 mr-1"></span>}
+                    {isLoading ? <ClipLoader color='rgba(215,118,102,1)' size="20px"/> : <span style={{ backgroundColor:`rgba(215,118,102,${fillOpacity})`}} className="w-3 h-3 mr-1"></span>}
                     <span className=' mr-5 w-40 text-sm justify-start'>AAC's</span>
                     <button onClick={hideAAC} className=' text-maintext hover:text-white'>
                     <CgClose />

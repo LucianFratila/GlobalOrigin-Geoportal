@@ -3,6 +3,7 @@ import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-load
 import axios from "axios";
 import { CgClose } from "react-icons/cg";
 import ClipLoader from "react-spinners/ClipLoader";
+import getOpacity from "common/utils/getOpacity";
 
 import useStore from "common/utils/stateStore/useStore";
 
@@ -11,11 +12,13 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
   const hideConcession = useStore((state) => state.hideConcession);
   const [isLoading, setIsLoading] = useState(false);
   const [params,setParams]=useState('');
+  const [fillOpacity,setFillOpacity]=useState(1)
 
   const isLoadedRef = useRef(false);
 
+
   const paint = {
-      "fill-opacity": ['interpolate',['linear'],['zoom'],7, 0.8, 10,0.1],
+      "fill-opacity": ['interpolate',['linear'],['zoom'],7,0.8, 10,0],
       "fill-color":["case", ["boolean", ["feature-state", "hover"], false],'rgb(115,18,2)','rgb(215,118,102)'],
       'fill-outline-color':'rgb(115,18,2)',
   };
@@ -41,13 +44,9 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
   },[params])
 
   const getData = useCallback(() => {
-    
-    if(isLoadedRef.current) return;
-    
     setIsLoading(true);
     axios.get(`/concessions/vectors?${params}`).then((response) => {
       setIsLoading(false);
-      isLoadedRef.current=true;
       map.current.getSource(name).setData(response.data);
     });
   }, [params]);
@@ -88,11 +87,17 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
         if(!isLoadedRef.current && map.current.getZoom()<10)
           getData();
 
+        setFillOpacity(getOpacity(7,0.8,10,0.1,map.current.getZoom()))  
+
         map.current.on('zoom', (e) => {
-            if(map.current.getZoom()<10)
-              getData()
-          });
-    
+         
+          setFillOpacity(getOpacity(7,0.8,10,0.1,map.current.getZoom()))
+
+          if(!isLoadedRef.current && map.current.getZoom()>7 && map.current.getZoom()<10){
+            isLoadedRef.current=true;
+            getData()
+          }
+        });
 
     
         map.current.on("mouseenter", name, (e) => {
@@ -142,8 +147,6 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
         map.current.on("click", name, (e) => {
             if(e.clickOnTopLayer) return;
             e.clickOnTopLayer = true;
-            
- //           console.log('click:'+name);
             activateSidePanel({ id: e.features[0].properties.Id, species: e.features[0].properties.name_geo});
         });
 
@@ -169,7 +172,7 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
         {isLoading ? (
           <ClipLoader color='rgba(215,118,102,1)' size='20px' />
         ) : (
-          <span style={{ backgroundColor:'rgba(215,118,102,1)'}} className='w-3 h-3 mr-1'></span>
+          <span style={{ backgroundColor:`rgba(215,118,102,${fillOpacity})`}} className='w-3 h-3 mr-1'></span>
         )}
         <span className=' mr-5 w-40 text-sm justify-start'>Concessions</span>
         <button onClick={hideConcession} className=' text-maintext hover:text-white'>

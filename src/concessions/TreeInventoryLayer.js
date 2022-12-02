@@ -5,17 +5,19 @@ import { CgClose } from "react-icons/cg";
 import ClipLoader from "react-spinners/ClipLoader";
 import aac_invetory from './data/aac_inventory.json'
 import useStore from "common/utils/stateStore/useStore";
+import getOpacity from "common/utils/getOpacity";
 
 export default function TreeInventoryLayer({ map, mapLoaded, layerProps, activateSidePanel }) {
 
   const hideConcession = useStore((state) => state.hideConcession);
   const [isLoading, setIsLoading] = useState(false);
   const [params,setParams]=useState('')
+  const [fillOpacity,setFillOpacity]=useState(1)
 
   const isLoadedRef = useRef(false);
 
   const paint = {
-    "circle-color":"#ff0000"
+    "circle-color":["case", ["boolean", ["feature-state", "hover"], false],'rgb(115,18,2)','rgb(215,118,102)']
   };
 
   const name = "treeinventory";
@@ -46,8 +48,7 @@ export default function TreeInventoryLayer({ map, mapLoaded, layerProps, activat
   const getData = useCallback(() => {
     setIsLoading(true);
     axios.get(`/annual_allowable_cut_inventory/vectors?${params}`).then((response) => {
-      setIsLoading(false);
-      isLoadedRef.current=true;
+      setIsLoading(false); 
       map.current.getSource(name).setData(response.data);
     });
   }, [params]);
@@ -66,21 +67,30 @@ export default function TreeInventoryLayer({ map, mapLoaded, layerProps, activat
           type: type,
           source: name,
           paint: paint,
-          minzoom:11,
           layout: {
             visibility: layerProps.visibility ? layerProps.visibility : "none",
           },
         });
 
         map.current.on('zoom', (e) => {
-          console.log()
-          if(!isLoadedRef.current && map.current.getZoom()>13)
+          let zoom = map.current.getZoom()
+          
+          if(zoom<11)
+            setFillOpacity(0)
+          else  
+            setFillOpacity(1)
+
+          if(!isLoadedRef.current && zoom>11){
+            isLoadedRef.current=true;
             getData()
+          }
         });
       
-        if(!isLoadedRef.current && map.current.getZoom()>13)
+        if(!isLoadedRef.current && map.current.getZoom()>11)
           getData();
 
+        if( map.current.getZoom()<11)
+          setFillOpacity(0)
 
         map.current.on("mouseenter", name, (e) => {
 //          console.log('mouseenter:'+name);
@@ -144,7 +154,7 @@ export default function TreeInventoryLayer({ map, mapLoaded, layerProps, activat
         {isLoading ? (
           <ClipLoader color={paint["circle-color"]} size='20px' />
         ) : (
-          <span style={{ backgroundColor: `${paint["circle-color"]}` }} className='w-3 h-3 mr-1'></span>
+          <span style={{ backgroundColor:`rgba(215,118,102,${fillOpacity})`}} className='w-3 h-3 mr-1'></span>
         )}
         <span className=' mr-5 w-40 text-sm justify-start'>Tree inventory</span>
         <button onClick={hideConcession} className=' text-maintext hover:text-white'>

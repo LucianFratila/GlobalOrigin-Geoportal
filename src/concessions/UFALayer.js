@@ -4,15 +4,17 @@ import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-load
 import { CgClose } from "react-icons/cg";
 import ClipLoader from "react-spinners/ClipLoader";
 import useStore from "common/utils/stateStore/useStore";
+import getOpacity from "common/utils/getOpacity";
 
 export default function UFALayer({ map, mapLoaded, layerProps, activateSidePanel }) {
   const hideUFA = useStore((state) => state.hideUFA);
   const [isLoading, setIsLoading] = useState(false);
+  const [fillOpacity,setFillOpacity]=useState(1)
 
   const isLoadedRef = useRef(false);
 
   const paint = {
-    "fill-opacity": ['interpolate',['linear'],['zoom'],7, 0.8, 10,0.1],
+    "fill-opacity": ['interpolate',['linear'],['zoom'],8, 0.8, 11,0],
     "fill-color":["case", ["boolean", ["feature-state", "hover"], false],'rgb(115,18,2)','rgb(215,118,102)'],
     'fill-outline-color':'rgb(115,18,2)',
   };
@@ -31,7 +33,6 @@ export default function UFALayer({ map, mapLoaded, layerProps, activateSidePanel
     setIsLoading(true);
     axios.get(`/development_units/vectors`).then((response) => {
       setIsLoading(false);
-      isLoadedRef.current=true;
       map.current.getSource(name).setData(response.data);
     });
   }, []);
@@ -71,13 +72,26 @@ export default function UFALayer({ map, mapLoaded, layerProps, activateSidePanel
         });
 
         map.current.on('zoom', (e) => {
-          console.log()
-          if(!isLoadedRef.current && map.current.getZoom()>7 && map.current.getZoom()<10)
+          let zoom = map.current.getZoom()
+
+          if(zoom<8 || zoom >11)
+            setFillOpacity(0)
+          else  
+            setFillOpacity(getOpacity(8,0.8,11,0.1,zoom))
+
+          if(!isLoadedRef.current && zoom>8 && zoom<11){
+            isLoadedRef.current=true;
             getData()
+          }
+
+
         });
       
         if(!isLoadedRef.current && map.current.getZoom()>7 && map.current.getZoom()<10)
           getData();
+
+          if( map.current.getZoom()<8 ||  map.current.getZoom() >11)
+            setFillOpacity(0)
 
         map.current.on("mouseenter", name, (e) => {
  //         console.log('mouseenter:'+name);
@@ -152,7 +166,7 @@ export default function UFALayer({ map, mapLoaded, layerProps, activateSidePanel
         {isLoading ? (
           <ClipLoader color='rgba(215,118,102,1)' size='20px' />
         ) : (
-          <span style={{ backgroundColor:'rgba(215,118,102,1)'}} className='w-3 h-3 mr-1'></span>
+          <span style={{ backgroundColor:`rgba(215,118,102,${fillOpacity})`}} className='w-3 h-3 mr-1'></span>
         )}
         <span className=' mr-5 w-40 text-sm justify-start'>UFA's</span>
         <button onClick={hideUFA} className=' text-maintext hover:text-white'>

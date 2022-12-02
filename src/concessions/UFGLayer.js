@@ -4,15 +4,17 @@ import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-load
 import { CgClose } from "react-icons/cg";
 import ClipLoader from "react-spinners/ClipLoader";
 import useStore from 'common/utils/stateStore/useStore';
+import getOpacity from "common/utils/getOpacity";
 
 export default function UFGLayer({map, mapLoaded, layerProps, activateSidePanel }){
     const hideUFG = useStore((state) => state.hideUFG);
     const [isLoading,setIsLoading]=useState(false)
+    const [fillOpacity,setFillOpacity]=useState(1)
 
     const isLoadedRef = useRef(false);
 
     const paint={
-        "fill-opacity": ['interpolate',['linear'],['zoom'],9, 0.8, 12,0.1],
+        "fill-opacity": ['interpolate',['linear'],['zoom'],9, 0.8, 12,0],
         "fill-color":["case", ["boolean", ["feature-state", "hover"], false],'rgb(115,18,2)','rgb(215,118,102)'],
         'fill-outline-color':'rgb(115,18,2)',
     }
@@ -32,7 +34,6 @@ export default function UFGLayer({map, mapLoaded, layerProps, activateSidePanel 
             axios.get(`/management_units/vectors`)
                 .then(response => {
                     setIsLoading(false)
-                    isLoadedRef.current=true;
                     map.current.getSource(name).setData(response.data);
                 }) 
         },[]);
@@ -73,13 +74,23 @@ export default function UFGLayer({map, mapLoaded, layerProps, activateSidePanel 
                 }); 
 
                 map.current.on('zoom', (e) => {
-                    console.log()
-                    if(!isLoadedRef.current && map.current.getZoom()>9 && map.current.getZoom()<12)
-                      getData()
-                  });
+                    let zoom = map.current.getZoom()
+                    if(zoom<9 || zoom >12)
+                        setFillOpacity(0)
+                    else  
+                        setFillOpacity(getOpacity(9,0.8,12,0.1,zoom))
+
+                    if(!isLoadedRef.current && zoom>9 && zoom<12){
+                        isLoadedRef.current=true;
+                        getData()
+                    }
+                });
                 
-                  if(!isLoadedRef.current && map.current.getZoom()>9 && map.current.getZoom()<12)
+                if(!isLoadedRef.current && map.current.getZoom()>9 && map.current.getZoom()<12)
                     getData();
+
+                if( map.current.getZoom()<9 ||  map.current.getZoom() >12)
+                    setFillOpacity(0)    
 
                 map.current.on("mouseenter", name, (e) => {
 //                    console.log('mouseenter:'+name);
@@ -154,7 +165,7 @@ export default function UFGLayer({map, mapLoaded, layerProps, activateSidePanel 
     let block
     if (layerProps.visibility=='visible') {
         block = <span key='1' className='flex items-center justify-between' >
-                    {isLoading ? <ClipLoader color='rgba(215,118,102,1)' size="20px"/> : <span style={{ backgroundColor:'rgba(215,118,102,1)'}} className="w-3 h-3 mr-1"></span>}
+                    {isLoading ? <ClipLoader color='rgba(215,118,102,1)' size="20px"/> : <span style={{ backgroundColor:`rgba(215,118,102,${fillOpacity})`}} className="w-3 h-3 mr-1"></span>}
                     <span className=' mr-5 w-40 text-sm justify-start'>UFG's</span>
                     <button onClick={hideUFG} className=' text-maintext hover:text-white'>
                     <CgClose />
