@@ -117,7 +117,7 @@ export default function UFALayer({ map, mapLoaded, layerProps, activateSidePanel
           e.clickOnTopLayer = true;
           
           console.log('click:'+name);
-          activateSidePanel({ id: e.features[0].properties.Id, species: e.features[0].properties.name_geo});
+          activateSidePanel({ id: e.features[0].properties.Id, ufa: e.features[0].properties});
         });
       }
     }
