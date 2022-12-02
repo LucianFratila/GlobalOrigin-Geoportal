@@ -12,7 +12,7 @@ const createToggleVisibility = (set) => ({
   showUFA: () => set(() => ({ UFAvisibility: true })),
   hideUFA: () => set(() => ({ UFAvisibility: false })),
 
-  UFGvisibility: false,
+  UFGvisibility: true,
   toggleUFG: () => set((state) => ({ UFGvisibility: !state.UFGvisibility })),
   showUFG: () => set(() => ({ UFGvisibility: true })),
   hideUFG: () => set(() => ({ UFGvisibility: false })),

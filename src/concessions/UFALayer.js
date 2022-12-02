@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from "react";
+import React, { useEffect, useCallback, useState, useRef } from "react";
 import axios from "axios";
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import { CgClose } from "react-icons/cg";
@@ -7,7 +7,9 @@ import useStore from "common/utils/stateStore/useStore";
 
 export default function UFALayer({ map, mapLoaded, layerProps, activateSidePanel }) {
   const hideUFA = useStore((state) => state.hideUFA);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const isLoadedRef = useRef(false);
 
   const paint = {
     "fill-opacity": ['interpolate',['linear'],['zoom'],7, 0.8, 10,0.1],
@@ -25,9 +27,11 @@ export default function UFALayer({ map, mapLoaded, layerProps, activateSidePanel
   }).trackPointer();
 
   const getData = useCallback(() => {
+
     setIsLoading(true);
     axios.get(`/development_units/vectors`).then((response) => {
       setIsLoading(false);
+      isLoadedRef.current=true;
       map.current.getSource(name).setData(response.data);
     });
   }, []);
@@ -42,6 +46,7 @@ export default function UFALayer({ map, mapLoaded, layerProps, activateSidePanel
 
   useEffect(() => {
     if (mapLoaded) {
+
       if (!map.current.getSource(name)) {
         map.current.addSource(name, {
           type: "geojson",
@@ -65,16 +70,22 @@ export default function UFALayer({ map, mapLoaded, layerProps, activateSidePanel
           },
         });
 
-        getData();
-
+        map.current.on('zoom', (e) => {
+          console.log()
+          if(!isLoadedRef.current && map.current.getZoom()>7 && map.current.getZoom()<10)
+            getData()
+        });
       
+        if(!isLoadedRef.current && map.current.getZoom()>7 && map.current.getZoom()<10)
+          getData();
+
         map.current.on("mouseenter", name, (e) => {
-          console.log('mouseenter:'+name);
+ //         console.log('mouseenter:'+name);
           map.current.getCanvas().style.cursor = "pointer";
       });
 
       map.current.on("mouseleave", name, () => {
-          console.log('mouseleave:'+name);
+//          console.log('mouseleave:'+name);
           map.current.getCanvas().style.cursor = "";
 
           if(popup.isOpen())
@@ -87,7 +98,7 @@ export default function UFALayer({ map, mapLoaded, layerProps, activateSidePanel
       });
 
       map.current.on("mousemove", name, (e) => {
-          console.log('mousemove:'+name);
+ //         console.log('mousemove:'+name);
 
           if (e.features.length > 0) {
               if(e.popupOnTopLayer){
@@ -112,13 +123,14 @@ export default function UFALayer({ map, mapLoaded, layerProps, activateSidePanel
       
       });
 
-      map.current.on("click", name, (e) => {
-          if(e.clickOnTopLayer) return;
-          e.clickOnTopLayer = true;
-          
-          console.log('click:'+name);
-          activateSidePanel({ id: e.features[0].properties.Id, ufa: e.features[0].properties});
+        map.current.on("click", name, (e) => {
+            if(e.clickOnTopLayer) return;
+            e.clickOnTopLayer = true;
+            
+ //           console.log('click:'+name);
+            activateSidePanel({ id: e.features[0].properties.Id, ufa: e.features[0].properties});
         });
+
       }
     }
   }, [mapLoaded]);

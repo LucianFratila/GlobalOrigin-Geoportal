@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from "react";
+import React, { useEffect, useCallback, useState, useRef } from "react";
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import axios from "axios";
 import { CgClose } from "react-icons/cg";
@@ -9,8 +9,10 @@ import useStore from "common/utils/stateStore/useStore";
 export default function TreeInventoryLayer({ map, mapLoaded, layerProps, activateSidePanel }) {
 
   const hideConcession = useStore((state) => state.hideConcession);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [params,setParams]=useState('')
+
+  const isLoadedRef = useRef(false);
 
   const paint = {
     "circle-color":"#ff0000"
@@ -36,7 +38,7 @@ export default function TreeInventoryLayer({ map, mapLoaded, layerProps, activat
   }, [layerProps.filters]);
 
   useEffect(()=>{
-    getData()
+  //  getData()
   },[params])
 
   let hoveredStateId = null;
@@ -45,6 +47,7 @@ export default function TreeInventoryLayer({ map, mapLoaded, layerProps, activat
     setIsLoading(true);
     axios.get(`/annual_allowable_cut_inventory/vectors?${params}`).then((response) => {
       setIsLoading(false);
+      isLoadedRef.current=true;
       map.current.getSource(name).setData(response.data);
     });
   }, [params]);
@@ -69,17 +72,23 @@ export default function TreeInventoryLayer({ map, mapLoaded, layerProps, activat
           },
         });
 
-        getData();
+        map.current.on('zoom', (e) => {
+          console.log()
+          if(!isLoadedRef.current && map.current.getZoom()>13)
+            getData()
+        });
+      
+        if(!isLoadedRef.current && map.current.getZoom()>13)
+          getData();
 
-        //popup.addTo(map.current);
 
         map.current.on("mouseenter", name, (e) => {
-          console.log('mouseenter:'+name);
+//          console.log('mouseenter:'+name);
           map.current.getCanvas().style.cursor = "pointer";
         });
 
         map.current.on("mouseleave", name, () => {
-          console.log('mouseleave:' + name);
+ //         console.log('mouseleave:' + name);
           map.current.getCanvas().style.cursor = "";
 
           if(popup.isOpen())
@@ -93,7 +102,7 @@ export default function TreeInventoryLayer({ map, mapLoaded, layerProps, activat
 
         map.current.on("mousemove", name, (e) => {
                 
-          console.log('mousemove:'+name);
+//          console.log('mousemove:'+name);
           
           if(!popup.isOpen())
             popup.addTo(map.current);
@@ -111,7 +120,7 @@ export default function TreeInventoryLayer({ map, mapLoaded, layerProps, activat
 
         map.current.on("click", name, (e) => {
           e.clickOnTopLayer = true;
-          console.log('click:'+name);
+//          console.log('click:'+name);
           activateSidePanel({ id: e.features[0].properties.treed_id_geo, species: e.features[0].properties.species_geo});
         });
       }

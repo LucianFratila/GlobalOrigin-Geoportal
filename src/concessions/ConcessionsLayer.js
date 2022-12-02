@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from "react";
+import React, { useEffect, useCallback, useState , useRef} from "react";
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import axios from "axios";
 import { CgClose } from "react-icons/cg";
@@ -9,8 +9,10 @@ import useStore from "common/utils/stateStore/useStore";
 export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateSidePanel }) {
 
   const hideConcession = useStore((state) => state.hideConcession);
-  const [isLoading, setIsLoading] = useState(true);
-  const [params,setParams]=useState('')
+  const [isLoading, setIsLoading] = useState(false);
+  const [params,setParams]=useState('');
+
+  const isLoadedRef = useRef(false);
 
   const paint = {
       "fill-opacity": ['interpolate',['linear'],['zoom'],7, 0.8, 10,0.1],
@@ -32,21 +34,24 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
     if(layerProps.filters.Company){
       setParams(`Company=${layerProps.filters.Company}`)
     }
-  },    [layerProps.filters]);
+  },[layerProps.filters]);
 
   useEffect(()=>{
-    getData()
+  //  getData()
   },[params])
 
-
-
   const getData = useCallback(() => {
+    
+    if(isLoadedRef.current) return;
+    
     setIsLoading(true);
     axios.get(`/concessions/vectors?${params}`).then((response) => {
       setIsLoading(false);
+      isLoadedRef.current=true;
       map.current.getSource(name).setData(response.data);
     });
   }, [params]);
+
 
   useEffect(() => {
     if (mapLoaded) {
@@ -80,16 +85,23 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
           },
         });
 
-        getData();
+        if(!isLoadedRef.current && map.current.getZoom()<10)
+          getData();
+
+        map.current.on('zoom', (e) => {
+            if(map.current.getZoom()<10)
+              getData()
+          });
+    
 
     
         map.current.on("mouseenter", name, (e) => {
-          console.log('mouseenter:'+name);
+ //         console.log('mouseenter:'+name);
           map.current.getCanvas().style.cursor = "pointer";
       });
 
       map.current.on("mouseleave", name, () => {
-          console.log('mouseleave:'+name);
+ //         console.log('mouseleave:'+name);
           map.current.getCanvas().style.cursor = "";
 
           if(popup.isOpen())
@@ -102,7 +114,7 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
       });
 
       map.current.on("mousemove", name, (e) => {
-          console.log('mousemove:'+name);
+ //         console.log('mousemove:'+name);
 
           if (e.features.length > 0) {
               if(e.popupOnTopLayer){
@@ -127,20 +139,21 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
       
       });
 
-      map.current.on("click", name, (e) => {
-          if(e.clickOnTopLayer) return;
-          e.clickOnTopLayer = true;
-          
-          console.log('click:'+name);
-          activateSidePanel({ id: e.features[0].properties.Id, species: e.features[0].properties.name_geo});
+        map.current.on("click", name, (e) => {
+            if(e.clickOnTopLayer) return;
+            e.clickOnTopLayer = true;
+            
+ //           console.log('click:'+name);
+            activateSidePanel({ id: e.features[0].properties.Id, species: e.features[0].properties.name_geo});
         });
-
 
       }
     }
   }, [mapLoaded]);
 
+
   useEffect(() => {
+    console.log("mounted")
     return () => {
       if (map.current.getSource(name)) {
         map.current.removeLayer(name);
@@ -150,7 +163,7 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
   }, []);
 
   let block;
-  if (layerProps.visibility == "visible") {
+  if (layerProps.visibility === "visible") {
     block = (
       <span key='1' className='flex items-center justify-between'>
         {isLoading ? (
