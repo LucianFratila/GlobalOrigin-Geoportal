@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import useStore from "common/utils/stateStore/useStore";
 
-
 ////React Icons Imports@spinners//////
 import { FaSourcetree } from "react-icons/fa";
 
@@ -10,7 +9,7 @@ import { PulseLoader } from "react-spinners";
 
 ///React Query Imports///
 import { useQuery } from "react-query";
-import { getAACbyParam } from "common/axios/endpoints";
+import { getTreebyParam } from "common/axios/endpoints";
 
 const TreeSidePanel = ({ layerData }) => {
   //////////VISIBILITY CONTROLS///////////////
@@ -18,15 +17,26 @@ const TreeSidePanel = ({ layerData }) => {
   const hideTreeSidePanel = useStore((state) => state.hideTreeSidePanel);
   const showMainNav = useStore((state) => state.showMainNav);
 
-
-
   //////////VISIBILITY CONTROLS///////////////
   function onClose() {
     hideTreeSidePanel();
     showMainNav();
   }
+
   const treeID = layerData?.id;
-  const species = layerData?.species;
+
+  const { data: tree } = useQuery(["tree", treeID], () => getTreebyParam(`?TreeId=${treeID}`), {
+    // The query will not execute until the condition
+    enabled: !!treeID,
+  });
+  const species = tree?.data.features[0].properties.species_geo;
+  const widthAtBase = tree?.data.features[0].properties.diameter_breast_height_geo;
+  const owned = tree?.data.features[0].properties.management_unit_geo;
+  const aac = tree?.data.features[0].properties.aac_geo;
+
+  const [liveTreeHight, setLiveTreeHight] = useState(12800);
+  
+  // console.log(tree?.data.features[0].properties);
   return (
     <>
       {/* DESKTOP MENU */}
@@ -34,7 +44,7 @@ const TreeSidePanel = ({ layerData }) => {
         <div className=' fixed left-0 top-0 z-50    '>
           <div
             className={`bg-primary/95 overflow-x-hidden h-screen   ${
-              treeSidePanelVisibility ? ` lg:w-[500px] md:w-[500px] sm:w-[300px] xs: w-[300px]  ` : ` w-0`
+              treeSidePanelVisibility ? ` lg:w-[500px] md:w-[500px] sm:w-[500px] xs: w-[500px]  ` : ` w-0`
             } duration-700`}
           >
             <div className={`grid grid-cols-2 p-4  whitespace-nowrap items-center`}>
@@ -68,25 +78,96 @@ const TreeSidePanel = ({ layerData }) => {
             </div>
             {/* Menu Header */}
 
-            {treeID ? (
+            {tree ? (
               <>
                 {/* Details */}
                 <div className='p-4  rounded-md mx-4 bg-neutral-700 text-maintext'>
                   <div className='my-2'>
                     <h1 className=' text-maintext text-lg font-mono'>Details</h1>
                   </div>
-                  <div className=' flex flex-row justify-between overflow-x-hidden '>
+                  <div className=' flex flex-col text-sm justify-between gap-3 overflow-x-hidden '>
                     <span>
-                      <h1 className=' text-sm'>{`Type:`}</h1>
+                      <h1>{`Tree type`}</h1>
                       <p className=' underline'>{species}</p>
                     </span>
-                    <span>
-                      <h1 className=' text-sm'>{`CreatedAt:`}</h1>
-                      {/* <p>{aac.data.data.CreatedAt}</p> */}
+                    <span className='flex flex-row gap-4 items-center'>
+                      <h1>{`Width at base`}</h1>
+                      <p>{widthAtBase}/cm</p>
                     </span>
+                    <div className=' flex flex-row justify-between gap-3 overflow-x-hidden '>
+                      <span>
+                        <h1>{`Owned by`}</h1>
+                        <p className=' underline '>{owned}</p>
+                      </span>
+                      <span>
+                        <h1>{`AAC`}</h1>
+                        <p>{aac}</p>
+                      </span>
+                    </div>
                   </div>
                 </div>
-                {/* PAO */}
+                <div className="p-4 mt-3 ">
+                        <input
+                          onChange={(e) => setLiveTreeHight(e.target.value / 1.01)}
+                          type='range'
+                          min='1'
+                          max='195'
+                        />
+                      </div>
+                {/* Details */}
+                <div className='p-4 mt-3  rounded-md mx-4 bg-neutral-700 text-maintext'>
+                  {/* Graph treelife */}
+                  
+                  <div className={`flex  flex-row ${treeSidePanelVisibility ? "" : " opacity-0 duration-200"}`}>
+                    
+                    <div>
+                      <div className='flex  flex-col'>
+                        {/* <span className={`w-7 ml-[1px]border-solid border-b border-sky-100 `}></span> */}
+                        <div className={`w-8 h-8  items-center justify-center flex  bg-green-500 rounded-full`}>
+                          <FaSourcetree size={20} />
+                        </div>
+                        <div
+                          style={{ height: `${liveTreeHight + 10}px` }}
+                          className='border-dashed ml-[15px]  border-l-2 border-sky-500'
+                        ></div>
+                        <div className={` w-4 h-4 ml-[8px] flex bg-sky-500 rounded-full `}></div>
+                      </div>
+                    </div>
+
+                    <div className=' flex felx-col  ml-5  w-full '>
+                      <div className='flex  flex-col'>
+                        <span className={`w-7 -ml-[50px] mt-10 border-solid border-b border-sky-100 `}></span>
+                        {liveTreeHight > 34 && (
+                          <>
+                            <span className={`w-4 -ml-[37px] mt-[35px] border-solid border-b border-sky-100 `}></span>
+                            <span className='-ml-[20px] -mt-3'>Marked by:XX</span>
+                          </>
+                        )}
+                        {liveTreeHight > 79 && (
+                          <>
+                            <span className={`w-4 -ml-[37px] mt-[30px] border-solid border-b border-sky-100 `}></span>
+                            <span className='-ml-[20px] -mt-3'>Felled</span>
+                          </>
+                        )}
+                        {liveTreeHight > 120 && (
+                          <>
+                            <span className={`w-4 -ml-[37px] mt-[30px] border-solid border-b border-sky-100 `}></span>
+                            <span className='-ml-[20px] -mt-3 underline'>Carnet d'Abattage</span>
+                          </>
+                        )}
+                        {liveTreeHight > 163 && (
+                          <>
+                            <span className={`w-4 -ml-[37px] mt-[30px] border-solid border-b border-sky-100 `}></span>
+                            <span className='-ml-[20px] -mt-3 underline'>Carnet de Chantier</span>
+                          </>
+                        )}
+                      </div>
+                      
+                    </div>
+                  </div>
+
+                  {/* Graph treelife */}
+                </div>
               </>
             ) : (
               <div

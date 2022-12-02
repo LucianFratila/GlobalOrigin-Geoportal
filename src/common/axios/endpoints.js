@@ -16,7 +16,7 @@ export const getAACbyParam = async (params) => {
 };
 
 export const getTreebyParam = async (params) => {
-  return await axios.get(`annual_allowable_cuts/vectors${params}`);
+  return await axios.get(`annual_allowable_cut_inventory/vectors${params}`);
 };
 
 // export const getTreesInConcession = async (params) => {
