@@ -33,10 +33,39 @@ const TreeSidePanel = ({ layerData }) => {
   const widthAtBase = tree?.data.features[0].properties.diameter_breast_height_geo;
   const owned = tree?.data.features[0].properties.management_unit_geo;
   const aac = tree?.data.features[0].properties.aac_geo;
+  // const standing = tree?.data.features[0].properties.tree_standing_geo;
+  // const marked = tree?.data.features[0].properties.tree_marked_geo;
+  const [standing, setStanding] = useState(false);
+  const [marked, setMarked] = useState(false);
+  const [felled, setFelled] = useState(false);
+  const [abattage, setAbattage] = useState(false);
+  const [chantier, setChantier] = useState(false);
+  // const standing = true;
+  // const marked = false;
+  // const felled = false;
+  // const abattage = true;
+  // const chantier = true;
 
-  const [liveTreeHight, setLiveTreeHight] = useState(12800);
-  
-  // console.log(tree?.data.features[0].properties);
+  const [liveTreeHight, setLiveTreeHight] = useState(0);
+  useEffect(() => {
+    if (standing) {
+      setLiveTreeHight(32);
+    }
+    if (marked) {
+      setLiveTreeHight(36);
+    }
+    if (felled) {
+      setLiveTreeHight(80);
+    }
+    if (abattage) {
+      setLiveTreeHight(121);
+    }
+    if (chantier) {
+      setLiveTreeHight(166);
+    }
+  }, [standing, marked, felled, abattage, chantier]);
+
+  // console.log(tree?.data.features[0].properties.tree_marked_geo);
   return (
     <>
       {/* DESKTOP MENU */}
@@ -106,20 +135,21 @@ const TreeSidePanel = ({ layerData }) => {
                     </div>
                   </div>
                 </div>
-                <div className="p-4 mt-3 ">
-                        <input
-                          onChange={(e) => setLiveTreeHight(e.target.value / 1.01)}
-                          type='range'
-                          min='1'
-                          max='195'
-                        />
-                      </div>
+                <div className='p-4 mt-3 '>
+                  <input onChange={(e) => setLiveTreeHight(e.target.value / 1.01)} type='range' min='1' max='195' />
+                  <span className='flex flex-row gap-4'>
+                    {/* <button onClick={() => setStanding(!standing)}>standing</button> */}
+                    <button onClick={() => setMarked(!marked)}>marked</button>
+                    <button onClick={() => setFelled(!felled)}>felled</button>
+                    <button onClick={() => setAbattage(!abattage)}>abattage</button>
+                    <button onClick={() => setChantier(!chantier)}>chantier</button>
+                  </span>
+                </div>
                 {/* Details */}
                 <div className='p-4 mt-3  rounded-md mx-4 bg-neutral-700 text-maintext'>
                   {/* Graph treelife */}
-                  
+
                   <div className={`flex  flex-row ${treeSidePanelVisibility ? "" : " opacity-0 duration-200"}`}>
-                    
                     <div>
                       <div className='flex  flex-col'>
                         {/* <span className={`w-7 ml-[1px]border-solid border-b border-sky-100 `}></span> */}
@@ -133,36 +163,56 @@ const TreeSidePanel = ({ layerData }) => {
                         <div className={` w-4 h-4 ml-[8px] flex bg-sky-500 rounded-full `}></div>
                       </div>
                     </div>
-
+                    {/* standing, marked, felled, abattage, chantier */}
                     <div className=' flex felx-col  ml-5  w-full '>
                       <div className='flex  flex-col'>
                         <span className={`w-7 -ml-[50px] mt-10 border-solid border-b border-sky-100 `}></span>
-                        {liveTreeHight > 34 && (
+                        <span className='-ml-[15px] -mt-9'>{"Live tree"}</span>
+                        {liveTreeHight > 34&&marked ? (
                           <>
                             <span className={`w-4 -ml-[37px] mt-[35px] border-solid border-b border-sky-100 `}></span>
                             <span className='-ml-[20px] -mt-3'>Marked by:XX</span>
                           </>
+                        ) : (
+                          <>
+                            <span className={`w-4 -ml-[37px] mt-[35px] border-solid border-b-0 border-sky-100 `}></span>
+                            <span className='-ml-[20px] -mt-3'></span>
+                          </>
                         )}
-                        {liveTreeHight > 79 && (
+                        {liveTreeHight > 79&&felled ? (
                           <>
                             <span className={`w-4 -ml-[37px] mt-[30px] border-solid border-b border-sky-100 `}></span>
                             <span className='-ml-[20px] -mt-3'>Felled</span>
                           </>
+                        ) : (
+                          <>
+                            <span className={`w-4 -ml-[37px] mt-[30px] border-solid border-b-0 border-sky-100 `}></span>
+                            <span className='-ml-[20px] -mt-3'></span>
+                          </>
                         )}
-                        {liveTreeHight > 120 && (
+                        {liveTreeHight > 120&&abattage ? (
                           <>
                             <span className={`w-4 -ml-[37px] mt-[30px] border-solid border-b border-sky-100 `}></span>
                             <span className='-ml-[20px] -mt-3 underline'>Carnet d'Abattage</span>
                           </>
+                        ) : (
+                          <>
+                            <span className={`w-4 -ml-[37px] mt-[30px] border-solid border-b-0 border-sky-100 `}></span>
+                            <span className='-ml-[20px] -mt-3 underline'></span>
+                          </>
                         )}
-                        {liveTreeHight > 163 && (
+                        {liveTreeHight > 163&&chantier ? (
                           <>
                             <span className={`w-4 -ml-[37px] mt-[30px] border-solid border-b border-sky-100 `}></span>
                             <span className='-ml-[20px] -mt-3 underline'>Carnet de Chantier</span>
                           </>
+                        ) : (
+                          <>
+                            <span className={`w-4 -ml-[37px] mt-[30px] border-solid border-b-0 border-sky-100 `}></span>
+                            <span className='-ml-[20px] -mt-3 underline'></span>
+                          </>
                         )}
                       </div>
-                      
                     </div>
                   </div>
 
