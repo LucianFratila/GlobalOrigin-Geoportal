@@ -89,8 +89,10 @@ export default function AACLayer({map, mapLoaded, layerProps, activateSidePanel}
                     }
                   });
                 
-                if(!isLoadedRef.current && map.current.getZoom()>10 && map.current.getZoom()<13)
+                if(!isLoadedRef.current && map.current.getZoom()>10 && map.current.getZoom()<13){
                     getData();
+                    isLoadedRef.current=true;
+                  }
 
                 if( map.current.getZoom()<10 ||  map.current.getZoom() >13)
                     setFillOpacity(0)

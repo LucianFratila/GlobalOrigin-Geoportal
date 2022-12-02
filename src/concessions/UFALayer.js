@@ -87,8 +87,10 @@ export default function UFALayer({ map, mapLoaded, layerProps, activateSidePanel
 
         });
       
-        if(!isLoadedRef.current && map.current.getZoom()>7 && map.current.getZoom()<10)
+        if(!isLoadedRef.current && map.current.getZoom()>8 && map.current.getZoom()<11){
           getData();
+          isLoadedRef.current=true;
+        }
 
           if( map.current.getZoom()<8 ||  map.current.getZoom() >11)
             setFillOpacity(0)

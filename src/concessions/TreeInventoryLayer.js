@@ -87,8 +87,10 @@ export default function TreeInventoryLayer({ map, mapLoaded, layerProps, activat
           }
         });
       
-        if(!isLoadedRef.current && map.current.getZoom()>11)
+        if(!isLoadedRef.current && map.current.getZoom()>11){
           getData();
+          isLoadedRef.current=true;
+        }
 
         if( map.current.getZoom()<11)
           setFillOpacity(0)

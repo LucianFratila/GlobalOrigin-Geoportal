@@ -86,9 +86,10 @@ export default function UFGLayer({map, mapLoaded, layerProps, activateSidePanel 
                     }
                 });
                 
-                if(!isLoadedRef.current && map.current.getZoom()>9 && map.current.getZoom()<12)
+                if(!isLoadedRef.current && map.current.getZoom()>9 && map.current.getZoom()<12){
                     getData();
-
+                    isLoadedRef.current=true;
+                  }
                 if( map.current.getZoom()<9 ||  map.current.getZoom() >12)
                     setFillOpacity(0)    
 

@@ -84,8 +84,10 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
           },
         });
 
-        if(!isLoadedRef.current && map.current.getZoom()<10)
+        if(!isLoadedRef.current && map.current.getZoom()<10){
           getData();
+          isLoadedRef.current=true;
+        }
 
         setFillOpacity(getOpacity(7,0.8,10,0.1,map.current.getZoom()))  
 
