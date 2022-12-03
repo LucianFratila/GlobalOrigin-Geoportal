@@ -40,7 +40,7 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
   },[layerProps.filters]);
 
   useEffect(()=>{
-  //  getData()
+    getData()
   },[params])
 
   const getData = useCallback(() => {
