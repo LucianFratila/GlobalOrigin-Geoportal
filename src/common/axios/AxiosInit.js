@@ -42,7 +42,7 @@ export default function AxiosDefaults(resetUser){
                         })
     }catch(err){
       console.log(err)
-      if(err.response.data.message=='Expired token'){
+      if(err.response.data.message=='Expired token' || err.response.data.message=='Entry for RefreshToken not found'){
         resetUser('Session expired! Please login!',"","")
         return req
       }
