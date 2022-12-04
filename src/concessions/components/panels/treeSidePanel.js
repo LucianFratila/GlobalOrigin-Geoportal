@@ -158,7 +158,7 @@ const TreeSidePanel = ({ layerData }) => {
                         </div>
                         <div
                           style={{ height: `${liveTreeHight + 10}px` }}
-                          className='border-dashed ml-[15px]  border-l-2 border-sky-500'
+                          className='border-dashed ml-[15px] duration-150  border-l-2 border-sky-500'
                         ></div>
                         <div className={` w-4 h-4 ml-[8px] flex bg-sky-500 rounded-full `}></div>
                       </div>
