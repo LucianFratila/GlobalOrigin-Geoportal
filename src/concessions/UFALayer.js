@@ -146,7 +146,7 @@ export default function UFALayer({ map, mapLoaded, layerProps, activateSidePanel
   const clickHandler=useCallback((e) => {
     if(e.clickOnTopLayer) return;
             e.clickOnTopLayer = true;
-            activateSidePanel({'id' : e.features[0].properties.Id ,'name_geo' : e.features[0].properties.name_geo});
+            activateSidePanel({'id' : e.features[0].properties.Id ,'name' : e.features[0].properties.name_geo});
   },[])
 
   useEffect(() => {

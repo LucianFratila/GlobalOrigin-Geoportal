@@ -25,15 +25,6 @@ const ConcessionSidePanel = ({ layerData }) => {
     showMainNav();
   }
 
-  useEffect(()=>{
-    console.log('In concessions side panel')
-  })
-
-  useEffect(()=>{
-    console.log("concession side panel")
-    console.log(layerData)
-  },[layerData])
-
   console.log(layerData)
   const dataId = layerData?.id;
   const { data: concession } = useQuery(["concession", dataId], () => getConcession(dataId, jwt), {

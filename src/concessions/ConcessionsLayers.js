@@ -18,23 +18,21 @@ export default function ConcessionsLayers({
 }) {
   return (
     <>
-    <ConcessionsLayer
-        map={map}
-        mapLoaded={mapLoaded}
-        layerProps={layersProps.concessions}
-        activateSidePanel={activateConcessionSidePanel}
-      />
       <TreeInventoryLayer
         map={map}
         mapLoaded={mapLoaded}
         layerProps={layersProps.treeinventory}
         activateSidePanel={activateTreeSidePanel}
       />
-      
-
       <AACLayer map={map} mapLoaded={mapLoaded} layerProps={layersProps.aac} activateSidePanel={activateAACSidePanel} />
       <UFGLayer map={map} mapLoaded={mapLoaded} layerProps={layersProps.ufg} activateSidePanel={activateUFGSidePanel} />
       <UFALayer map={map} mapLoaded={mapLoaded} layerProps={layersProps.ufa} activateSidePanel={activateUFASidePanel} />
+      <ConcessionsLayer
+        map={map}
+        mapLoaded={mapLoaded}
+        layerProps={layersProps.concessions}
+        activateSidePanel={activateConcessionSidePanel}
+      />
     </>
   );
 }
