@@ -139,7 +139,7 @@ export default function TreeInventoryLayer({ map, mapLoaded, layerProps, activat
   const clickHandler=useCallback((e) => {
     if(e.clickOnTopLayer) return;
             e.clickOnTopLayer = true;
-            activateSidePanel({'id' : e.features[0].properties.Id ,'species' : e.features[0].properties.species_geo});
+            activateSidePanel({'id' : e.features[0].properties.treed_id_geo ,'species' : e.features[0].properties.species_geo});
   },[])
 
   useEffect(() => {
