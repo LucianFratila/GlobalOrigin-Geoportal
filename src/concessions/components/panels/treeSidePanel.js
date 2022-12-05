@@ -29,10 +29,11 @@ const TreeSidePanel = ({ layerData }) => {
     // The query will not execute until the condition
     enabled: !!treeID,
   });
-  const species = tree?.data.features[0].properties.species_geo;
-  const widthAtBase = tree?.data.features[0].properties.diameter_breast_height_geo;
-  const owned = tree?.data.features[0].properties.management_unit_geo;
-  const aac = tree?.data.features[0].properties.aac_geo;
+  
+  // const species = tree?.data.features[0].properties.species_geo;
+  // const widthAtBase = tree?.data.features[0].properties.diameter_breast_height_geo;
+  // const owned = tree?.data.features[0].properties.management_unit_geo;
+  // const aac = tree?.data.features[0].properties.aac_geo;
   // const standing = tree?.data.features[0].properties.tree_standing_geo;
   // const marked = tree?.data.features[0].properties.tree_marked_geo;
   const [standing, setStanding] = useState(false);
@@ -45,7 +46,7 @@ const TreeSidePanel = ({ layerData }) => {
   // const felled = false;
   // const abattage = true;
   // const chantier = true;
-
+  console.log(layerData);
   const [liveTreeHight, setLiveTreeHight] = useState(0);
   useEffect(() => {
     if (standing) {
@@ -68,8 +69,8 @@ const TreeSidePanel = ({ layerData }) => {
   // console.log(tree?.data.features[0].properties.tree_marked_geo);
   return (
     <>
-      {/* DESKTOP MENU */}
-      <div>
+{/* DESKTOP MENU */}
+<div>
         <div className=' fixed left-0 top-0 z-50    '>
           <div
             className={`bg-primary/95 overflow-x-hidden h-screen   ${
@@ -117,20 +118,20 @@ const TreeSidePanel = ({ layerData }) => {
                   <div className=' flex flex-col text-sm justify-between gap-3 overflow-x-hidden '>
                     <span>
                       <h1>{`Tree type`}</h1>
-                      <p className=' underline'>{species}</p>
+                      {/* <p className=' underline'>{species}</p> */}
                     </span>
                     <span className='flex flex-row gap-4 items-center'>
                       <h1>{`Width at base`}</h1>
-                      <p>{widthAtBase}/cm</p>
+                      {/* <p>{widthAtBase}/cm</p> */}
                     </span>
                     <div className=' flex flex-row justify-between gap-3 overflow-x-hidden '>
                       <span>
                         <h1>{`Owned by`}</h1>
-                        <p className=' underline '>{owned}</p>
+                        {/* <p className=' underline '>{owned}</p> */}
                       </span>
                       <span>
                         <h1>{`AAC`}</h1>
-                        <p>{aac}</p>
+                        {/* <p>{aac}</p> */}
                       </span>
                     </div>
                   </div>
@@ -239,3 +240,9 @@ const TreeSidePanel = ({ layerData }) => {
 };
 
 export default TreeSidePanel;
+
+
+
+
+
+      

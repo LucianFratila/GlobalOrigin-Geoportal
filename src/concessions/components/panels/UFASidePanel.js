@@ -25,7 +25,7 @@ const UFASidePanel = ({ layerData }) => {
     hideUFASidePanel();
     showMainNav();
   }
-  const name_geo = layerData?.ufa.name_geo;
+  const name_geo = layerData?.name;
   
   
  

@@ -26,9 +26,9 @@ const AACSidePanel = ({ layerData }) => {
   }
 
   const aacID = layerData?.id;
-  // const aacName = layerData?.concession;
-  const name_geo = layerData?.aac.name_geo;
-  
+  const aacName = layerData?.name;
+  // const name_geo = layerData?.aac.name_geo;
+  // console.log(layerData);
 
   const { data: aacById } = useQuery(
     ["aacById", aacID],
@@ -38,6 +38,7 @@ const AACSidePanel = ({ layerData }) => {
       enabled: !!aacID,
     }
   );
+  // console.log(aacById);
 
   
 
@@ -76,7 +77,7 @@ const AACSidePanel = ({ layerData }) => {
                 </button>
               </div>
               <span className=' mt-2'>
-                <h1 className=' text-lg uppercase text-maintext  '>{name_geo}</h1>
+                <h1 className=' text-lg uppercase text-maintext  '>{aacName}</h1>
               </span>
               {/* Menu Close/Open Controls and Search */}
             </div>

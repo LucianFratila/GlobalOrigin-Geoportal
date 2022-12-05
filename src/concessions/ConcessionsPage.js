@@ -86,7 +86,7 @@ export default function ConcessionsPage({ map, mapLoaded }) {
     hideUFASidePanel();
    
   }
-  console.log('state ' + layerConcessionData);
+  // console.log('state ' + layerConcessionData);
 
   function activateAACSidePanel(data) {
     showAACSidePanel();

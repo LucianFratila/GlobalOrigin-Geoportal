@@ -25,7 +25,8 @@ const UFGSidePanel = ({ layerData }) => {
     hideUFGSidePanel();
     showMainNav();
   }
-  const name_geo = layerData?.UFG.name_geo;
+  const name = layerData?.name
+  // console.log(layerData);
   
  
   return (
@@ -63,7 +64,7 @@ const UFGSidePanel = ({ layerData }) => {
                 </button>
               </div>
               <span className=' mt-2'>
-                <h1 className=' text-lg uppercase text-maintext  '>{name_geo}</h1>
+                <h1 className=' text-lg uppercase text-maintext  '>{name}</h1>
               </span>
               {/* Menu Close/Open Controls and Search */}
             </div>

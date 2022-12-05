@@ -25,14 +25,14 @@ const ConcessionSidePanel = ({ layerData }) => {
     showMainNav();
   }
 
-  console.log(layerData)
+ 
   const dataId = layerData?.id;
   const { data: concession } = useQuery(["concession", dataId], () => getConcession(dataId, jwt), {
     // The query will not execute until the condition
     enabled: !!dataId,
   });
   
-  // console.log(layerData);
+
   ////////Fake Data////////
   let trees = useTrees();
   let totalTrees = trees?.falled + trees?.live + trees?.marked;
