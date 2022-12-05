@@ -22,7 +22,7 @@ const TreeSidePanel = ({ layerData }) => {
     hideTreeSidePanel();
     showMainNav();
   }
-
+  
   const treeID = layerData?.id;
 
   const { data: tree } = useQuery(["tree", treeID], () => getTreebyParam(`?TreeId=${treeID}`), {
@@ -158,7 +158,7 @@ const TreeSidePanel = ({ layerData }) => {
                         </div>
                         <div
                           style={{ height: `${liveTreeHight + 10}px` }}
-                          className='border-dashed ml-[15px] duration-150  border-l-2 border-sky-500'
+                          className='border-dashed ml-[15px]   border-l-2 border-sky-500'
                         ></div>
                         <div className={` w-4 h-4 ml-[8px] flex bg-sky-500 rounded-full `}></div>
                       </div>
@@ -192,7 +192,7 @@ const TreeSidePanel = ({ layerData }) => {
                         )}
                         {liveTreeHight > 120&&abattage ? (
                           <>
-                            <span className={`w-4 -ml-[37px] mt-[30px] border-solid border-b border-sky-100 `}></span>
+                            <span className={`w-7 -ml-[50px] mt-[30px] border-solid border-b border-sky-100 `}></span>
                             <span className='-ml-[20px] -mt-3 underline'>Carnet d'Abattage</span>
                           </>
                         ) : (
@@ -203,7 +203,7 @@ const TreeSidePanel = ({ layerData }) => {
                         )}
                         {liveTreeHight > 163&&chantier ? (
                           <>
-                            <span className={`w-4 -ml-[37px] mt-[30px] border-solid border-b border-sky-100 `}></span>
+                            <span className={`w-7 -ml-[50px] mt-[30px] border-solid border-b border-sky-100 `}></span>
                             <span className='-ml-[20px] -mt-3 underline'>Carnet de Chantier</span>
                           </>
                         ) : (
