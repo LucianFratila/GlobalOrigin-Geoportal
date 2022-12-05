@@ -1,9 +1,11 @@
 import React,{useState} from "react";
+import useDebounce from "hooks/useDebounce";
 const SearchFilter = ({ disable,getInputData }) => {
     const [val,setVal] = useState(null)
+    useDebounce(()=>getInputData(val),1000,[val])
   return (
     <div className="mt-2">
-      <form required onSubmit={(e)=>{getInputData(val); e.preventDefault()}}>
+      <form required >
         <div className='relative '>
           <div className='flex absolute text-maintext  inset-y-0 left-0 items-center pl-3 pointer-events-none'>
             <svg
@@ -31,13 +33,13 @@ const SearchFilter = ({ disable,getInputData }) => {
             placeholder='Search for AAC ID, tree ID...'
             required
           />
-          <button
+          {/* <button
             type='submit'
             disabled={disable}
             className='text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
           >
             Search
-          </button>
+          </button> */}
         </div>
       </form>
     </div>

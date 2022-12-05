@@ -4,6 +4,7 @@ import ToggleCheckBox from "components/reusable/toggleCheckbox";
 import InputSelectCompany from "./components/inputSelectCompany";
 import InputSelectConcession from "./components/inputSelectConcession";
 
+import ConcessionsStatistics from "./components/statistics";
 import ConcessionsLayers from "./ConcessionsLayers";
 import MapLegendConcession from "./ConcessionLegend";
 import ConcessionSidePanel from "concessions/components/panels/ConcessionSidePanel";
@@ -21,6 +22,17 @@ import { getCompanies, getConcessions } from "common/axios/endpoints";
 
 /////
 import { FaUndo } from "react-icons/fa";
+
+const chartDataSample = {
+  chart1: [
+    { title: "xx1", value: 10, color: "#E38627" },
+    { title: "xx2", value: 10, color: "#C13C37" },
+    { title: "xx3", value: 35, color: "#6A2135" },
+    { title: "xx4", value: 15, color: "#009278" },
+    { title: "xx5", value: 10, color: "#7b83dd" },
+    { title: "xx6", value: 20, color: "#b3c1bf" },
+  ],
+};
 
 export default function ConcessionsPage({ map, mapLoaded }) {
   const [layerConcessionData, setLayerConcessionData] = useState(null);
@@ -61,17 +73,20 @@ export default function ConcessionsPage({ map, mapLoaded }) {
   const hideUFGSidePanel = useStore((state) => state.hideUFGSidePanel);
   const hideUFASidePanel = useStore((state) => state.hideUFASidePanel);
 
-  function activateConcessionSidePanel(data) {
+  const activateConcessionSidePanel=(data)=> {
+    setLayerConcessionData(data);
+    
     showConcessionSidePanel();
+
     hideMainNav();
 
     hideAACSidePanel();
     hideTreeSidePanel();
     hideUFGSidePanel();
     hideUFASidePanel();
-
-    setLayerConcessionData(data);
+   
   }
+  console.log('state ' + layerConcessionData);
 
   function activateAACSidePanel(data) {
     showAACSidePanel();
@@ -86,6 +101,7 @@ export default function ConcessionsPage({ map, mapLoaded }) {
   }
 
   function activateTreeSidePanel(data) {
+    // console.log(data + 'param');
     showTreeSidePanel();
     hideMainNav();
 
@@ -96,6 +112,7 @@ export default function ConcessionsPage({ map, mapLoaded }) {
 
     setLayerTreeData(data);
   }
+  // console.log(layerTreeData + 'state');
 
   function activateUFGSidePanel(data) {
     showUFGSidePanel();
@@ -132,7 +149,6 @@ export default function ConcessionsPage({ map, mapLoaded }) {
   const [inputSearchValue, setInputSearchValue] = useState(null);
 
   function selectedCompany(item) {
-    console.log(item);
     let parse = `{}`;
     if (item !== "Company Name" && item !== "") {
       parse = `{${item}}`;
@@ -258,6 +274,7 @@ export default function ConcessionsPage({ map, mapLoaded }) {
           </div>
           {/* Layer toggles */}
         </section>
+        <ConcessionsStatistics data={chartDataSample.chart1} />
       </main>
       <UFASidePanel layerData={layerUFAData} />
       <UFGSidePanel layerData={layerUFGData} />

@@ -51,6 +51,8 @@ const createToggleVisibility = (set) => ({
   showUFASidePanel: () => set(() => ({ UFASidePanelVisibility: true })),
   hideUFASidePanel: () => set(() => ({ UFASidePanelVisibility: false })),
 
+  
+
   jwt: null,
   setJwt: (data) => set((state) => ({ jwt: data })),
 });

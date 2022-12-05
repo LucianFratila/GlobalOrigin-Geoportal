@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import useStore from "common/utils/stateStore/useStore";
 import TreeBarChart from "./treeBarChart";
-
 ////React Icons Imports@spinners//////
 import { CgMiniPlayer } from "react-icons/cg";
 import { CgClose } from "react-icons/cg";
@@ -10,6 +9,7 @@ import { PulseLoader } from "react-spinners";
 ///React Query Imports///
 import { useQuery } from "react-query";
 import { getConcession } from "common/axios/endpoints";
+
 import useTrees from "common/utils/useTrees";
 
 const ConcessionSidePanel = ({ layerData }) => {
@@ -40,14 +40,28 @@ const ConcessionSidePanel = ({ layerData }) => {
     // The query will not execute until the condition
     enabled: !!dataId,
   });
+  
+  // console.log(layerData);
+  ////////Fake Data////////
   let trees = useTrees();
   let totalTrees = trees?.falled + trees?.live + trees?.marked;
   let species = trees?.species;
   let am = species["African Mahogany"];
+  let eb = species["Ebony"];
+  let ok = species["Okoume"];
   let totalSpecies = am.falled + am.live + am.marked;
+  let totalSpeciesEb = eb.falled + eb.live + eb.marked;
+  let totalSpeciesok = ok.falled + ok.live + ok.marked;
   let falledPercentage = ((am.falled * 100) / totalSpecies).toFixed(1);
   let livePercentage = ((am.live * 100) / totalSpecies).toFixed(1);
   let markedPercentage = ((am.marked * 100) / totalSpecies).toFixed(1);
+  let falledPercentageEb = ((eb.falled * 100) / totalSpeciesEb).toFixed(1);
+  let livePercentageEb = ((eb.live * 100) / totalSpeciesEb).toFixed(1);
+  let markedPercentageEb = ((eb.marked * 100) / totalSpeciesEb).toFixed(1);
+  let falledPercentageOk = ((ok.falled * 100) / totalSpeciesok).toFixed(1);
+  let livePercentageOk = ((ok.live * 100) / totalSpeciesok).toFixed(1);
+  let markedPercentageOk = ((ok.marked * 100) / totalSpeciesok).toFixed(1);
+  ////////Fake Data////////
   return (
     <>
       {/* DESKTOP MENU */}
@@ -162,10 +176,32 @@ const ConcessionSidePanel = ({ layerData }) => {
                       falledPercentage={falledPercentage}
                       livePercentage={livePercentage}
                       markedPercentage={markedPercentage}
-                      colorArray={['#8a5a40','#f18f48','#27773e']}
+                      colorArray={["#8a5a40", "#f18f48", "#27773e"]}
+                    />
+                    <TreeBarChart
+                      name={"Ebony"}
+                      falledPercentage={falledPercentageEb}
+                      livePercentage={livePercentageEb}
+                      markedPercentage={markedPercentageEb}
+                      colorArray={["#8a5a40", "#f18f48", "#27773e"]}
+                    />
+                    <TreeBarChart
+                      name={"Okoume"}
+                      falledPercentage={falledPercentageOk}
+                      livePercentage={livePercentageOk}
+                      markedPercentage={markedPercentageOk}
+                      colorArray={["#8a5a40", "#f18f48", "#27773e"]}
                     />
                   </div>
                   {/* Chart */}
+                </div>
+
+                {/* Additional Info */}
+                <div className='p-4  rounded-md mx-4 mt-4 bg-neutral-700 text-maintext'>
+                  <div className='my-2 mb-3'>
+                    <h1 className=' text-maintext text-lg font-mono'>Additional Info</h1>
+                  </div>
+                  <AdditionalTabs />
                 </div>
               </>
             ) : (
@@ -188,3 +224,33 @@ const ConcessionSidePanel = ({ layerData }) => {
 };
 
 export default ConcessionSidePanel;
+const TransportPermits = () => {
+  return (
+    <div>
+      <p>TransportPermits</p>
+    </div>
+  );
+};
+const AACs = () => {
+  return (
+    <div>
+      <p>AACs</p>
+    </div>
+  );
+};
+
+const AdditionalTabs = () => {
+  const [activeTab, setActiveTab] = useState("tab1");
+  return (
+    <div>
+      <div className='flex gap-4'>
+        <span onClick={()=>setActiveTab("tab1")} className={`${activeTab === "tab1" ? " border-b-2 border-green-600" : ""}`}><button>Transport Permits</button></span>
+        <span onClick={()=>setActiveTab("tab2")} className={`${activeTab === "tab2" ? " border-b-2 border-green-600" : ""}`}><button>AAC's</button></span>
+      </div>
+      <div className=' mt-3'>
+        {activeTab === "tab1" && <TransportPermits />}
+        {activeTab === "tab2" && <AACs />}
+      </div>
+    </div>
+  );
+};
