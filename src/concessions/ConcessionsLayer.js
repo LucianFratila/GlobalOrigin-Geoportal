@@ -120,8 +120,8 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
           hoveredStateId = null;
       });
 
-      map.current.on("mousemove", name, (e) => {
- //         console.log('mousemove:'+name);
+        map.current.on("mousemove", name, (e) => {
+//         console.log('mousemove:'+name);
 
           if (e.features.length > 0) {
               if(e.popupOnTopLayer){
@@ -144,18 +144,17 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
               hoveredStateId = null
           }
       
-      });
-
-        map.current.on("click", name, (e) => {
-            if(e.clickOnTopLayer) return;
-            e.clickOnTopLayer = true;
-            activateSidePanel({ id: e.features[0].properties.Id, species: e.features[0].properties.name_geo});
         });
-
+        map.current.on("click", name, clickHandler);
       }
     }
   }, [mapLoaded]);
 
+  const clickHandler=useCallback((e) => {
+    if(e.clickOnTopLayer) return;
+            e.clickOnTopLayer = true;
+            activateSidePanel({'id' : e.features[0].properties.Id ,'name' : e.features[0].properties.name_geo});
+  },[])
 
   useEffect(() => {
     console.log("mounted")
@@ -163,6 +162,7 @@ export default function ConcessionsLayer({ map, mapLoaded, layerProps, activateS
       if (map.current.getSource(name)) {
         map.current.removeLayer(name);
         map.current.removeSource(name);
+        map.current.off("click", name, clickHandler);
       }
     };
   }, []);

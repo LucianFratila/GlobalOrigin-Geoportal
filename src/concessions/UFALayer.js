@@ -138,25 +138,23 @@ export default function UFALayer({ map, mapLoaded, layerProps, activateSidePanel
           }
       
       });
-
-        map.current.on("click", name, (e) => {
-            if(e.clickOnTopLayer) return;
-            e.clickOnTopLayer = true;
-            
- //           console.log('click:'+name);
-            activateSidePanel({ id: e.features[0].properties.Id, ufa: e.features[0].properties});
-        });
-
+      map.current.on("click", name, clickHandler);
       }
     }
   }, [mapLoaded]);
+
+  const clickHandler=useCallback((e) => {
+    if(e.clickOnTopLayer) return;
+            e.clickOnTopLayer = true;
+            activateSidePanel({'id' : e.features[0].properties.Id ,'name_geo' : e.features[0].properties.name_geo});
+  },[])
 
   useEffect(() => {
     return () => {
       if (map.current.getSource(name)) {
         map.current.removeLayer(name);
         map.current.removeSource(name);
-        //  map.current.off('moveend',name,getData)
+        map.current.off("click", name, clickHandler);
       }
     };
   }, []);

@@ -131,21 +131,23 @@ export default function TreeInventoryLayer({ map, mapLoaded, layerProps, activat
           }
         });
 
-        map.current.on("click", name, (e) => {
-          e.clickOnTopLayer = true;
-//          console.log('click:'+name);
-          activateSidePanel({ id: e.features[0].properties.treed_id_geo, species: e.features[0].properties.species_geo});
-        });
+        map.current.on("click", name, clickHandler);
       }
     }
   }, [mapLoaded]);
+
+  const clickHandler=useCallback((e) => {
+    if(e.clickOnTopLayer) return;
+            e.clickOnTopLayer = true;
+            activateSidePanel({'id' : e.features[0].properties.Id ,'species_geo' : e.features[0].properties.species_geo});
+  },[])
 
   useEffect(() => {
     return () => {
       if (map.current.getSource(name)) {
         map.current.removeLayer(name);
         map.current.removeSource(name);
-        
+        map.current.off("click", name, clickHandler);
       }
     };
   }, []);

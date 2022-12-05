@@ -136,19 +136,18 @@ export default function UFGLayer({map, mapLoaded, layerProps, activateSidePanel 
                     }
                 
                 });
-
-                map.current.on("click", name, (e) => {
-                    if(e.clickOnTopLayer) return;
-                    e.clickOnTopLayer = true;
-                    
- //                   console.log('click:'+name);
-                    activateSidePanel({ id: e.features[0].properties.Id, UFG: e.features[0].properties});
-                });
-
+                map.current.on("click", name, clickHandler);
             }
         }
 
     },[mapLoaded])
+
+
+    const clickHandler=useCallback((e) => {
+        if(e.clickOnTopLayer) return;
+                e.clickOnTopLayer = true;
+                activateSidePanel({'id' : e.features[0].properties.Id ,'name' : e.features[0].properties.name_geo});
+    },[])
 
     useEffect(()=>{
 
@@ -156,7 +155,7 @@ export default function UFGLayer({map, mapLoaded, layerProps, activateSidePanel 
             if(map.current.getSource(name)){
                 map.current.removeLayer(name)
                 map.current.removeSource(name)
-             //   map.current.off('moveend',name,getData)
+                map.current.off("click", name, clickHandler);
             }
         }
 

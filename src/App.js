@@ -39,7 +39,6 @@ function App() {
   const setJwtStore = useStore((state) => state.setJwt);
   const map = useRef(null);
 
-
   useEffect(()=>{
     AxiosDefaults(resetUser)
   },[])
