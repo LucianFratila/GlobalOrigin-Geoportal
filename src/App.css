@@ -11,13 +11,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/*  */
+
 
 .map-container {
   width: 100%;
   height: 100vh;
 }
-/////stiluri pt scroll bar////
+
 /* width */
 ::-webkit-scrollbar {
   width: 0px;
