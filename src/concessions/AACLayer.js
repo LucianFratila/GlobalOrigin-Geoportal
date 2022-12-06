@@ -4,9 +4,11 @@ import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-load
 import { CgClose } from "react-icons/cg";
 import ClipLoader from "react-spinners/ClipLoader";
 import getOpacity from "common/utils/getOpacity";
+import { useNavigate } from "react-router-dom";
 
 import useStore from 'common/utils/stateStore/useStore';
-export default function AACLayer({map, mapLoaded, layerProps, activateSidePanel}){
+export default function AACLayer({map, mapLoaded, layerProps}){
+    const navigate = useNavigate();
     const hideAAC = useStore((state) => state.hideAAC);
     const [isLoading,setIsLoading]=useState(false)
     const [fillOpacity,setFillOpacity]=useState(1)
@@ -150,7 +152,10 @@ export default function AACLayer({map, mapLoaded, layerProps, activateSidePanel}
     const clickHandler=useCallback((e) => {
         if(e.clickOnTopLayer) return;
                 e.clickOnTopLayer = true;
-                activateSidePanel({'id' : e.features[0].properties.Id ,'name' : e.features[0].properties.name_geo});
+                // activateSidePanel({'id' : e.features[0].properties.Id ,'name' : e.features[0].properties.name_geo});
+                (() => {
+                    navigate(`/concessions/aac/${e.features[0].properties.Id}`, { replace: true });
+                  })();
       },[])
 
     useEffect(()=>{

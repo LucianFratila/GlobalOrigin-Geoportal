@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import { Link } from "react-router-dom";
 import ToggleCheckBox from "components/reusable/toggleCheckbox";
 import InputSelectCompany from "./components/inputSelectCompany";
 import InputSelectConcession from "./components/inputSelectConcession";
@@ -34,7 +34,7 @@ const chartDataSample = {
   ],
 };
 
-export default function ConcessionsPage({ map, mapLoaded }) {
+export default function ConcessionsPage({ map, mapLoaded, children }) {
   const [layerConcessionData, setLayerConcessionData] = useState(null);
   const [layerAACData, setLayerAACData] = useState(null);
   const [layerTreeData, setLayerTreeData] = useState(null);
@@ -55,89 +55,6 @@ export default function ConcessionsPage({ map, mapLoaded }) {
   const toggleAAC = useStore((state) => state.toggleAAC);
 
   //////////LAYER VISIBILITY CONTROLS///////////////
-
-  //////////////////SIDE PANEL CONTROLS //////////////////
-
-  //show panels
-  const showConcessionSidePanel = useStore((state) => state.showConcessionSidePanel);
-  const showAACSidePanel = useStore((state) => state.showAACSidePanel);
-  const showTreeSidePanel = useStore((state) => state.showTreeSidePanel);
-  const showUFGSidePanel = useStore((state) => state.showUFGSidePanel);
-  const showUFASidePanel = useStore((state) => state.showUFASidePanel);
-
-  //hide panels
-  const hideMainNav = useStore((state) => state.hideMainNav);
-  const hideConcessionSidePanel = useStore((state) => state.hideConcessionSidePanel);
-  const hideAACSidePanel = useStore((state) => state.hideAACSidePanel);
-  const hideTreeSidePanel = useStore((state) => state.hideTreeSidePanel);
-  const hideUFGSidePanel = useStore((state) => state.hideUFGSidePanel);
-  const hideUFASidePanel = useStore((state) => state.hideUFASidePanel);
-
-  const activateConcessionSidePanel=(data)=> {
-    setLayerConcessionData(data);
-    
-    showConcessionSidePanel();
-
-    hideMainNav();
-
-    hideAACSidePanel();
-    hideTreeSidePanel();
-    hideUFGSidePanel();
-    hideUFASidePanel();
-   
-  }
-  // console.log('state ' + layerConcessionData);
-
-  function activateAACSidePanel(data) {
-    showAACSidePanel();
-    hideMainNav();
-
-    hideConcessionSidePanel();
-    hideTreeSidePanel();
-    hideUFGSidePanel();
-    hideUFASidePanel();
-
-    setLayerAACData(data);
-  }
-
-  function activateTreeSidePanel(data) {
-    // console.log(data + 'param');
-    showTreeSidePanel();
-    hideMainNav();
-
-    hideConcessionSidePanel();
-    hideAACSidePanel();
-    hideUFGSidePanel();
-    hideUFASidePanel();
-
-    setLayerTreeData(data);
-  }
-  // console.log(layerTreeData + 'state');
-
-  function activateUFGSidePanel(data) {
-    showUFGSidePanel();
-    hideMainNav();
-
-    hideConcessionSidePanel();
-    hideAACSidePanel();
-    hideUFASidePanel();
-    hideTreeSidePanel();
-
-    setLayerUFGData(data);
-  }
-
-  function activateUFASidePanel(data) {
-    showUFASidePanel();
-    hideMainNav();
-
-    hideConcessionSidePanel();
-    hideAACSidePanel();
-    hideUFGSidePanel();
-    hideTreeSidePanel();
-
-    setLayerUFAData(data);
-  }
-  //////////////////SIDE PANEL CONTROLS //////////////////
 
   /////////Fetch /////////////
   const { data: companies, isLoading: companieLoading, error } = useQuery("companies", getCompanies);
@@ -212,6 +129,7 @@ export default function ConcessionsPage({ map, mapLoaded }) {
       <main className='p-2'>
         {/* layer name & visibility */}
         {/* filters */}
+        {children}
         <section className='  rounded-md p-4 mt-3  bg-neutral-700'>
           <div className=' flex flex-row items-center justify-between'>
             <h1 className=' text-white py-4'>Filters</h1>
@@ -227,6 +145,7 @@ export default function ConcessionsPage({ map, mapLoaded }) {
           </div>
           <div className='flex flex-row gap-2'>
             {/* Company */}
+            
             <InputSelectCompany
               selected={"Company Name"}
               returnSelected={selectedCompany}
@@ -242,11 +161,14 @@ export default function ConcessionsPage({ map, mapLoaded }) {
               isLoading={concessionLoading}
             />
           </div>
+          
           <SearchFilter disable={searchForm} getInputData={setInputSearchValue} />
           {/* Layer toggles */}
           <div className=' py-5 gap-3 flex flex-col'>
+          <Link to={'/concessions/1'}>Go to id</Link>
             <div className='flex py-3 gap-3'>
               <h1 className=' text-white'>View Concessions</h1>
+              
               <ToggleCheckBox
                 toggleState={concessionLayerVisibility}
                 toggleAction={toggleConcessionLayer}
@@ -276,21 +198,12 @@ export default function ConcessionsPage({ map, mapLoaded }) {
         </section>
         <ConcessionsStatistics data={chartDataSample.chart1} />
       </main>
-      <UFASidePanel layerData={layerUFAData} />
-      <UFGSidePanel layerData={layerUFGData} />
-      <TreeSidePanel layerData={layerTreeData} />
-      <AACSidePanel layerData={layerAACData} />
-      <ConcessionSidePanel layerData={layerConcessionData} />
       <MapLegendConcession layersProps={layersProps} map={map} mapLoaded={mapLoaded}>
         <ConcessionsLayers
           map={map}
           mapLoaded={mapLoaded}
           layersProps={layersProps}
-          activateConcessionSidePanel={activateConcessionSidePanel}
-          activateAACSidePanel={activateAACSidePanel}
-          activateTreeSidePanel={activateTreeSidePanel}
-          activateUFGSidePanel={activateUFGSidePanel}
-          activateUFASidePanel={activateUFASidePanel}
+
         ></ConcessionsLayers>
       </MapLegendConcession>
     </React.Fragment>

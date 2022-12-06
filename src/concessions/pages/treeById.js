@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import useStore from "common/utils/stateStore/useStore";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 ////React Icons Imports@spinners//////
+import { CgMiniPlayer } from "react-icons/cg";
 import { FaSourcetree } from "react-icons/fa";
-
 import { CgClose } from "react-icons/cg";
 import { PulseLoader } from "react-spinners";
 
@@ -11,43 +12,17 @@ import { PulseLoader } from "react-spinners";
 import { useQuery } from "react-query";
 import { getTreebyParam } from "common/axios/endpoints";
 
-const TreeSidePanel = ({ layerData }) => {
-  //////////VISIBILITY CONTROLS///////////////
-  const treeSidePanelVisibility = useStore((state) => state.treeSidePanelVisibility);
-  const hideTreeSidePanel = useStore((state) => state.hideTreeSidePanel);
-  const showMainNav = useStore((state) => state.showMainNav);
-
-  //////////VISIBILITY CONTROLS///////////////
-  function onClose() {
-    hideTreeSidePanel();
-    showMainNav();
-  }
-  
-  const treeID = layerData?.id;
-
-  const { data: tree} = useQuery(["tree", treeID], () => getTreebyParam(`?TreeId=${treeID}`), {
-    // The query will not execute until the condition
-    enabled: !!treeID,
-  });
-  
-  // const species = tree?.data.features[0].properties.species_geo;
-  // const widthAtBase = tree?.data.features[0].properties.diameter_breast_height_geo;
-  // const owned = tree?.data.features[0].properties.management_unit_geo;
-  // const aac = tree?.data.features[0].properties.aac_geo;
-  // const standing = tree?.data.features[0].properties.tree_standing_geo;
-  // const marked = tree?.data.features[0].properties.tree_marked_geo;
+const TreebyId = () => {
+  const navigate = useNavigate();
   const [standing, setStanding] = useState(false);
   const [marked, setMarked] = useState(false);
   const [felled, setFelled] = useState(false);
   const [abattage, setAbattage] = useState(false);
   const [chantier, setChantier] = useState(false);
-  // const standing = true;
-  // const marked = false;
-  // const felled = false;
-  // const abattage = true;
-  // const chantier = true;
-  console.log(layerData);
   const [liveTreeHight, setLiveTreeHight] = useState(0);
+  const { state } = useLocation();
+  const { id } = state; // Read values passed on state
+
   useEffect(() => {
     if (standing) {
       setLiveTreeHight(32);
@@ -64,28 +39,33 @@ const TreeSidePanel = ({ layerData }) => {
     if (chantier) {
       setLiveTreeHight(166);
     }
-  }, [standing, marked, felled, abattage, chantier]);
+  }, [standing, marked, felled, abattage, chantier])
 
-  // console.log(tree?.data.features[0].properties.tree_marked_geo);
+  const { data: tree } = useQuery(["tree", id], () => getTreebyParam(`?TreeId=${id}`), {
+    // The query will not execute until the condition
+    enabled: !!id,
+  });
+
+  const species = tree?.data.features[0].properties.species_geo;
+  const widthAtBase = tree?.data.features[0].properties.diameter_breast_height_geo;
+  const owned = tree?.data.features[0].properties.management_unit_geo;
+  const aac = tree?.data.features[0].properties.aac_geo;
+//   const standing = tree?.data.features[0].properties.tree_standing_geo;
+//   const marked = tree?.data.features[0].properties.tree_marked_geo;
+
   return (
     <>
-{/* DESKTOP MENU */}
-<div>
+      {/* DESKTOP MENU */}
+      <div>
         <div className=' fixed left-0 top-0 z-50    '>
           <div
-            className={`bg-primary/95 overflow-x-hidden h-screen   ${
-              treeSidePanelVisibility ? ` lg:w-[500px] md:w-[500px] sm:w-[500px] xs: w-[500px]  ` : ` w-0`
-            } duration-700`}
+            className={`bg-primary overflow-x-hidden h-screen   lg:w-[500px] md:w-[500px] sm:w-[300px] xs: w-[300px] duration-700`}
           >
             <div className={`grid grid-cols-2 p-4  whitespace-nowrap items-center`}>
               {/* Menu Header */}
-              <div
-                className={`${
-                  !treeSidePanelVisibility && "opacity-0"
-                } flex flex-row gap-2 items-center transition delay-300 duration-400  `}
-              >
+              <div className={` flex flex-row gap-2 items-center transition delay-300 duration-400  `}>
                 <span className='text-maintext'>
-                  <FaSourcetree size={30} />
+                  <CgMiniPlayer size={30} />
                 </span>
                 <span>
                   <h1 className='text-sm uppercase text-maintext '>Tree</h1>
@@ -93,17 +73,11 @@ const TreeSidePanel = ({ layerData }) => {
               </div>
               {/* Menu Close/Open Controls and Search */}
               <div className='flex justify-end p-2'>
-                <button onClick={onClose} className={`${!treeSidePanelVisibility ? " px-1 py-2  rounded-md" : ""}`}>
-                  <CgClose
-                    className={`text-maintext text-2xl hover:text-white duration-300 ${
-                      !treeSidePanelVisibility && " scale-100"
-                    }`}
-                  />
+                <button onClick={() => navigate(`/concessions`)} className={`px-1 py-2  rounded-md`}>
+                  <CgClose className={`text-maintext text-2xl hover:text-white duration-300`} />
                 </button>
               </div>
-              <span className=' mt-2'>
-                <h1 className=' text-lg uppercase text-maintext  '>{treeID}</h1>
-              </span>
+              <span className=' mt-2'><h1 className=' text-lg uppercase text-maintext  '>{id}</h1></span>
               {/* Menu Close/Open Controls and Search */}
             </div>
             {/* Menu Header */}
@@ -118,20 +92,20 @@ const TreeSidePanel = ({ layerData }) => {
                   <div className=' flex flex-col text-sm justify-between gap-3 overflow-x-hidden '>
                     <span>
                       <h1>{`Tree type`}</h1>
-                      {/* <p className=' underline'>{species}</p> */}
+                      <p className=' underline'>{species}</p>
                     </span>
                     <span className='flex flex-row gap-4 items-center'>
                       <h1>{`Width at base`}</h1>
-                      {/* <p>{widthAtBase}/cm</p> */}
+                      <p>{widthAtBase}/cm</p>
                     </span>
                     <div className=' flex flex-row justify-between gap-3 overflow-x-hidden '>
                       <span>
                         <h1>{`Owned by`}</h1>
-                        {/* <p className=' underline '>{owned}</p> */}
+                        <p className=' underline '>{owned}</p>
                       </span>
                       <span>
                         <h1>{`AAC`}</h1>
-                        {/* <p>{aac}</p> */}
+                        <p>{aac}</p>
                       </span>
                     </div>
                   </div>
@@ -146,11 +120,11 @@ const TreeSidePanel = ({ layerData }) => {
                     <button onClick={() => setChantier(!chantier)}>chantier</button>
                   </span>
                 </div>
-                {/* Details */}
-                <div className='p-4 mt-3  rounded-md mx-4 bg-neutral-700 text-maintext'>
+                 {/* Details */}
+                 <div className='p-4 mt-3  rounded-md mx-4 bg-neutral-700 text-maintext'>
                   {/* Graph treelife */}
 
-                  <div className={`flex  flex-row ${treeSidePanelVisibility ? "" : " opacity-0 duration-200"}`}>
+                  <div className={`flex  flex-row `}>
                     <div>
                       <div className='flex  flex-col'>
                         {/* <span className={`w-7 ml-[1px]border-solid border-b border-sky-100 `}></span> */}
@@ -221,11 +195,7 @@ const TreeSidePanel = ({ layerData }) => {
                 </div>
               </>
             ) : (
-              <div
-                className={`text-maintext absolute h-screen w-full flex items-center justify-center p-5 ${
-                  !treeSidePanelVisibility && " scale-0"
-                }`}
-              >
+              <div className={`text-maintext absolute h-screen w-full flex items-center justify-center p-5`}>
                 <PulseLoader color='#02690b' size={30} />
               </div>
             )}
@@ -239,10 +209,4 @@ const TreeSidePanel = ({ layerData }) => {
   );
 };
 
-export default TreeSidePanel;
-
-
-
-
-
-      
+export default TreebyId;

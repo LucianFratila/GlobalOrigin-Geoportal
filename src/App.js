@@ -20,6 +20,12 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 import ConcessionsPage from "concessions/ConcessionsPage";
 import HarvestingPage from "harvesting/HarvestingPage";
 
+import ConcessionById from "concessions/pages/ConcessionById";
+import AACbyId from "concessions/pages/AACbyId";
+import UFAbyId from "concessions/pages/UFAbyId";
+import UFGbyId from "concessions/pages/UFGbyId";
+import TreebyId from "concessions/pages/treeById";
+
 ///// UI Components Imports//////
 import MainNav from "components/mainNav/mainNav";
 import useStore from "common/utils/stateStore/useStore";
@@ -85,7 +91,15 @@ function App() {
             <MainNav logout={() => resetUser("guest","","")} user={user}>
               <Routes>
                 <Route exact path='/' element={<ConcessionsPage map={map} mapLoaded={mapLoaded} />} />
-                <Route exact path='/concessions' element={<ConcessionsPage map={map} mapLoaded={mapLoaded} />} />
+                <Route exact path='/concessions/*' element={<ConcessionsPage map={map} mapLoaded={mapLoaded} >
+                  <Routes>
+                    <Route exact path='/concession/:id' element={<ConcessionById/>}/>
+                    <Route exact path='/aac/:id' element={<AACbyId/>}/>
+                    <Route exact path='/ufa/:id' element={<UFAbyId/>}/>
+                    <Route exact path='/ufg/:id' element={<UFGbyId/>}/>
+                    <Route exact path='/tree/:id' element={<TreebyId/>}/>
+                  </Routes>
+                </ConcessionsPage>} />
                 <Route exact path='/harvesting' element={<HarvestingPage map={map} mapLoaded={mapLoaded} />} />
                 <Route exact path='/login' element={<LoginForm resetUser={resetUser} />} />
                 <Route exact path='/register' element={<RegisterForm />} />

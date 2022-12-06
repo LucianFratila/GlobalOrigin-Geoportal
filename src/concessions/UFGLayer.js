@@ -5,8 +5,10 @@ import { CgClose } from "react-icons/cg";
 import ClipLoader from "react-spinners/ClipLoader";
 import useStore from 'common/utils/stateStore/useStore';
 import getOpacity from "common/utils/getOpacity";
+import { useNavigate } from "react-router-dom";
 
-export default function UFGLayer({map, mapLoaded, layerProps, activateSidePanel }){
+export default function UFGLayer({map, mapLoaded, layerProps }){
+    const navigate = useNavigate();
     const hideUFG = useStore((state) => state.hideUFG);
     const [isLoading,setIsLoading]=useState(false)
     const [fillOpacity,setFillOpacity]=useState(1)
@@ -146,7 +148,10 @@ export default function UFGLayer({map, mapLoaded, layerProps, activateSidePanel 
     const clickHandler=useCallback((e) => {
         if(e.clickOnTopLayer) return;
                 e.clickOnTopLayer = true;
-                activateSidePanel({'id' : e.features[0].properties.Id ,'name' : e.features[0].properties.name_geo});
+                // activateSidePanel({'id' : e.features[0].properties.Id ,'name' : e.features[0].properties.name_geo});
+                (() => {
+                    navigate(`/concessions/ufg/${e.features[0].properties.Id}`, { replace: true });
+                  })();
     },[])
 
     useEffect(()=>{
